@@ -1,0 +1,112 @@
+tap "homebrew/bundle"
+tap "homebrew/services"
+# Color management engine supporting ICC profiles
+brew "little-cms2"
+# Image format providing lossless and lossy compression for web images
+brew "webp"
+# New file format for still image compression
+brew "jpeg-xl"
+# Codec library for encoding and decoding AV1 video streams
+brew "aom"
+# Companion library to apr, the Apache Portable Runtime library
+brew "apr-util"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.12"
+# Core application library for C
+brew "glib"
+# Vector graphics library with cross-device output support
+brew "cairo"
+# Libraries to talk to Microsoft SQL Server and Sybase databases
+brew "freetds"
+# Library for encoding and decoding .avif files
+brew "libavif"
+# Graphics library to dynamically manipulate images
+brew "gd"
+# General-purpose scripting language
+brew "php"
+# Dependency Manager for PHP
+brew "composer"
+# Isolated development environments using Docker
+brew "docker-compose"
+# Validating, recursive, caching DNS resolver
+brew "unbound"
+# GNU Transport Layer Security (TLS) Library
+brew "gnutls"
+# OpenType text shaping engine
+brew "harfbuzz"
+# Library for JPEG-2000 image manipulation
+brew "openjpeg"
+# Image processing and image analysis library
+brew "leptonica"
+# Subtitle renderer for the ASS/SSA subtitle format
+brew "libass"
+# Light HTTP/1.1 server library
+brew "libmicrohttpd"
+# Reliable Internet Stream Transport (RIST)
+brew "librist"
+# Framework for layout and rendering of i18n text
+brew "pango"
+# OCR (Optical Character Recognition) engine
+brew "tesseract"
+# Play, record, convert, and stream audio and video
+brew "ffmpeg"
+# Interpreter for PostScript and PDF
+brew "ghostscript"
+# Distributed revision control system
+brew "git"
+# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
+brew "libheif"
+# C/C++ seam carving library
+brew "liblqr"
+# Tools and libraries to manipulate images in many formats
+brew "imagemagick"
+# Provides library functionality for FIDO U2F & FIDO 2.0, including USB
+brew "libfido2"
+# Open source relational database management system
+brew "mysql", restart_service: true
+# Platform built on V8 to build network applications
+brew "node"
+# Open Visual Inference And Optimization toolkit for AI inference
+brew "openvino"
+# Implementation of Telnet and SSH
+brew "putty"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "stow"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Library to create, extract, and modify Windows Imaging files
+brew "wimlib"
+# Download YouTube videos from the command-line
+brew "youtube-dl"
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
+# Collection of apps and services for photography, design, video, web, and UX
+cask "adobe-creative-cloud"
+# Enable Windows-like alt-tab
+cask "alt-tab"
+# Server and cloud storage browser
+cask "cyberduck"
+# Voice and text chat software
+cask "discord"
+# Web browser
+cask "firefox"
+cask "font-jetbrains-mono"
+cask "font-jetbrains-mono-nerd-font"
+# Web browser
+cask "google-chrome"
+# Password manager
+cask "lastpass"
+# Move and resize windows using keyboard shortcuts or snap areas
+cask "rectangle"
+# Native GUI tool for relational databases
+cask "tableplus"
+# GPU-accelerated cross-platform terminal emulator and multiplexer
+cask "wezterm"
+# Video communication and virtual meeting platform
+cask "zoom"
