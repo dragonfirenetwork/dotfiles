@@ -13,7 +13,7 @@ A collection of configuration files to quickly bootstrap and set up any new **Li
 - [🎯 Usage](#usage)
 - [📄 License](#license)
 
-## ✨ Features {#features}
+## ✨ Features
 
 - **Cross-Platform Support**: Automates setup for macOS, Linux, and Windows.
 - **Configuration Management**: Utilizes Ansible and GNU Stow for managing configurations.
@@ -21,7 +21,7 @@ A collection of configuration files to quickly bootstrap and set up any new **Li
 - **Secure Setup**: Handles SSH key setup and encryption.
 - **Customizable**: Easily extendable to include additional configurations and scripts.
 
-## 📝 Prerequisites {#prerequisites}
+## 📝 Prerequisites
 
 ### Common
 
@@ -29,23 +29,23 @@ A collection of configuration files to quickly bootstrap and set up any new **Li
 - **Ansible**: Automation tool for configuration management.
 - **GNU Stow**: Symlink farm manager for managing dotfiles.
 
-### macOS Specific {#macos-specific}
+### macOS Specific
 
 - **Apple's Command Line Tools**: Required for Git and Homebrew.
 
-### Linux Specific {#linux-specific}
+### Linux Specific
 
 - **Package Manager**: `apt`, `dnf`, or `pacman` depending on the distribution.
 
-### Windows Specific {#windows-specific}
+### Windows Specific
 
 - **Git for Windows**: Includes Git Bash.
 - **Chocolatey**: Package manager for Windows.
 - **Windows Subsystem for Linux (WSL)** *(optional)*: For running Linux distributions on Windows.
 
-## 🚀 Installation {#installation}
+## 🚀 Installation
 
-### 🍎 macOS {#macos}
+### 🍎 macOS
 
 #### Introduction:
 
@@ -93,7 +93,7 @@ This section guides you through bootstrapping a new macOS machine using the dotf
     brew bundle --file ~/.dotfiles/programs/Brewfile
     ```
 
-### 🐧 Linux {#linux}
+### 🐧 Linux
 
 #### Introduction:
 
@@ -160,7 +160,7 @@ This section guides you through bootstrapping a new Linux machine using the dotf
     sudo pacman -S --noconfirm $(cat ~/.dotfiles/programs/pacman-packages.txt)
     ```
 
-### 🪟 Windows {#windows}
+### 🪟 Windows
 
 #### Introduction:
 
@@ -225,10 +225,10 @@ This section guides you through bootstrapping a new Windows machine using the do
 
     *(Alternatively, manage Windows packages via Ansible within WSL)*
 
-## 🎯 Usage {#usage}
+## 🎯 Usage
 
 After installation, your environment should be set up with your preferred configurations. You can further customize and extend the dotfiles by modifying the repository and rerunning the Ansible playbook.
 
-## 📄 License {#license}
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
