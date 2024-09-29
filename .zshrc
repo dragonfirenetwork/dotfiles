@@ -18,5 +18,9 @@ setopt hist_verify
 bindkey "^[[A" history-search-backward # Uparrow
 bindkey "^[[B" history-search-forward # Downarrow
 
+# zoxide
+alias cd="z"
+eval "$(zoxide init zsh)"
+
 # Initialize Starship prompt
 eval "$(starship init zsh)"
