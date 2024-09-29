@@ -1,5 +1,9 @@
 live_config_reload = true
 
+import = [
+    "~/.config/alacritty/themes/themes/dracula.toml"
+]
+
 [env]
 TERM = "xterm-256color"
 
