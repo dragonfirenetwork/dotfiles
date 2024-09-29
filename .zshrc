@@ -1,6 +1,9 @@
 # Paths
 PATH="$HOME/.composer/vendor/bin:$PATH"
 
+# Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Activate syntax highlighting
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -18,9 +21,13 @@ setopt hist_verify
 bindkey "^[[A" history-search-backward # Uparrow
 bindkey "^[[B" history-search-forward # Downarrow
 
-# zoxide
+# Zoxide
 alias cd="z"
 eval "$(zoxide init zsh)"
+
+# Tmux
+alias open-work="tmux new-session -s \"work\" -c \"$HOME/Work\""
+alias open-projects="tmux new-session -s \"projects\" -c \"$HOME/Projects\""
 
 # Initialize Starship prompt
 eval "$(starship init zsh)"

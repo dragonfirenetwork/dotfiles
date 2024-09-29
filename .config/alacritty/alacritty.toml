@@ -34,7 +34,7 @@ bold_italic.family = "JetBrainsMono Nerd Font"
 bold_italic.style = "Bold Italic"
 
 [cursor.style]
-shape = "Beam"
+shape = "Block"
 blinking = "Always"
 
 [selection]
