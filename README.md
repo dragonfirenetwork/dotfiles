@@ -11,7 +11,6 @@ A collection of configuration files to quickly bootstrap and set up any new **Li
   - [🐧 Linux](#linux)
   - [🪟 Windows](#windows)
 - [🎯 Usage](#usage)
-- [📄 License](#license)
 
 ## ✨ Features
 
