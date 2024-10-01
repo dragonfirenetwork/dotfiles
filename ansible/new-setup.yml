@@ -1,0 +1,7 @@
+# New setup file
+
+vars:
+  source_key: "./.ssh/id_rsa"
+  dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+  source_pub_key: "./.ssh/id_rsa.pub"
+  dest_pub_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"

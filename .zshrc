@@ -1,5 +1,5 @@
-# Paths
-PATH="$HOME/.composer/vendor/bin:$PATH"
+# SSH alias
+ssha='eval $(ssh-agent) && ssh-add'
 
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -28,6 +28,9 @@ eval "$(zoxide init zsh)"
 # Tmux
 alias open-work="tmux new-session -s \"work\" -c \"$HOME/Work\""
 alias open-projects="tmux new-session -s \"projects\" -c \"$HOME/Projects\""
+
+# Composer path
+PATH="$HOME/.composer/vendor/bin:$PATH"
 
 # Initialize Starship prompt
 eval "$(starship init zsh)"
