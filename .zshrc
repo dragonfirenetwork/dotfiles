@@ -29,6 +29,13 @@ eval "$(zoxide init zsh)"
 alias open-work="tmux new-session -s \"work\" -c \"$HOME/Work\""
 alias open-projects="tmux new-session -s \"projects\" -c \"$HOME/Projects\""
 
+# Tmux fzf -Primagen
+function tmux_sessionizer() {
+    $HOME/scripts/tmux-sessionizer
+}
+
+bindkey -s ^f "tmux-sessionizer\n"
+
 # Composer path
 PATH="$HOME/.composer/vendor/bin:$PATH"
 
