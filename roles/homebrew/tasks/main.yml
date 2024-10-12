@@ -1,0 +1,70 @@
+---
+# roles/homebrew_setup/tasks/main.yml
+
+- name: Detect Mac architecture
+  set_fact:
+    mac_architecture: "{{ ansible_architecture }}"
+  tags:
+    - homebrew_setup
+
+- name: Set Homebrew prefix based on architecture
+  set_fact:
+    homebrew_prefix: >
+      {% if mac_architecture == 'arm64' %}
+        /opt/homebrew
+      {% else %}
+        /usr/local
+      {% endif %}
+  tags:
+    - homebrew_setup
+
+- name: Check if Homebrew is installed
+  stat:
+    path: "{{ homebrew_prefix }}/bin/brew"
+  register: brew_check
+  tags:
+    - homebrew_setup
+
+- name: Install Homebrew (macOS)
+  shell: |
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    executable: /bin/bash
+    creates: "{{ homebrew_prefix }}/bin/brew"
+  when: not brew_check.stat.exists
+  environment:
+    NONINTERACTIVE: 1
+    HOMEBREW_PREFIX: "{{ homebrew_prefix }}"
+  tags:
+    - homebrew_setup
+
+- name: Add Homebrew to PATH in .zprofile
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zprofile"
+    line: 'export PATH="{{ homebrew_prefix }}/bin:$PATH"'
+    create: yes
+    state: present
+  tags:
+    - homebrew_setup
+
+- name: Ensure Homebrew is up to date
+  shell: "{{ homebrew_prefix }}/bin/brew update"
+  when: brew_check.stat.exists
+  tags:
+    - homebrew_setup
+
+- name: Ensure Homebrew directories have correct permissions
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+  loop:
+    - "{{ homebrew_prefix }}"
+    - "{{ homebrew_prefix }}/bin"
+    - "{{ homebrew_prefix }}/etc"
+    - "{{ homebrew_prefix }}/share"
+  when: brew_check.stat.exists
+  tags:
+    - homebrew_setup

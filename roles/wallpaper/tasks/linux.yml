@@ -1,0 +1,26 @@
+---
+# roles/wallpaper/tasks/linux.yml
+
+- name: Detect desktop environment
+  set_fact:
+    desktop_environment: "{{ ansible_env.XDG_CURRENT_DESKTOP | default('') | lower }}"
+  tags:
+    - wallpaper
+
+- name: Set wallpapers on i3wm
+  include_tasks: i3wm.yml
+  when: "'i3' in desktop_environment or ansible_env.DESKTOP_SESSION == 'i3'"
+  tags:
+    - wallpaper
+
+- name: Set wallpaper on GNOME
+  include_tasks: gnome.yml
+  when: "'gnome' in desktop_environment"
+  tags:
+    - wallpaper
+
+- name: Set wallpaper on KDE Plasma
+  include_tasks: kde.yml
+  when: "'kde' in desktop_environment or 'plasma' in desktop_environment"
+  tags:
+    - wallpaper

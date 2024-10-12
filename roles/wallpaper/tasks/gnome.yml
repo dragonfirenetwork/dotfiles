@@ -1,0 +1,27 @@
+---
+# roles/wallpaper/tasks/gnome.yml
+
+- name: Ensure the Wallpaper directory exists
+  file:
+    path: "{{ wallpaper_directory_path }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags:
+    - wallpaper
+
+- name: Copy main wallpaper to the local directory
+  copy:
+    src: "{{ wallpaper.main_wallpaper.image }}"
+    dest: "{{ wallpaper_directory_path }}/{{ wallpaper.main_wallpaper.image }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags:
+    - wallpaper
+
+- name: Set main wallpaper in GNOME
+  shell: |
+    gsettings set org.gnome.desktop.background picture-uri "file://{{ wallpaper_directory_path }}/{{ wallpaper.main_wallpaper.image }}"
+  tags:
+    - wallpaper

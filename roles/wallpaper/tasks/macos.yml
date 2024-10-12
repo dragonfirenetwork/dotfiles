@@ -1,0 +1,45 @@
+---
+# roles/wallpaper/tasks/macos.yml
+
+- name: Ensure the Wallpaper directory exists
+  file:
+    path: "{{ wallpaper_directory_path }}"
+    state: directory
+    mode: '0755'
+  tags:
+    - wallpaper
+
+- name: Copy wallpapers to the local directory
+  copy:
+    src: "{{ item.image }}"
+    dest: "{{ wallpaper_directory_path }}/{{ item.image }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+  loop: "{{ wallpaper.virtual_desktop_wallpaper.values() | list | unique }}"
+  loop_control:
+    label: "{{ item.image }}"
+  tags:
+    - wallpaper
+
+- name: Create AppleScript to set wallpapers
+  template:
+    src: set_wallpaper.applescript.j2
+    dest: "{{ ansible_env.HOME }}/set_wallpaper.applescript"
+  when: wallpaper.virtual_desktop_wallpaper is defined
+  tags:
+    - wallpaper
+
+- name: Execute the AppleScript to set wallpapers
+  shell: osascript "{{ ansible_env.HOME }}/set_wallpaper.applescript"
+  when: wallpaper.virtual_desktop_wallpaper is defined
+  tags:
+    - wallpaper
+
+- name: Remove the temporary AppleScript
+  file:
+    path: "{{ ansible_env.HOME }}/set_wallpaper.applescript"
+    state: absent
+  when: wallpaper.virtual_desktop_wallpaper is defined
+  tags:
+    - wallpaper

@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+import i3ipc
+import os
+
+wallpaper_directory = "{{ wallpaper_directory_path }}"
+wallpapers = {
+{% for n in range(1, virtual_desktops + 1) %}
+    "{{ n }}": "{{ wallpaper.virtual_desktop_wallpaper['desktop' ~ n|string].image }}",
+{% endfor %}
+}
+
+def on_workspace_focus(self, e):
+    workspace = e.current
+    if workspace:
+        wp = wallpapers.get(workspace.name, '{{ wallpaper.virtual_desktop_wallpaper.desktop1.image }}')
+        os.system('feh --bg-scale "{}"'.format(os.path.join(wallpaper_directory, wp)))
+
+i3 = i3ipc.Connection()
+i3.on("workspace::focus", on_workspace_focus)
+i3.main()

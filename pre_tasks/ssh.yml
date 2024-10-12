@@ -1,0 +1,49 @@
+---
+# pre_tasks/ssh.yml
+
+- name: Setup SSH
+  block:
+    - name: Ensure .ssh directory exists
+      file:
+        path: "{{ ansible_env.HOME }}/.ssh"
+        state: directory
+        mode: '0700'
+      tags:
+        - pre_tasks
+        - ssh
+
+    - name: Copy SSH keys
+      copy:
+        dest: "{{ ansible_env.HOME }}/.ssh/{{ ssh_key_item.key }}"
+        content: "{{ ssh_key_item.value }}"
+        mode: "{{ ssh_key_item.key.endswith('.pub') | ternary('0644', '0600') }}"
+      no_log: true
+      loop: "{{ ssh_keys | default({}) | dict2items }}"
+      loop_control:
+        label: "{{ ssh_key_item.key }}"
+        loop_var: ssh_key_item
+      tags:
+        - pre_tasks
+        - ssh
+
+    - name: Copy SSH config file
+      copy:
+        dest: "{{ ansible_env.HOME }}/.ssh/config"
+        content: "{{ ssh_configs }}"
+        mode: '0644'
+      tags:
+        - pre_tasks
+        - ssh
+
+    - name: Copy known_hosts file
+      copy:
+        dest: "{{ ansible_env.HOME }}/.ssh/known_hosts"
+        content: "{{ ssh_known_hosts }}"
+        mode: '0644'
+      tags:
+        - pre_tasks
+        - ssh
+
+  tags:
+    - pre_tasks
+    - ssh

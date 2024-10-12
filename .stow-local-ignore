@@ -1,4 +1,10 @@
-README.md
 .git
-scripts
+group_vars
+pre_tasks
 programs
+roles
+ansible.cfg
+inventory.ini
+main.yml
+README.md
+vault.secret

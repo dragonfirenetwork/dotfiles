@@ -1,0 +1,10 @@
+---
+# roles/alacritty/tasks/main.yml
+
+- name: Run Alacritty role for MacOS
+  include_tasks: macos.yml
+  when: ansible_os_family == "Darwin"
+
+- name: Rune Alacritty role for Linux
+  include_tasks: linux.yml
+  when: ansible_os_family == "Debian"

@@ -1,0 +1,41 @@
+---
+branch: master
+
+first_run: false
+
+dist_upgrade: false
+
+ansible_cron_minute: "0 5 * * *" # At 05:00, every day
+ssh_port: 22
+ssh_users: "glitchbox itadmin"
+
+# Platform-specific
+ansible_python_interpreter: /usr/bin/python3
+microcode_amd_install: false
+microcode_intel_install: true
+linode_instance: false
+proxmox_instance: true
+raspberry_pi: false
+
+# Terminal defaults
+terminal_emulator: alacritty
+shell: starship
+multiplexer: tmux
+
+# Programing languages
+python: true
+
+# Server defaults
+unattended_upgrades: true
+
+# Server type
+app_server: false
+batch_server: false
+control_node: true
+k8s: false
+portainer: false
+web_server: false
+worker: false
+
+# host_vars/your_host.yml
+ssh_allowed_users: "itadmin"
