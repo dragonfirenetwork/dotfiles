@@ -61,11 +61,6 @@
   tags:
     - pre_tasks
 
-- name: System Setup | Homebrew | Cleanup Homebrew
-  command: "{{ homebrew_prefix }}/bin/brew cleanup"
-  tags:
-    - pre_tasks
-
 # Check if .config exists, if not create it
 - name: System Setup | General | Ensure .config directory exists
   file:
