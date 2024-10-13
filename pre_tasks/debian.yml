@@ -1,40 +1,24 @@
 ---
 # pre_tasks/debian.yml
 
-- name: System Setup | Repositories | add ignored packages for archlinux hosts
-  lineinfile:
-      dest: /etc/pacman.conf
-      regexp: "^#?IgnorePkg"
-      line: "IgnorePkg   = ansible linux linux-headers linux-lts linux-lts-headers"
-  when: ansible_distribution == "Archlinux"
-  tags:
-    - pre_tasks
-
-- name: System Setup | Repositories | add sources.list for debian hosts
+- name: System Setup | Repositories | Add sources.list for debian hosts
   copy:
-    src: distribution_packages/debian_sources.list
+    src: "{{ ansible_distribution | lower }}_sources.list"
     dest: /etc/apt/sources.list
     backup: yes
   notify: apt_update
-  when: ansible_distribution == "Debian"
+  become: true
+  when: ansible_distribution in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - pre_tasks
 
-- name: System Setup | Repositories | add debian-backports
-  apt_repository:
-    repo: deb http://deb.debian.org/debian buster-backports main
-    filename: debian-backports
-  notify: apt_update
-  when: ansible_distribution == "Debian"
-  tags:
-    - pre_tasks
-
-- name: System Setup | Install package management tools (debian-based)
+- name: System Setup | Install package management tools
   package:
     name:
       - aptitude
       - software-properties-common
     state: latest
+  become: true
   when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
   tags:
     - pre_tasks
@@ -42,12 +26,14 @@
 - name: System Setup | Update APT package index
   apt:
     update_cache: yes
+  become: true
   tags:
     - pre_tasks
 
 - name: System Setup | Upgrade all installed packages to the latest version
   apt:
     upgrade: dist
+  become: true
   tags:
     - pre_tasks
 
@@ -57,46 +43,7 @@
     src: "user-sudo.j2"
     dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
     mode: "0440"
-  tags:
-    - pre_tasks
-
-- name: System Setup | Install essential packages
-  apt:
-    name:
-      - build-essential
-      - ca-certificates
-      - curl
-      - gnupg
-      - lsb-release
-      - software-properties-common
-      - sudo
-      - wget
-      - git
-      - zsh
-      - sshfs
-      - net-tools
-      - nmap
-      - htop
-      - btop
-      - unzip
-      - traceroute
-      - dnsutils
-      - iftop
-      - cron
-      - logrotate
-      - netstat
-      - zoxide
-      - rsync
-      - locales
-      - language-pack-en
-      - language-pack-jp
-      - rar
-      - unrar
-      - xz-utils
-      - ffmpeg
-      - qemu-kvm
-      - vagrant
-    state: present
+  become: true
   tags:
     - pre_tasks
 

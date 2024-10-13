@@ -1,0 +1,8 @@
+---
+# pre_tasks/linux.yml
+
+- name: Pre-tasks | Debian based specific tasks
+  import_tasks:  debian.yml
+  when: ansible_distribution == "Debian"
+  tags:
+    - pre_tasks

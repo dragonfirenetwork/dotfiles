@@ -1,1 +1,10 @@
 ---
+# roles/system/tasks/main.yml
+
+- name: System | Run tasks for MacOS
+  include_tasks: macos.yml
+  when: ansible_os_family == "Darwin"
+
+- name: System | Run tasks for Debian-based Linux
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"

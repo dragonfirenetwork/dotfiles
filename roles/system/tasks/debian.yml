@@ -1,0 +1,43 @@
+---
+# roles/system/tasks/debian.yml
+
+# Install system packages via Apt
+- name: System | Install system packages (debian-based)
+  apt:
+    name:
+      - build-essential
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - software-properties-common
+      - sudo
+      - wget
+      - git
+      - zsh
+      - sshfs
+      - net-tools
+      - nmap
+      - htop
+      - btop
+      - unzip
+      - traceroute
+      - dnsutils
+      - iftop
+      - cron
+      - logrotate
+      - netstat
+      - zoxide
+      - rsync
+      - locales
+      - language-pack-en
+      - language-pack-jp
+      - rar
+      - unrar
+      - xz-utils
+      - ffmpeg
+      - qemu-kvm
+      - vagrant
+    state: present
+  tags:
+    - system

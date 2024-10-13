@@ -2,7 +2,7 @@
 # roles/system/tasks/macos.yml
 
 # Install system packages via Homebrew
-- name: Install system packages (macOS)
+- name: System | Install system packages (macOS)
   homebrew:
     name:
       - autoconf

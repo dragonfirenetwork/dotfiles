@@ -1,0 +1,15 @@
+# Main repository for Pop!_OS LTS
+deb http://apt.pop-os.org/ubuntu lts main restricted universe multiverse
+deb-src http://apt.pop-os.org/ubuntu lts main restricted universe multiverse
+
+# Security updates for Pop!_OS LTS
+deb http://apt.pop-os.org/ubuntu lts-security main restricted universe multiverse
+deb-src http://apt.pop-os.org/ubuntu lts-security main restricted universe multiverse
+
+# Updates for Pop!_OS LTS
+deb http://apt.pop-os.org/ubuntu lts-updates main restricted universe multiverse
+deb-src http://apt.pop-os.org/ubuntu lts-updates main restricted universe multiverse
+
+# Backports for Pop!_OS LTS (optional)
+deb http://apt.pop-os.org/ubuntu lts-backports main restricted universe multiverse
+deb-src http://apt.pop-os.org/ubuntu lts-backports main restricted universe multiverse

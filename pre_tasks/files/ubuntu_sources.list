@@ -1,0 +1,15 @@
+# Main repository for LTS Ubuntu releases
+deb http://archive.ubuntu.com/ubuntu lts main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu lts main restricted universe multiverse
+
+# Security updates for LTS Ubuntu releases
+deb http://security.ubuntu.com/ubuntu lts-security main restricted universe multiverse
+deb-src http://security.ubuntu.com/ubuntu lts-security main restricted universe multiverse
+
+# Updates for LTS Ubuntu releases
+deb http://archive.ubuntu.com/ubuntu lts-updates main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu lts-updates main restricted universe multiverse
+
+# Backports for LTS Ubuntu releases (optional)
+deb http://archive.ubuntu.com/ubuntu lts-backports main restricted universe multiverse
+deb-src http://archive.ubuntu.com/ubuntu lts-backports main restricted universe multiverse
