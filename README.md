@@ -59,12 +59,13 @@ nano group_vars/all.yml
 
 You can also update or reset specific packages manually by providing specific tags to the Ansible playbook. Make sure the package is uncommented in the ```group_vars/all.yml``` file.
 
-To update or reset a package:
+To update a package or reset a package to this default configuration run:
 ```
-ansible-playbook main.yml --tag <package>
+ansible-playbook <dotfiles_dir>/main.yml --tag <package>
 ```
 
-For example, to reset Alacritty:
+For example, to upgrade/reset Alacritty:
 ```
+cd $HOME/.dotfiles
 ansible-playbook main.yml --tag alacritty
 ```
