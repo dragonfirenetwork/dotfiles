@@ -1,21 +1,66 @@
 ---
 # pre_tasks/debian.yml
 
-- name: Update APT package index
+- name: System Setup | Repositories | add ignored packages for archlinux hosts
+  lineinfile:
+      dest: /etc/pacman.conf
+      regexp: "^#?IgnorePkg"
+      line: "IgnorePkg   = ansible linux linux-headers linux-lts linux-lts-headers"
+  when: ansible_distribution == "Archlinux"
+  tags:
+    - pre_tasks
+
+- name: System Setup | Repositories | add sources.list for debian hosts
+  copy:
+    src: distribution_packages/debian_sources.list
+    dest: /etc/apt/sources.list
+    backup: yes
+  notify: apt_update
+  when: ansible_distribution == "Debian"
+  tags:
+    - pre_tasks
+
+- name: System Setup | Repositories | add debian-backports
+  apt_repository:
+    repo: deb http://deb.debian.org/debian buster-backports main
+    filename: debian-backports
+  notify: apt_update
+  when: ansible_distribution == "Debian"
+  tags:
+    - pre_tasks
+
+- name: System Setup | Install package management tools (debian-based)
+  package:
+    name:
+      - aptitude
+      - software-properties-common
+    state: latest
+  when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
+  tags:
+    - pre_tasks
+
+- name: System Setup | Update APT package index
   apt:
     update_cache: yes
-  become: yes
   tags:
     - pre_tasks
 
-- name: Upgrade all installed packages to the latest version
+- name: System Setup | Upgrade all installed packages to the latest version
   apt:
     upgrade: dist
-  become: yes
   tags:
     - pre_tasks
 
-- name: Install essential packages
+# Enable passwordless sudo for user
+- name: System Setup | Enable passwordless sudo for user
+  ansible.builtin.template:
+    src: "user-sudo.j2"
+    dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
+    mode: "0440"
+  tags:
+    - pre_tasks
+
+- name: System Setup | Install essential packages
   apt:
     name:
       - build-essential
@@ -52,10 +97,17 @@
       - qemu-kvm
       - vagrant
     state: present
-  become: yes
   tags:
     - pre_tasks
-    - essentials
+
+# Check if .config exists, if not create it
+- name: System Setup | Ensure .config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config"
+    state: directory
+    mode: '0755'
+  tags:
+    - pre_taskss
 
 - name: ZSH
   block:
@@ -76,72 +128,3 @@
   tags:
     - pre_tasks
     - zsh
-
-- name: Install Python packages
-  apt:
-    name:
-      - python3
-      - python3-pip
-      - python3-venv
-      - virtualenv
-    state: present
-  become: yes
-  tags:
-    - pre_tasks
-    - python
-
-- name: Ensure Python interpreter is set to Python 3
-  set_fact:
-    ansible_python_interpreter: /usr/bin/python3
-  tags:
-    - pre_tasks
-
-- name: Install Docker and related packages
-  block:
-    - name: Add Docker GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-      become: yes
-
-    - name: Add Docker APT repository
-      apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
-        state: present
-      become: yes
-
-    - name: Update APT cache after adding Docker repository
-      apt:
-        update_cache: yes
-      become: yes
-
-    - name: Install Docker and related packages
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-buildx-plugin
-          - docker-compose-plugin
-        state: present
-      become: yes
-
-    - name: Add user to Docker group
-      user:
-        name: "{{ ansible_user | default('your_username') }}"
-        groups: docker
-        append: yes
-      become: yes
-  when: "'docker' in default_roles or 'docker' in run_roles"
-  tags:
-    - pre_tasks
-    - docker_setup
-
-# Check if .config exists, if not create it
-- name: Ensure .config directory exists
-  file:
-    path: "{{ ansible_env.HOME }}/.config"
-    state: directory
-    mode: '0755'
-  tags:
-    - pre_tasks

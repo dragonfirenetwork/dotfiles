@@ -1,0 +1,17 @@
+---
+# roles/python/tasks/debian.yml
+
+- name: Install Python packages
+  apt:
+    name:
+      - python3-venv
+      - virtualenv
+    state: present
+  tags:
+    - python
+
+- name: Ensure Python interpreter is set to Python 3
+  set_fact:
+    ansible_python_interpreter: /usr/bin/python3
+  tags:
+    - pre_tasks

@@ -3,7 +3,7 @@
 
 - name: Check internet connection
   uri:
-    url: "https://google.com"
+    url: "https://one.one.one.one"
     return_content: no
   register: internet_connection
   tags:

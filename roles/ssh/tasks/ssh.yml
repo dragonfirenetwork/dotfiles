@@ -1,5 +1,5 @@
 ---
-# pre_tasks/ssh.yml
+# roles/ssh/tasks/ssh.yml
 
 - name: Setup SSH
   block:
@@ -9,7 +9,6 @@
         state: directory
         mode: '0700'
       tags:
-        - pre_tasks
         - ssh
 
     - name: Copy SSH keys
@@ -23,27 +22,22 @@
         label: "{{ ssh_key_item.key }}"
         loop_var: ssh_key_item
       tags:
-        - pre_tasks
         - ssh
 
-    - name: Copy SSH config file
+    - name: Copy SSH config
       copy:
         dest: "{{ ansible_env.HOME }}/.ssh/config"
         content: "{{ ssh_configs }}"
         mode: '0644'
       tags:
-        - pre_tasks
         - ssh
 
-    - name: Copy known_hosts file
+    - name: Copy SSH known_host
       copy:
         dest: "{{ ansible_env.HOME }}/.ssh/known_hosts"
         content: "{{ ssh_known_hosts }}"
         mode: '0644'
       tags:
-        - pre_tasks
         - ssh
-
   tags:
-    - pre_tasks
     - ssh
