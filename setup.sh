@@ -212,7 +212,7 @@ create_vault_secret
 
 # Playbook run
 if [[ ! -f "$DOTFILES_DIR/.first_run" && ! $STOP_AUTO_RUN ]]; then
-    printf "\n${LGREEN}Running Ansible playbook for the first time...${RESTORE}\n"
+    printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
     touch $DOTFILES_DIR/.first_run
     ansible-playbook $DOTFILES_DIR/main.yml --ask-become-pass
 elif [[ ! -f "$DOTFILES_DIR/.first_run" && ! $STOP_AUTO_RUN ]]; then
