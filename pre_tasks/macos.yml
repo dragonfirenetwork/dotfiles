@@ -53,24 +53,12 @@
   tags:
     - pre_tasks
 
-# Set Homebrew prefix based on architecture
-- name: Set Homebrew prefix based on architecture
-  set_fact:
-    homebrew_prefix: >
-      {% if mac_arch.stdout == 'arm64' %}
-        /opt/homebrew
-      {% else %}
-        /usr/local
-      {% endif %}
-  tags:
-    - pre_tasks
-
 # Update, upgrade and cleanup Homebrew
-- name: Updating Homebrew
-  update_homebrew: true
-  upgrade_all: true
-  tags:
-    - pre_tasks
+- name: Update and upgrade Homebrew
+  community.general.homebrew:
+      update_homebrew: true
+      upgrade_all: true
+      clear_cache: true
 
 - name: Cleanup Homebrew
   command: "{{ homebrew_prefix }}/bin/brew cleanup"

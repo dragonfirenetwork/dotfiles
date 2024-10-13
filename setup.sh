@@ -196,9 +196,11 @@ prompt_for_role_changes() {
     if [[ "$CHANGE_ROLES" =~ ^[Yy]$ || -z "$CHANGE_ROLES" ]]; then
       printf "${LCYAN}To make changes, edit the following file:${RESTORE}\n"
       echo "$DOTFILES_DIR/group_vars/all.yml"
+      echo
       printf "${LGREEN}To edit the file using 'vim' or 'nano', run:${RESTORE}\n"
       echo "vim $DOTFILES_DIR/group_vars/all.yml"
       echo "nano $DOTFILES_DIR/group_vars/all.yml"
+      echo
       printf "${LYELLOW}Re-run this script after making changes, or run the playbook directly using:${RESTORE}\n"
       echo "ansible-playbook $DOTFILES_DIR/main.yml"
       echo "ansible-playbook $DOTFILES_DIR/main.yml --tag <package>"
