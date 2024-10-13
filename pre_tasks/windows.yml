@@ -4,9 +4,13 @@
     state: present
     params: allowGlobalConfirmation=true
   when: ansible_distribution == "Windows"
+  tags:
+    - pre_tasks
 
 - name: Pre-run | Update Chocolatey (Windows)
   win_chocolatey:
     name: all
     state: latest
   when: ansible_distribution == "Windows"
+  tags:
+    - pre_tasks

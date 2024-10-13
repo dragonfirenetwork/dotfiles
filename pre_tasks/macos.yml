@@ -2,7 +2,7 @@
 # pre_tasks/macos.yml
 
 # Detect Mac architecture (Apple Silicon vs. Intel)
-- name: Detect Mac architecture
+- name: System Setup | Detect Mac architecture
   command: uname -m
   register: mac_arch
   changed_when: false
@@ -10,7 +10,7 @@
     - pre_tasks
 
 # Ensure Xcode Command Line Tools are installed silently
-- name: Ensure Xcode Command Line Tools are installed (macOS)
+- name: System Setup | Xcode | Ensure Xcode Command Line Tools are installed (macOS)
   block:
     - name: Check if Xcode CLT is installed
       stat:
@@ -19,7 +19,7 @@
       tags:
         - pre_tasks
 
-    - name: Trigger Xcode CLT installation prompt
+    - name: System Setup | Xcode | Trigger Xcode CLT installation prompt
       shell: xcode-select --install
       args:
         executable: /bin/bash
@@ -29,7 +29,7 @@
       tags:
         - pre_tasks
 
-    - name: Wait for Xcode CLT installation to complete
+    - name: System Setup | Xcode | Wait for Xcode CLT installation to complete
       wait_for:
         path: /Library/Developer/CommandLineTools/usr/bin/git
         timeout: 600
@@ -37,14 +37,14 @@
       tags:
         - pre_tasks
 
-    - name: Verify Xcode Command Line Tools installation
+    - name: System Setup | Xcode | Verify Xcode Command Line Tools installation
       stat:
         path: /Library/Developer/CommandLineTools
       register: clt_verify
       tags:
         - pre_tasks
 
-    - name: Fail if Xcode Command Line Tools installation failed
+    - name: System Setup | Xcode | Fail if Xcode Command Line Tools installation failed
       fail:
         msg: "Xcode Command Line Tools installation failed."
       when: not clt_verify.stat.exists
@@ -54,20 +54,22 @@
     - pre_tasks
 
 # Update, upgrade and cleanup Homebrew
-- name: Update and upgrade Homebrew
+- name: System Setup | Homebrew | Update and upgrade Homebrew
   community.general.homebrew:
       update_homebrew: true
       upgrade_all: true
-      clear_cache: true
+  register: brew_check
+  tags:
+    - pre_tasks
 
-- name: Cleanup Homebrew
+- name: System Setup | Homebrew | Cleanup Homebrew
   command: "{{ homebrew_prefix }}/bin/brew cleanup"
   when: brew_check.stat.exists
   tags:
     - pre_tasks
 
 # Check if .config exists, if not create it
-- name: Ensure .config directory exists
+- name: System Setup | General | Ensure .config directory exists
   file:
     path: "{{ ansible_env.HOME }}/.config"
     state: directory
@@ -76,10 +78,10 @@
     - pre_tasks
 
 # Enable passwordless sudo for homebrew
-- name: "Enable passwordless sudo for homebrew"
+- name: System Setup | General | Enable passwordless sudo for homebrew
   ansible.builtin.template:
     src: "user-sudo.j2"
     dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
     mode: "0440"
   tags:
-    - homebrew
+    - pre_tasks
