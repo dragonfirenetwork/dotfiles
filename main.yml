@@ -8,7 +8,7 @@
 
   vars:
     # Stupid Homebrew preventing becoming root and causing re-writes of ansible playbooks
-    to_root_or_not:  "{{ true if ansible_pkg_mgr != 'brew' else false }}"
+    to_root_or_not: "{{ ansible_pkg_mgr != 'brew' }}"
 
   vars_files:
     - group_vars/all.yml
