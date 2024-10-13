@@ -198,12 +198,15 @@ prompt_for_role_changes() {
             echo
             echo "You can comment out any roles you don't want to install."
             echo
-            echo "To edit the file using 'vim', run:"
+            echo "To edit the file using 'vim' or 'nano' run:"
             echo "vim $DOTFILES_DIR/group_vars/all.yml"
-            echo
-            echo "To edit the file using 'nano', run:"
             echo "nano $DOTFILES_DIR/group_vars/all.yml"
             echo
+            echo "When you are finished with your changes you can either re-run this script, or you "
+            echo "can run the ansible playbook directly yourself (even with tags)."
+            echo "ansible-playbook $DOTFILES_DIR/main.yml"
+            echo "ansible-playbook $DOTFILES_DIR/main.yml --tag <package>"
+            echo 
             exit 0
         elif [[ "$CHANGE_ROLES" =~ ^[Nn]$ ]]; then
             echo "Proceeding with default roles..."
