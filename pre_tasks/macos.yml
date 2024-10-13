@@ -73,7 +73,7 @@
 # Enable passwordless sudo for homebrew
 - name: System Setup | General | Enable passwordless sudo for homebrew
   ansible.builtin.template:
-    src: "user-sudo.j2"
+    src: "user_sudo.j2"
     dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
     mode: "0440"
   tags:
