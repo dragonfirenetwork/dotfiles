@@ -28,7 +28,8 @@
         - pre_tasks
     
     - name: Pre-tasks | Linux specific
-      include_tasks: pre_tasks/debian.yml
+      import_tasks: pre_tasks/debian.yml
+      become: true
       when: ansible_os_family == "Debian"
       tags:
         - pre_tasks
