@@ -74,3 +74,13 @@
     mode: '0755'
   tags:
     - pre_tasks
+
+# Enable passwordless sudo for homebrew
+- name: "Enable passwordless sudo for homebrew"
+  ansible.builtin.template:
+    src: "user-sudo.j2"
+    dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
+    mode: "0440"
+  become: true
+  tags:
+    - homebrew
