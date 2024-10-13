@@ -211,8 +211,12 @@ install_ansible_requirements
 create_vault_secret
 
 # Playbook run
-if [ ! $STOP_AUTO_RUN ]; then
-    printf "\n${LGREEN}Running Ansible playbook${RESTORE}\n"
+if [[ ! -f "$DOTFILES_DIR/.first_run" && ! $STOP_AUTO_RUN ]]; then
+    printf "\n${LGREEN}Running Ansible playbook for the first time...${RESTORE}\n"
+    touch $DOTFILES_DIR/.first_run
+    ansible-playbook $DOTFILES_DIR/main.yml --ask-become-pass
+elif [[ ! -f "$DOTFILES_DIR/.first_run" && ! $STOP_AUTO_RUN ]]; then
+    printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
     ansible-playbook $DOTFILES_DIR/main.yml
 else
     exit 0
