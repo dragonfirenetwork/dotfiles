@@ -58,13 +58,11 @@
   community.general.homebrew:
       update_homebrew: true
       upgrade_all: true
-  register: brew_check
   tags:
     - pre_tasks
 
 - name: System Setup | Homebrew | Cleanup Homebrew
   command: "{{ homebrew_prefix }}/bin/brew cleanup"
-  when: brew_check.stat.exists
   tags:
     - pre_tasks
 
