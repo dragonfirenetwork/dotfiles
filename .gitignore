@@ -1,3 +1,4 @@
 # Ignore OS-specific files
 .DS_Store
 vault.secret
+.first_run
