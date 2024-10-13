@@ -1,6 +1,14 @@
 ---
 # pre_tasks/macos.yml
 
+# Detect Mac architecture (Apple Silicon vs. Intel)
+- name: Detect Mac architecture
+  command: uname -m
+  register: mac_arch
+  changed_when: false
+  tags:
+    - pre_tasks
+
 # Ensure Xcode Command Line Tools are installed silently
 - name: Ensure Xcode Command Line Tools are installed (macOS)
   block:
@@ -45,111 +53,30 @@
   tags:
     - pre_tasks
 
-# Detect Mac architecture (Intel vs. Apple Silicon)
-- name: Detect Mac architecture
-  command: uname -m
-  register: mac_arch
-  changed_when: false
-  tags:
-    - pre_tasks
-
-# Homebrew tasks
-- name: Homebrew configuration
-  import_tasks: homebrew/main.yml
-  tags:
-    - pre_tasks
-    - homebrew
-
-# Source .zprofile to update PATH for current session
-- name: Source .zprofile to update PATH
-  shell: source "{{ ansible_env.HOME }}/.zprofile"
-  args:
-    executable: /bin/zsh
-  tags:
-    - pre_tasks
-
-# Ensure Homebrew is up to date
-- name: Ensure Homebrew is up to date
-  shell: "{{ homebrew_prefix }}/bin/brew update"
-  when: brew_check.stat.exists
-  tags:
-    - pre_tasks
-
-# Ensure Homebrew directories have correct permissions
-- name: Ensure Homebrew directories have correct permissions
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    mode: '0755'
-  loop:
-    - "{{ homebrew_prefix }}"
-    - "{{ homebrew_prefix }}/bin"
-    - "{{ homebrew_prefix }}/etc"
-    - "{{ homebrew_prefix }}/share"
-  when: brew_check.stat.exists
-  tags:
-    - pre_tasks
-
-# Install essential packages via Homebrew
-- name: Install essential packages (macOS)
-  homebrew:
-    name:
-      - autoconf
-      - automake
-      - wget
-      - htop
-      - btop
-      - nmap
-      - netcat
-      - zoxide
-      - ffmpeg
-      - tree
-      - jq
-      - ripgrep
-      - neofetch
-      - gnupg
-      - coreutils
-      - findutils
-      - git 
-      - gnu-sed
-      - gawk
-      - watch
-      - gnu-tar
-    state: present
-  tags:
-    - pre_tasks
-    - essentials
-
-# Install Python packages via Homebrew
-- name: Install Python packages (macOS)
-  homebrew:
-    name:
-      - python@3.9
-      - pipenv
-      - virtualenv
-    state: present
-  tags:
-    - pre_tasks
-    - python
-
-# Set Ansible Python interpreter to Homebrew's Python 3
-- name: Ensure Python interpreter is set to Python 3
+# Set Homebrew prefix based on architecture
+- name: Set Homebrew prefix based on architecture
   set_fact:
-    ansible_python_interpreter: "{{ homebrew_prefix }}/bin/python3"
+    homebrew_prefix: >
+      {% if mac_arch.stdout == 'arm64' %}
+        /opt/homebrew
+      {% else %}
+        /usr/local
+      {% endif %}
   tags:
     - pre_tasks
 
-# Install Docker Desktop via Homebrew Cask if Docker role is included
-- name: Install Docker Desktop (macOS)
-  homebrew_cask:
-    name: docker
-    state: present
-  when: "'docker' in default_roles or 'docker' in run_roles"
+# Update, upgrade and cleanup Homebrew
+- name: Updating Homebrew
+  update_homebrew: true
+  upgrade_all: true
   tags:
     - pre_tasks
-    - docker_setup
+
+- name: Cleanup Homebrew
+  command: "{{ homebrew_prefix }}/bin/brew cleanup"
+  when: brew_check.stat.exists
+  tags:
+    - pre_tasks
 
 # Check if .config exists, if not create it
 - name: Ensure .config directory exists

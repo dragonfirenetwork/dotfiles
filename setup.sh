@@ -1,6 +1,43 @@
 #!/bin/bash
 set -e
 
+# Dracula theme colors
+RESTORE='\033[0m'
+BLACK='\033[00;30m'
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+YELLOW='\033[00;33m'
+PURPLE='\033[00;35m'
+CYAN='\033[00;36m'
+LIGHTGRAY='\033[00;37m'
+LBLACK='\033[01;30m'
+LRED='\033[38;5;203m'  # Dracula Red
+LGREEN='\033[38;5;83m' # Dracula Green
+LYELLOW='\033[38;5;227m' # Dracula Yellow
+LPURPLE='\033[38;5;141m' # Dracula Purple
+LCYAN='\033[38;5;87m'    # Dracula Cyan
+PINK='\033[38;5;205m'    # Dracula Pink
+ORANGE='\033[38;5;215m'  # Dracula Orange
+OVERWRITE='\e[1A\e[K'
+
+# Emoji codes
+CHECK_MARK="${LGREEN}\xE2\x9C\x94${RESTORE}"
+X_MARK="${LRED}\xE2\x9C\x96${RESTORE}"
+PIN="${PINK}\xF0\x9F\x93\x8C${RESTORE}"
+CLOCK="${LCYAN}\xE2\x8C\x9B${RESTORE}"
+ARROW="${LCYAN}\xE2\x96\xB6${RESTORE}"
+BOOK="${LPURPLE}\xF0\x9F\x93\x8B${RESTORE}"
+HOT="${ORANGE}\xF0\x9F\x94\xA5${RESTORE}"
+WARNING="${LRED}\xF0\x9F\x9A\xA8${RESTORE}"
+RIGHT_ANGLE="${LGREEN}\xE2\x88\x9F${RESTORE}"
+
+# Paths
+DOTFILES_LOG="$HOME/.dotfiles.log"
+DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_GIT_REMOTE="https://github.com/dragonfirenetwork/dotfiles.git"
+OS="$(uname -s)"
+
+# Abort function for failure
 abort() {
   printf "%s\n" "$@" >&2
   exit 1
@@ -8,217 +45,182 @@ abort() {
 
 # Fail fast with a concise message when not using bash
 if [ -z "${BASH_VERSION:-}" ]; then
-  abort "Bash is required to interpret this script."
+  abort "${X_MARK} ${LRED}Bash is required to interpret this script.${RESTORE}"
 fi
 
-# Set the dotfiles directory
-DOTFILES_DIR="$HOME/.dotfiles"
-DOTFILES_GIT_REMOTE="https://github.com/dragonfirenetwork/dotfiles.git"
-OS="$(uname -s)"
-
-# Ansible playbook function
-run_playbook() {
-    echo "Beginning playbook run in 5 seconds..."
-    sleep 5
-    clear
-    ansible-playbook "$DOTFILES_DIR/main.yml"
+# _task colorize the given argument with spacing
+function _task {
+  if [[ $TASK != "" ]]; then
+    printf "${OVERWRITE}${LGREEN} [✓]  ${LGREEN}${TASK}\n"
+  fi
+  TASK=$1
+  printf "${LBLACK} [ ]  ${TASK} \n${LRED}"
 }
 
-# If on MacOS
-if [[ "$OS" == "Darwin" ]]; then
-    if ! command -v brew &> /dev/null; then
-        echo "Installing the Homebrew package manager..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    brew update && brew upgrade && brew cleanup
-fi
+# _cmd performs commands with error checking
+function _cmd {
+  if ! [[ -f $DOTFILES_LOG ]]; then
+    touch $DOTFILES_LOG
+  fi
+  > $DOTFILES_LOG
+  if eval "$1" 1> /dev/null 2> $DOTFILES_LOG; then
+    return 0
+  fi
+  printf "${OVERWRITE}${LRED} [X]  ${TASK}${LRED}\n"
+  while read -r line; do
+    printf "      ${line}\n"
+  done < $DOTFILES_LOG
+  rm $DOTFILES_LOG
+  exit 1
+}
+
+# Clear task
+function _clear_task {
+  TASK=""
+}
+
+# Mark task as done
+function _task_done {
+  printf "${OVERWRITE}${LGREEN} [✓]  ${LGREEN}${TASK}\n"
+  _clear_task
+}
+
+# macOS Setup
+macos_setup() {
+  _task "Checking for Homebrew"
+  if ! command -v brew &> /dev/null; then
+    _cmd "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+  fi
+  _cmd "brew update && brew upgrade && brew cleanup"
+  _task_done
+}
 
 # Check if Git is installed, if not install it
-if ! command -v git &> /dev/null; then
-    echo "Git not found. Installing Git..."
+install_git() {
+  _task "Checking for Git installation"
+  if ! command -v git &> /dev/null; then
+    _task "Installing Git"
     if [[ "$OS" == "Darwin" ]]; then
-        brew install git
+      _cmd "brew install git"
     elif [[ "$OS" == "Linux" ]]; then
-        if command -v apt &> /dev/null; then
-            sudo apt update && sudo apt install -y git
-        elif command -v yum &> /dev/null; then
-            sudo yum install -y git
-        elif command -v dnf &> /dev/null; then
-            sudo dnf install -y git
-        elif command -v pacman &> /dev/null; then
-            sudo pacman -Syu --noconfirm git
-        elif command -v zypper &> /dev/null; then
-            sudo zypper install -y git
-        else
-            echo "No supported package manager found to install Git."
-            exit 1
-        fi
+      if command -v apt &> /dev/null; then
+        _cmd "sudo apt update && sudo apt install -y git"
+      elif command -v yum &> /dev/null; then
+        _cmd "sudo yum install -y git"
+      elif command -v dnf &> /dev/null; then
+        _cmd "sudo dnf install -y git"
+      elif command -v pacman &> /dev/null; then
+        _cmd "sudo pacman -Syu --noconfirm git"
+      elif command -v zypper &> /dev/null; then
+        _cmd "sudo zypper install -y git"
+      else
+        abort "${X_MARK} ${LRED}No supported package manager found to install Git.${RESTORE}"
+      fi
     else
-        echo "Unsupported operating system: $OS"
-        exit 1
+      abort "${X_MARK} ${LRED}Unsupported operating system: $OS${RESTORE}"
     fi
-fi
-
-# Associative array for package managers
-declare -A package_managers
-if [[ "$OS" == "Darwin" ]]; then
-    package_managers=( ["brew"]="brew install ansible" )
-elif [[ "$OS" == "Linux" ]]; then
-    if grep -qEi "(debian|ubuntu)" /etc/*release; then
-        # Specific logic for different Debian-based distros
-        if grep -qEi "pop" /etc/*release; then
-            package_managers=( ["apt"]="sudo apt install ansible -y" )  # Pop!_OS
-        elif grep -qEi "ubuntu" /etc/*release; then
-            package_managers=( ["apt"]="sudo apt update -y && sudo apt install software-properties-common -y && sudo add-apt-repository --yes --update ppa:ansible/ansible && sudo apt install ansible -y" )
-        elif grep -qEi "debian" /etc/*release; then
-            package_managers=( ["apt"]="UBUNTU_CODENAME=jammy && wget -O- \"https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=get&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367\" | sudo gpg --dearmour -o /usr/share/keyrings/ansible-archive-keyring.gpg && echo \"deb [signed-by=/usr/share/keyrings/ansible-archive-keyring.gpg] http://ppa.launchpad.net/ansible/ansible/ubuntu \$UBUNTU_CODENAME main\" | sudo tee /etc/apt/sources.list.d/ansible.list && sudo apt update && sudo apt install ansible -y" )
-        fi
-    else
-        # Other Linux distros
-        package_managers=(
-            ["yum"]="sudo yum install -y ansible"
-            ["dnf"]="sudo dnf install -y ansible"
-            ["pacman"]="sudo pacman -Syu --noconfirm ansible"
-            ["zypper"]="sudo zypper install -y ansible"
-        )
-    fi
-else
-    echo "Unsupported operating system: $OS"
-    exit 1
-fi
-
-# Find the package manager and install Ansible
-for manager in "${!package_managers[@]}"; do
-    if command -v "$manager" &> /dev/null; then
-        INSTALL_ANSIBLE="${package_managers[$manager]}"
-        break
-    fi
-done
-
-if [ -z "$INSTALL_ANSIBLE" ]; then
-    echo "No supported package manager found."
-    exit 1
-fi
-
-# Install Ansible if not installed
-if ! command -v ansible &> /dev/null; then
-    echo "Ansible not found. Installing using $manager..."
-    eval "$INSTALL_ANSIBLE"
-else
-    echo "Ansible is already installed, skipping."
-fi
-
-# Clone the dotfiles repository
-if [[ ! -d "$DOTFILES_DIR" ]]; then
-    echo "Cloning dotfiles repository into $DOTFILES_DIR..."
-    git clone "$DOTFILES_GIT_REMOTE" "$DOTFILES_DIR"
-else
-    echo "Dotfiles directory already exists. Pulling latest changes..."
-    cd "$DOTFILES_DIR"
-    git pull origin main
-    cd
-fi
-
-# Install Ansible requirements
-if [[ -f "$DOTFILES_DIR/requirements.yml" ]]; then
-    echo "Checking Ansible requirements..."
-    ansible-galaxy install -r "$DOTFILES_DIR/requirements.yml"
-else
-    echo "No Ansible requirements found, skipping."
-fi
-
-# Create the vault.secret file
-if [[ ! -f "$DOTFILES_DIR/vault.secret" ]]; then
-    read -s -p "Enter vault password: " vault
-    echo
-    echo "$vault" > "$DOTFILES_DIR/vault.secret"
-    chmod 600 "$DOTFILES_DIR/vault.secret"
-else
-    echo "vault.secret already exists, skipping."
-fi
-
-# Function to check the vault secret
-check_vault_secret() {
-    while true; do
-        read -p "Is the vault.secret correct? (Y/n): " SECRET_CORRECT
-        if [[ "$SECRET_CORRECT" =~ ^[Yy]$ || -z "$SECRET_CORRECT" ]]; then
-            echo "Vault secret confirmed."
-            break
-        elif [[ "$SECRET_CORRECT" =~ ^[Nn]$ ]]; then
-            read -s -p "Re-enter vault password: " vault
-            echo
-            echo "$vault" > "$DOTFILES_DIR/vault.secret"
-            chmod 600 "$DOTFILES_DIR/vault.secret"
-        else
-            echo "Invalid response. Please enter Y for Yes or N for No."
-        fi
-    done
+  else
+    _task_done
+  fi
 }
 
-# Loop until valid Y or N is entered for vault check
-while true; do
-    read -p "Would you like to check the vault.secret now? (Y/n): " VAULT_CHECK
-    if [[ "$VAULT_CHECK" =~ ^[YyNn]$ || -z "$VAULT_CHECK" ]]; then
-        break
+# Install Python, pip, and Ansible for different distros
+install_dependencies() {
+  _task "Installing dependencies"
+  if [[ "$OS" == "Darwin" ]]; then
+    _cmd "brew install ansible"
+  elif [[ "$OS" == "Linux" ]]; then
+    if grep -qEi "(debian|ubuntu|pop|mint)" /etc/*release; then
+      _cmd "sudo apt update -y && sudo apt install -y python3 python3-pip software-properties-common"
+      _cmd "sudo add-apt-repository --yes --update ppa:ansible/ansible"
+      _cmd "sudo apt install -y ansible"
+    elif grep -qEi "arch" /etc/*release; then
+      _cmd "sudo pacman -Syu --noconfirm python ansible python-pip"
+    elif grep -qEi "fedora" /etc/*release; then
+      _cmd "sudo dnf install -y python3 python3-pip ansible"
+    elif grep -qEi "centos|redhat" /etc/*release; then
+      _cmd "sudo yum install -y python3 python3-pip ansible"
     else
-        echo "Invalid response. Please enter Y for Yes or N for No."
+      abort "${X_MARK} ${LRED}No supported package manager found to install Python, pip, and Ansible.${RESTORE}"
     fi
-done
+  else
+    abort "${X_MARK} ${LRED}Unsupported operating system: $OS${RESTORE}"
+  fi
 
-# Vault check logic
-if [[ "$VAULT_CHECK" =~ ^[Yy]$ || -z "$VAULT_CHECK" ]]; then
-    while true; do
-        read -p "Would you like to manually check it yourself (recommended), or display it here? (M/d): " CHECK_TYPE
-        if [[ "$CHECK_TYPE" =~ ^[MmDd]$ || -z "$CHECK_TYPE" ]]; then
-            if [[ "$CHECK_TYPE" =~ ^[Mm]$ || -z "$CHECK_TYPE" ]]; then
-                clear
-                echo "You can manually check the file located at: $DOTFILES_DIR/vault.secret"
-                exit 0
-            elif [[ "$CHECK_TYPE" =~ ^[Dd]$ ]]; then
-                check_vault_secret
-            fi
-            break
-        else
-            echo "Invalid response. Please enter M for Manual or D for Display."
-        fi
-    done
-else
-    echo "Skipping vault.secret check."
-fi
+  _cmd "pip3 install watchdog"
+  _task_done
+}
+
+# Clone or update the dotfiles repository
+clone_or_update_dotfiles() {
+  _task "Cloning or updating dotfiles repository"
+  if [[ ! -d "$DOTFILES_DIR" ]]; then
+    _cmd "git clone $DOTFILES_GIT_REMOTE $DOTFILES_DIR"
+  else
+    _cmd "cd $DOTFILES_DIR && git pull origin main"
+  fi
+  _task_done
+}
+
+# Install Ansible roles and collections from requirements.yml
+install_ansible_requirements() {
+  _task "Installing Ansible roles and collections from requirements.yml"
+  if [[ -f "$DOTFILES_DIR/requirements.yml" ]]; then
+    _cmd "ansible-galaxy install -r $DOTFILES_DIR/requirements.yml"
+  else
+    printf "${WARNING} ${LYELLOW}No requirements.yml found, skipping role and collection installation.${RESTORE}\n"
+  fi
+  _task_done
+}
+
+# Create the vault.secret file
+create_vault_secret() {
+  _task "Checking for vault.secret file"
+  if [[ ! -f "$DOTFILES_DIR/vault.secret" ]]; then
+    read -s -p "${LCYAN}Enter vault password: ${RESTORE}" vault
+    echo "$vault" > "$DOTFILES_DIR/vault.secret"
+    chmod 600 "$DOTFILES_DIR/vault.secret"
+    printf "${CHECK_MARK} ${LGREEN}vault.secret created.${RESTORE}\n"
+  else
+    printf "${CHECK_MARK} ${LGREEN}vault.secret already exists, skipping.${RESTORE}\n"
+  fi
+  _task_done
+}
 
 # Function to prompt for role changes
 prompt_for_role_changes() {
-    echo "Would you like to make changes to the roles (packages) before proceeding?"
-    while true; do
-        read -p "(Y/n): " CHANGE_ROLES
-        if [[ "$CHANGE_ROLES" =~ ^[Yy]$ || -z "$CHANGE_ROLES" ]]; then
-            echo
-            echo "To make changes to the roles (packages) to be installed, please edit the following file:"
-            echo "$DOTFILES_DIR/group_vars/all.yml"
-            echo
-            echo "You can comment out any roles you don't want to install."
-            echo
-            echo "To edit the file using 'vim' or 'nano' run:"
-            echo "vim $DOTFILES_DIR/group_vars/all.yml"
-            echo "nano $DOTFILES_DIR/group_vars/all.yml"
-            echo
-            echo "When you are finished with your changes you can either re-run this script, or you "
-            echo "can run the ansible playbook directly yourself (even with tags)."
-            echo "ansible-playbook $DOTFILES_DIR/main.yml"
-            echo "ansible-playbook $DOTFILES_DIR/main.yml --tag <package>"
-            echo 
-            exit 0
-        elif [[ "$CHANGE_ROLES" =~ ^[Nn]$ ]]; then
-            echo "Proceeding with default roles..."
-            break
-        else
-            echo "Invalid response. Please enter Y for Yes or N for No."
-        fi
-    done
+  _task "Prompting for role changes"
+  printf "${LYELLOW}Would you like to make changes to the roles (packages) before proceeding?${RESTORE}\n"
+  while true; do
+    read -p "(Y/n): " CHANGE_ROLES
+    if [[ "$CHANGE_ROLES" =~ ^[Yy]$ || -z "$CHANGE_ROLES" ]]; then
+      printf "${LCYAN}To make changes, edit the following file:${RESTORE}\n"
+      echo "$DOTFILES_DIR/group_vars/all.yml"
+      printf "${LGREEN}To edit the file using 'vim' or 'nano', run:${RESTORE}\n"
+      echo "vim $DOTFILES_DIR/group_vars/all.yml"
+      echo "nano $DOTFILES_DIR/group_vars/all.yml"
+      printf "${LYELLOW}Re-run this script after making changes, or run the playbook directly using:${RESTORE}\n"
+      echo "ansible-playbook $DOTFILES_DIR/main.yml"
+      echo "ansible-playbook $DOTFILES_DIR/main.yml --tag <package>"
+      exit 0
+    elif [[ "$CHANGE_ROLES" =~ ^[Nn]$ ]]; then
+      printf "${CHECK_MARK} ${LGREEN}Proceeding with default roles...${RESTORE}\n"
+      break
+    else
+      printf "${X_MARK} ${LRED}Invalid response. Please enter Y for Yes or N for No.${RESTORE}\n"
+    fi
+  done
+  _task_done
 }
 
-# Ask user if they'd like to make changes to the roles (packages)
+# Main logic
+install_git
+install_dependencies
+clone_or_update_dotfiles
+install_ansible_requirements
+create_vault_secret
 prompt_for_role_changes
 
-# Now run the playbook
-run_playbook
+# Playbook run
+_task "Running Ansible playbook"
+_cmd "ansible-playbook $DOTFILES_DIR/main.yml"
