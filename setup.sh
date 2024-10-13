@@ -177,52 +177,43 @@ install_ansible_requirements() {
 create_vault_secret() {
   _task "Checking for vault.secret file"
   if [[ ! -f "$DOTFILES_DIR/vault.secret" ]]; then
-    read -s -p "${LCYAN}Enter vault password: ${RESTORE}" vault
-    echo "$vault" > "$DOTFILES_DIR/vault.secret"
-    chmod 600 "$DOTFILES_DIR/vault.secret"
-    printf "${CHECK_MARK} ${LGREEN}vault.secret created.${RESTORE}\n"
+    while true; do
+        read -s -p "${LCYAN}Enter vault password: ${RESTORE}" vault
+        read -s -p "${LCYAN}Confirm vault password: ${RESTORE}" vault_confirm
+        if [ $vault == $vault_confirm ]; then
+            echo "$vault" > "$DOTFILES_DIR/vault.secret"
+            chmod 600 "$DOTFILES_DIR/vault.secret"
+            printf "${CHECK_MARK} ${LGREEN}vault.secret created.${RESTORE}\n"
+            break
+        else 
+            printf "${OVERWRITE}${LRED}[X] Checking for vault.secret file${LRED}\n"
+            printf "${LRED}The passwords you entered did not match${LRED}"
+            printf "${LRED}The playbook will not run now automatically.${LRED}"
+            echo
+            printf "${WARNING} ${ORANGE}You will need to enter your vault secret manually in: $DOTFILES_DIR/vault.secret${ORANGE}"
+            echo
+            STOP_AUTO_RUN=1
+            break
+        fi
+    done
   else
-    printf "${CHECK_MARK} ${LGREEN}vault.secret already exists, skipping.${RESTORE}\n"
+    printf "${OVERWRITE}${CHECK_MARK} ${LGREEN}vault.secret already exists, skipping.${RESTORE}\n"
   fi
   _task_done
 }
 
-# Function to prompt for role changes
-prompt_for_role_changes() {
-  _task "Prompting for role changes"
-  printf "${LYELLOW}Would you like to make changes to the roles (packages) before proceeding?${RESTORE}\n"
-  while true; do
-    read -p "(Y/n): " CHANGE_ROLES
-    if [[ "$CHANGE_ROLES" =~ ^[Yy]$ || -z "$CHANGE_ROLES" ]]; then
-      printf "${LCYAN}To make changes, edit the following file:${RESTORE}\n"
-      echo "$DOTFILES_DIR/group_vars/all.yml"
-      echo
-      printf "${LGREEN}To edit the file using 'vim' or 'nano', run:${RESTORE}\n"
-      echo "vim $DOTFILES_DIR/group_vars/all.yml"
-      echo "nano $DOTFILES_DIR/group_vars/all.yml"
-      echo
-      printf "${LYELLOW}Re-run this script after making changes, or run the playbook directly using:${RESTORE}\n"
-      echo "ansible-playbook $DOTFILES_DIR/main.yml"
-      echo "ansible-playbook $DOTFILES_DIR/main.yml --tag <package>"
-      exit 0
-    elif [[ "$CHANGE_ROLES" =~ ^[Nn]$ ]]; then
-      printf "${CHECK_MARK} ${LGREEN}Proceeding with default roles...${RESTORE}\n"
-      break
-    else
-      printf "${X_MARK} ${LRED}Invalid response. Please enter Y for Yes or N for No.${RESTORE}\n"
-    fi
-  done
-  _task_done
-}
-
 # Main logic
+clear
 install_git
 install_dependencies
 clone_or_update_dotfiles
 install_ansible_requirements
 create_vault_secret
-prompt_for_role_changes
 
 # Playbook run
-_task "Running Ansible playbook"
-_cmd "ansible-playbook $DOTFILES_DIR/main.yml"
+if [ ! $STOP_AUTO_RUN ]; then
+    printf "\n${LGREEN}Running Ansible playbook${RESTORE}\n"
+    ansible-playbook $DOTFILES_DIR/main.yml
+else
+    exit 0
+fi
