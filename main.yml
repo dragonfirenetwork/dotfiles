@@ -46,15 +46,12 @@
       tags:
         - always
 
-    - name: Run roles
-      ansible.builtin.include_role:
-        apply:
-          tags:
-            - "{{ roles_item }}"
+    - name: Run roles with conditional privilege escalation
+      include_role:
         name: "{{ roles_item }}"
+      loop: "{{ run_roles }}"
       loop_control:
         loop_var: roles_item
-      with_items: "{{ run_roles }}"
       become: "{{ to_root_or_not }}"
       tags:
         - always
