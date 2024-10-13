@@ -1,9 +1,14 @@
 ---
+# .dotfiles/main.yml
+
 - name: Dotfiles Configuration
   hosts: localhost
   connection: local
   gather_facts: true
-  become: true
+
+  vars:
+    # Stupid Homebrew preventing becoming root and causing re-writes of ansible playbooks
+    to_root_or_not:  "{{ true if ansible_pkg_mgr != 'brew' else false }}"
 
   vars_files:
     - group_vars/all.yml
@@ -17,11 +22,13 @@
 
     - name: Internet Connection Check
       include_tasks: pre_tasks/check_connection.yml
+      become: {{ to_root_or_not }}
       tags:
         - always
 
     - name: OS-specific pre-tasks
       include_tasks: pre_tasks/{{ system_os | lower }}.yml
+      become: {{ to_root_or_not }}
       tags:
         - always
 
@@ -35,6 +42,7 @@
     - name: Display roles
       ansible.builtin.debug:
         var: run_roles
+      become: {{ to_root_or_not }}
       tags:
         - always
 
@@ -47,5 +55,6 @@
       loop_control:
         loop_var: roles_item
       with_items: "{{ run_roles }}"
+      become: {{ to_root_or_not }}
       tags:
         - always
