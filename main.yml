@@ -10,21 +10,28 @@
     - group_vars/all.yml
 
   pre_tasks:
-    - name: Set OS identifier
+    - name: Pre-tasks | Set OS identifier
       set_fact:
         system_os: "{{ 'macos' if ansible_os_family == 'Darwin' else ansible_os_family | lower }}"
       tags:
         - always
 
-    - name: Internet Connection Check
+    - name: Pre-tasks | Internet Connection Check
       include_tasks: pre_tasks/check_connection.yml
       tags:
         - always
-
-    - name: OS-specific pre-tasks
-      include_tasks: pre_tasks/{{ system_os | lower }}.yml
+    
+    - name: Pre-tasks | MacOS specific
+      include_tasks: pre_tasks/macos.yml
+      when: ansible_os_family == "Darwin"
       tags:
-        - always
+        - pre_tasks
+    
+    - name: Pre-tasks | Linux specific
+      include_tasks: pre_tasks/debian.yml
+      when: ansible_os_family == "Debian"
+      tags:
+        - pre_tasks
 
   tasks:
     - name: Set roles
