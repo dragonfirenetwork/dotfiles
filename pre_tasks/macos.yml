@@ -58,7 +58,6 @@
   community.general.homebrew:
       update_homebrew: true
       upgrade_all: true
-  become: false
   register: brew_check
   tags:
     - pre_tasks
@@ -66,7 +65,6 @@
 - name: System Setup | Homebrew | Cleanup Homebrew
   command: "{{ homebrew_prefix }}/bin/brew cleanup"
   when: brew_check.stat.exists
-  become: false
   tags:
     - pre_tasks
 
@@ -76,7 +74,6 @@
     path: "{{ ansible_env.HOME }}/.config"
     state: directory
     mode: '0755'
-  become: false
   tags:
     - pre_tasks
 
