@@ -1,5 +1,7 @@
+# group_vars/all.yml
+
 # Software to install, uncomment any you wish to skip
-#default_roles:
+default_roles:
 #  - alacritty
 #  - bat
 #  - starship
