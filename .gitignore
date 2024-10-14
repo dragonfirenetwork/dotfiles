@@ -1,5 +1,8 @@
 # Ignore OS-specific files
 .DS_Store
-vault.secret
 .gitconfig
+.gitignore
+.hushlogin
+.stow-local-ignore
+vault.secret
 .first_run
