@@ -86,7 +86,7 @@
     path: "{{ ansible_env.HOME }}/.hushlogin"
     state: touch
     owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
+    group: "staff"
     mode: 0600
   tags:
     - pre_tasks
