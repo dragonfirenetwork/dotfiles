@@ -81,22 +81,43 @@
   tags:
     - system
 
-- name: ZSH
+# ZSH tasks
+- name: System | ZSH
   block:
-    - name: Check if .zshrc exists
+    - name: "System | ZSH | Set default terminal"
+      ansible.builtin.user:
+        name: "{{ ansible_env.USER }}"
+        shell: /usr/bin/zsh
+      become: true
+
+    - name: System | ZSH | Check if .zshrc exists
       stat:
         path: "{{ ansible_env.HOME }}/.zshrc"
       register: zshrc_exists
     
-    - name: Create .zshrc
+    - name: System | ZSH | Create or update .zshrc configuration
       copy:
         dest: "{{ ansible_env.HOME }}/.zshrc"
         content: |
-          export PATH="/usr/local/bin:$PATH"
-          alias ll="ls -la"
-        mode: '0644'
-      when: not zshrc_exists.stat.exists
+          # {{ ansible_managed }}
 
+          # Set system PATH just in case
+          export PATH="/usr/local/bin:$PATH"
+
+          # Convienece aliases
+          alias update='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
+
+          # History setup
+          HISTFILE=$HOME/.zhistory
+          SAVEHIST=1000
+          HISTSIZE=999
+          setopt share_history
+          setopt hist_expire_dups_first
+          setopt hist_ignore_dups
+          setopt hist_verify
+          bindkey "^[[A" history-search-backward # Up arrow
+          bindkey "^[[B" history-search-forward # Down arrow
+        mode: 0600
+      when: zshrc_exists.stat.exists == false
   tags:
-    - pre_tasks
-    - zsh
+    - system
