@@ -80,6 +80,14 @@
   tags:
     - pre_tasks
 
+# Check if the .hushlogin file exists
+- name: System Setup | General | Check if .hushlogin exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.hushlogin"
+  register: hushlogin_file
+  tags:
+    - pre_tasks
+
 # Hush the terminal login
 - name: System Setup | General | Hush the terminal login
   file:
@@ -88,5 +96,6 @@
     owner: "{{ ansible_env.USER }}"
     group: "staff"
     mode: 0600
+  when: hushlogin_file.stat.exists == false
   tags:
     - pre_tasks
