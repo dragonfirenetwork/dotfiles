@@ -1,10 +1,45 @@
 ---
 # roles/alacritty/tasks/main.yml
 
-- name: Run Alacritty role for MacOS
-  include_tasks: macos.yml
+- name: Alacritty | Install via Homebrew
+  homebrew:
+    name: alacritty
+    state: present
   when: ansible_os_family == "Darwin"
+  tags:
+    - alacritty
 
-- name: Rune Alacritty role for Linux
-  include_tasks: linux.yml
-  when: ansible_os_family == "Debian"
+- name: Alacritty | Install via Apt
+  apt:
+    name: alacritty
+    state: present
+  when: ansible_os_family in ["Darwin", "Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  tags:
+    - alacritty
+
+- name: Alacritty | Check for needed directories
+  file:
+    path: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+    state: directory
+    mode: '0755'
+  tags:
+    - alacritty
+
+- name: Alacritty | Copy configuration file
+  copy:
+    src: alacritty.toml
+    dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+  tags:
+    - alacritty
+
+- name: Alacritty | Clone themes repository
+  git:
+    repo: 'https://github.com/alacritty/alacritty-theme.git'
+    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+    version: main
+    force: yes
+  tags:
+    - alacritty
