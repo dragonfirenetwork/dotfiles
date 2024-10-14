@@ -3,6 +3,8 @@
 # Software to install, uncomment any you wish to skip
 default_roles:
   - system
+  - ssh
+  - git
 #  - alacritty
 #  - bat
 #  - starship

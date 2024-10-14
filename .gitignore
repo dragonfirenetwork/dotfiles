@@ -1,4 +1,5 @@
 # Ignore OS-specific files
 .DS_Store
 vault.secret
+.gitconfig
 .first_run
