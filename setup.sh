@@ -215,9 +215,7 @@ if [[ ! -f "$DOTFILES_DIR/.first_run" && ! $STOP_AUTO_RUN ]]; then
     printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
     touch $DOTFILES_DIR/.first_run
     ansible-playbook $DOTFILES_DIR/main.yml --ask-become-pass
-elif [[ ! -f "$DOTFILES_DIR/.first_run" && ! $STOP_AUTO_RUN ]]; then
+else
     printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
     ansible-playbook $DOTFILES_DIR/main.yml
-else
-    exit 0
 fi
