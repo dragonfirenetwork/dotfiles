@@ -18,14 +18,8 @@
     - asciiquarium
 
 - name: Asciiquarium | Check if aliases exist
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      # Asciiquarium
-      alias brb=asciiquarium
-      alias aq=asciiquarium
-  state: present
-  check_mode: true
+  shell: grep -q '^# Asciiquarium' "{{ ansible_env.HOME }}/.zshrc"
+  ignore_errors: true
   register: aq_aliases
 
 - name: Asciiquarium | Remove old aliases
@@ -33,7 +27,7 @@
     path: "{{ ansible_env.HOME }}/.zshrc"
     state: absent
     regexp: '^# Asciiquarium(\n|.)*alias aq=asciiquarium'
-  when: aq_aliases.changed
+  when: aq_aliases.rc == 0
 
 - name: Asciiquarium | Add aliases
   lineinfile:
