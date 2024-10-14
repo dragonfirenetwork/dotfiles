@@ -22,14 +22,7 @@
   ignore_errors: true
   register: aq_aliases
 
-- name: Asciiquarium | Remove old aliases
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    state: absent
-    regexp: '^# Asciiquarium(\n|.)*alias aq=asciiquarium'
-  when: aq_aliases.rc == 0
-
-- name: Asciiquarium | Add aliases
+- name: Asciiquarium | Add aliases with blank line before the block
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |
@@ -38,5 +31,7 @@
       alias aq=asciiquarium
     state: present
     insertafter: EOF
+    insertbefore: '^$'
+  when: aq_aliases.rc != 0 
   tags:
     - asciiquarium

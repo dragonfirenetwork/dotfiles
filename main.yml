@@ -49,3 +49,12 @@
         loop_var: roles_item
       tags:
         - always
+
+    # Source, just in case of changes
+    - name: Finalizing | Setting source
+      shell: source ~/.zshrc
+      args:
+        executable: /bin/zsh
+      when: ansible_os_family in ["Darwin", "Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+      tags:
+        - always

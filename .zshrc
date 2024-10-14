@@ -38,3 +38,7 @@ PATH="$HOME/.composer/vendor/bin:$PATH"
 
 # Initialize Starship prompt
 eval "$(starship init zsh)"
+
+# Asciiquarium
+alias brb=asciiquarium
+alias aq=asciiquarium
