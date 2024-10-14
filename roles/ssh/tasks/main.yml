@@ -7,7 +7,7 @@
       file:
         path: "{{ ansible_env.HOME }}/.ssh"
         state: directory
-        mode: '0700'
+        mode: 0700
       tags:
         - ssh
 
@@ -28,7 +28,7 @@
       copy:
         dest: "{{ ansible_env.HOME }}/.ssh/config"
         content: "{{ ssh_configs }}"
-        mode: '0644'
+        mode: 0644
       tags:
         - ssh
 
@@ -36,7 +36,7 @@
       copy:
         dest: "{{ ansible_env.HOME }}/.ssh/known_hosts"
         content: "{{ ssh_known_hosts }}"
-        mode: '0644'
+        mode: 0644
       tags:
         - ssh
   tags:

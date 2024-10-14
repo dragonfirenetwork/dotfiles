@@ -1,0 +1,39 @@
+---
+# roles/asciiquarium/tasks/macos.yml
+
+- name: Asciiquarium | Install with Homebrew
+  homebrew:
+    name: asciiquarium
+    state: present
+  tags:
+    - asciiquarium
+
+- name: Asciiquarium | Check if aliases exist
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Asciiquarium
+      alias brb=asciiquarium
+      alias aq=asciiquarium
+  state: present
+  check_mode: true
+  register: aq_aliases
+
+- name: Asciiquarium | Remove old aliases
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    state: absent
+    regexp: '^# Asciiquarium(\n|.)*alias aq=asciiquarium'
+  when: aq_aliases.changed
+
+- name: Asciiquarium | Add aliases
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Asciiquarium
+      alias brb=asciiquarium
+      alias aq=asciiquarium
+    state: present
+    insertafter: EOF
+  tags:
+    - asciiquarium

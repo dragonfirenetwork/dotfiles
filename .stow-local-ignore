@@ -4,7 +4,10 @@ pre_tasks
 programs
 roles
 ansible.cfg
-inventory.ini
+inventory
 main.yml
 README.md
 vault.secret
+.gitignore
+requirements.yml
+setup.sh
