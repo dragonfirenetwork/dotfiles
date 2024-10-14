@@ -32,7 +32,7 @@
     - system
     - ssh
     - git
-  #  - alacritty
+    - alacritty
     - asciiquarium
   #  - bat
   #  - starship
