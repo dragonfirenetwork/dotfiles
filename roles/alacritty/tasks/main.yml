@@ -25,13 +25,25 @@
   tags:
     - alacritty
 
-- name: Alacritty | Copy configuration file
+- name: Alacritty | Copy configuration file (MacOS)
   copy:
     src: alacritty.toml
     dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
     owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_system == 'Darwin' | ternary('staff', ansible_env.USER) }}"
+    group: "staff"
     mode: 0644
+  when: ansible_system == "Darwin"
+  tags:
+    - alacritty
+
+- name: Alacritty | Copy configuration file (Linux)
+  copy:
+    src: alacritty.toml
+    dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: 0644
+  when: ansible_system != "Darwin"
   tags:
     - alacritty
 
