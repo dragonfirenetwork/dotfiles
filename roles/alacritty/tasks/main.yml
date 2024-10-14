@@ -13,7 +13,7 @@
   apt:
     name: alacritty
     state: present
-  when: ansible_os_family in ["Darwin", "Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - alacritty
 
