@@ -1,12 +1,7 @@
-# SSH alias
-ssha='eval $(ssh-agent) && ssh-add'
-
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
-
 # Activate syntax highlighting
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 # Activate autosuggestions
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -21,6 +16,9 @@ setopt hist_verify
 bindkey "^[[A" history-search-backward # Uparrow
 bindkey "^[[B" history-search-forward # Downarrow
 
+# SSH
+ssha='eval $(ssh-agent) && ssh-add'
+
 # Zoxide
 alias cd="z"
 eval "$(zoxide init zsh)"
@@ -33,10 +31,9 @@ alias open-projects="tmux new-session -s \"projects\" -c \"$HOME/Projects\""
 function tmux_sessionizer() {
     $HOME/scripts/tmux-sessionizer
 }
-
 bindkey -s ^f "tmux-sessionizer\n"
 
-# Composer path
+# PHP | Composer path
 PATH="$HOME/.composer/vendor/bin:$PATH"
 
 # Initialize Starship prompt
