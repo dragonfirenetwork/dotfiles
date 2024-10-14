@@ -1,6 +1,44 @@
 ---
 # roles/system/tasks/debian.yml
 
+# Add HashiCorp GPG key for Vagrant
+- name: System | Add HashiCorp GPG key
+  apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+  become: true
+  tags:
+    - system
+
+# Add Btop GPG key (if using the PPA)
+- name: System | Add Btop GPG key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 91A6E7F0
+    state: present
+  become: true
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - system
+
+# Add Zoxide GPG key (if using the PPA)
+- name: System | Add Zoxide GPG key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: A0B04B9F10496B85
+    state: present
+  become: true
+  when: ansible_distribution == "Ubuntu"
+  tags:
+    - system
+
+- name: System | Update cache
+  apt:
+    update_cache: true
+  become: true
+  tags:
+    - system
+
 # Install system packages via Apt
 - name: System | Install system packages (debian-based)
   apt:
@@ -39,5 +77,26 @@
       - qemu-kvm
       - vagrant
     state: present
+  become: true
   tags:
     - system
+
+- name: ZSH
+  block:
+    - name: Check if .zshrc exists
+      stat:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+      register: zshrc_exists
+    
+    - name: Create .zshrc
+      copy:
+        dest: "{{ ansible_env.HOME }}/.zshrc"
+        content: |
+          export PATH="/usr/local/bin:$PATH"
+          alias ll="ls -la"
+        mode: '0644'
+      when: not zshrc_exists.stat.exists
+
+  tags:
+    - pre_tasks
+    - zsh

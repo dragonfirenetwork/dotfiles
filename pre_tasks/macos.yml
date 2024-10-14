@@ -75,7 +75,18 @@
   ansible.builtin.template:
     src: "user_sudo.j2"
     dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
-    mode: "0440"
+    mode: 0440
   become: true
+  tags:
+    - pre_tasks
+
+# Hush the terminal login
+- name: System Setup | General | Hush the terminal login
+  file:
+    path: "{{ ansible_env.HOME }}/.hushlogin"
+    state: touch
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: 0600
   tags:
     - pre_tasks

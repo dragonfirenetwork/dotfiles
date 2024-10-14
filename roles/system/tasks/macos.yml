@@ -26,6 +26,7 @@
       - gawk
       - watch
       - gnu-tar
+      - vagrant
     state: present
   tags:
     - system

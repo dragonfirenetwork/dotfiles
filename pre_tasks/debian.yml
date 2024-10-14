@@ -1,7 +1,7 @@
 ---
 # pre_tasks/debian.yml
 
-- name: System Setup | Repositories | Add sources.list for debian hosts
+- name: System Setup | Debian-based | Repositories | Add sources.list for debian hosts
   copy:
     src: "{{ ansible_distribution | lower }}_sources.list"
     dest: /etc/apt/sources.list
@@ -12,66 +12,51 @@
   tags:
     - pre_tasks
 
-- name: System Setup | Install package management tools
+- name: System Setup | Debian-based | Install package management tools
   package:
     name:
       - aptitude
       - software-properties-common
     state: latest
-  become: true
-  when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
-  tags:
-    - pre_tasks
-
-- name: System Setup | Update APT package index
-  apt:
-    update_cache: yes
+  notify: apt_update
   become: true
   tags:
     - pre_tasks
 
-- name: System Setup | Upgrade all installed packages to the latest version
+- name: System Setup | Debian-based | Upgrade all installed packages to the latest version
   apt:
-    upgrade: dist
+    upgrade: yes
+  notify: apt_update
   become: true
   tags:
     - pre_tasks
 
 # Enable passwordless sudo for user
-- name: System Setup | Enable passwordless sudo for user
+- name: System Setup | Debian-based | Enable passwordless sudo for user
   ansible.builtin.template:
     src: "user-sudo.j2"
-    dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
+    dest: /etc/sudoers.d/{{ ansible_env['USER'] }}
     mode: "0440"
   become: true
   tags:
     - pre_tasks
 
 # Check if .config exists, if not create it
-- name: System Setup | Ensure .config directory exists
+- name: System Setup | Debian-based | Ensure .config directory exists
   file:
     path: "{{ ansible_env.HOME }}/.config"
     state: directory
     mode: '0755'
   tags:
-    - pre_taskss
+    - pre_tasks
 
-- name: ZSH
-  block:
-    - name: Check if .zshrc exists
-      stat:
-        path: "{{ ansible_env.HOME }}/.zshrc"
-      register: zshrc_exists
-    
-    - name: Create .zshrc
-      copy:
-        dest: "{{ ansible_env.HOME }}/.zshrc"
-        content: |
-          export PATH="/usr/local/bin:$PATH"
-          alias ll="ls -la"
-        mode: '0644'
-      when: not zshrc_exists.stat.exists
-
+# Hush the terminal login
+- name: System Setup | General | Hush the terminal login
+  file:
+    path: "{{ ansible_env.HOME }}/.hushlogin"
+    state: touch
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: 0600
   tags:
     - pre_tasks
-    - zsh
