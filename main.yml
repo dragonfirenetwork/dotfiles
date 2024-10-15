@@ -34,7 +34,7 @@
     - git
     - alacritty
     - asciiquarium
-  #  - bat
+    - bat
   #  - starship
   #  - tmux
   #  - zsh
