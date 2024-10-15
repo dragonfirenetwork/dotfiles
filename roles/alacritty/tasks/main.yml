@@ -1,7 +1,7 @@
 ---
 # roles/alacritty/tasks/main.yml
 
-- name: Alacritty | Install via Homebrew
+- name: Install via Homebrew
   homebrew:
     name: alacritty
     state: present
@@ -9,7 +9,7 @@
   tags:
     - alacritty
 
-- name: Alacritty | Install via Apt
+- name: Install via Apt
   apt:
     name: alacritty
     state: present
@@ -17,14 +17,14 @@
   tags:
     - alacritty
 
-- name: Alacritty | Check if themes repository exists
+- name: Check if themes repository exists
   stat:
     path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
   register: alacritty_repo_exists
   tags:
     - alacritty
 
-- name: Alacritty | Clone Alacritty themes repository
+- name: Clone Alacritty themes repository
   git:
     repo: "https://github.com/alacritty/alacritty-theme.git"
     dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
@@ -32,7 +32,7 @@
   tags:
     - alacritty
 
-- name: Alacritty | Pull latest changes from themes repository
+- name: Pull latest changes from themes repository
   git:
     repo: "https://github.com/alacritty/alacritty-theme.git"
     dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
@@ -41,7 +41,7 @@
   tags:
     - alacritty
 
-- name: Alacritty | Copy configuration file (MacOS)
+- name: Copy configuration file (MacOS)
   copy:
     src: alacritty.toml
     dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
@@ -52,7 +52,7 @@
   tags:
     - alacritty
 
-- name: Alacritty | Copy configuration file (Linux debian-based)
+- name: Copy configuration file (Linux debian-based)
   copy:
     src: alacritty.toml
     dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
