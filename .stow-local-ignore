@@ -11,3 +11,4 @@ vault.secret
 .gitignore
 requirements.yml
 setup.sh
+ansible.log

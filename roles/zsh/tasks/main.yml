@@ -1,0 +1,10 @@
+---
+# roles/zsh/tasks/main.yml
+
+- name: Setup Zsh on MacOSX
+  include_tasks: macos.yml
+  when: ansible_os_family == "Darwin"
+
+- name: Install Zsh on Debian-based Linux
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"

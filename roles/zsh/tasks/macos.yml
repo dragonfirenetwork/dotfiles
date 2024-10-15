@@ -1,0 +1,25 @@
+---
+# roles/zsh/tasks/macos.yml
+
+- name: Check for .zshrc file
+  copy:
+    src: .zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    mode: 0600
+    backup: yes
+  tags:
+    - zsh
+
+- name: Install syntax highlighting
+  homebrew:
+    name: zsh-syntax-highlighting
+    state: present
+  tags:
+    - zsh
+
+- name: Install auto-suggestions
+  homebrew:
+    name: zsh-autosuggestions
+    state: present
+  tags:
+    - zsh

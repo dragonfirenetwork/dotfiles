@@ -2,7 +2,7 @@
 # roles/system/tasks/macos.yml
 
 # Install system packages via Homebrew
-- name: System | Install system packages (macOS)
+- name: System | Install system packages
   homebrew:
     name:
       - autoconf
@@ -26,51 +26,6 @@
       - gawk
       - watch
       - gnu-tar
-      - vagrant
-      - zsh-syntax-highlighting
-      - zsh-autosuggestions
     state: present
-  tags:
-    - system
-
-# ZSH tasks
-- name: System | ZSH
-  block:
-    - name: System | ZSH | Check if .zshrc exists
-      stat:
-        path: "{{ ansible_env.HOME }}/.zshrc"
-      register: zshrc_exists
-    
-    - name: System | ZSH | Create or update .zshrc configuration
-      copy:
-        dest: "{{ ansible_env.HOME }}/.zshrc"
-        content: |
-          # {{ ansible_managed }}
-
-          # Set system PATH just in case
-          export PATH="/usr/local/bin:$PATH"
-          
-          # Homebrew
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-          ## Activate syntax highlighting
-          source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-          ## Activate autosuggestions
-          source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-          # Convienece aliases
-          alias update='brew update && brew upgrade && brew cleanup'
-
-          # History setup
-          HISTFILE=$HOME/.zhistory
-          SAVEHIST=1000
-          HISTSIZE=999
-          setopt share_history
-          setopt hist_expire_dups_first
-          setopt hist_ignore_dups
-          setopt hist_verify
-          bindkey "^[[A" history-search-backward # Up arrow
-          bindkey "^[[B" history-search-forward # Down arrow
-        mode: 0644
-      when: zshrc_exists.stat.exists == false
   tags:
     - system
