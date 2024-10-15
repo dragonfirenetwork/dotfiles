@@ -222,7 +222,6 @@ create_vault_secret
 
 if [ "$FIRST_PLAY" = true ]; then
   printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
-  touch $DOTFILES_DIR/.first_run
   ansible-playbook $DOTFILES_DIR/main.yml --ask-become-pass
 else
   printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
