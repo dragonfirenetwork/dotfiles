@@ -1,7 +1,7 @@
 ---
 # roles/alacritty/tasks/main.yml
 
-- name: Install via Homebrew
+- name: MacOSX | Install via Homebrew
   homebrew:
     name: alacritty
     state: present
@@ -9,7 +9,7 @@
   tags:
     - alacritty
 
-- name: Install via Apt
+- name: Linux | Debian-based | Install via Apt
   apt:
     name: alacritty
     state: present
