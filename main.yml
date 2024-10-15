@@ -35,7 +35,7 @@
     - alacritty
     - asciiquarium
     - bat
-  #  - starship
+    - starship
   #  - tmux
   #  - zsh
   #  - terraform
