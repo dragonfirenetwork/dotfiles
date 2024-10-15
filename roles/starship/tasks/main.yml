@@ -29,7 +29,7 @@
       # Starship
       eval "$(starship init zsh)"
     state: present
-    insertbefore: '^$'
+    insertafter: EOF
   when: starship_alias.rc != 0
   tags:
     - starship

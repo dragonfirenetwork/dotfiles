@@ -36,9 +36,9 @@ bindkey -s ^f "tmux-sessionizer\n"
 # PHP | Composer path
 PATH="$HOME/.composer/vendor/bin:$PATH"
 
-# Starship
-eval "$(starship init zsh)"
-
 # Asciiquarium
 alias brb=asciiquarium
 alias aq=asciiquarium
+
+# Starship
+eval "$(starship init zsh)"
