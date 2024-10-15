@@ -17,14 +17,6 @@
   tags:
     - starship
 
-- name: Windows | Install via Chocolatey
-  ansible.builtin.win_chocolatey:
-    name: starship
-    state: present
-  when: ansible_os_family == "Windows"
-  tags:
-    - starship
-
 - name: Check if aliases exist
   shell: grep -q '^# Starship' "{{ ansible_env.HOME }}/.zshrc"
   ignore_errors: true
@@ -37,8 +29,7 @@
       # Starship
       eval "$(starship init zsh)"
     state: present
-    insertafter: EOF
     insertbefore: '^$'
-  when: starship_alias.stat.exists
+  when: starship_alias.rc != 0
   tags:
     - starship
