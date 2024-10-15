@@ -89,7 +89,8 @@
           block:
             - name: Finalizing | Update brew cache
               homebrew:
-                update_cache: true
+                update_homebrew: true
+                upgrade_all: true
             - name: Cleanup brew
               shell: brew cleanup
           when: ansible_system == "Darwin"
