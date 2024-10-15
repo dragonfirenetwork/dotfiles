@@ -74,11 +74,52 @@
 
   tasks:
 
-    # Source, just in case of changes
-    - name: Finalizing | Setting source
-      shell: source ~/.zshrc
-      args:
-        executable: /bin/zsh
-      when: ansible_os_family in ["Darwin", "Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+    # Wrap up the run
+    - name: Finalizing | Dotfiles
+      block:
+        # Source, just in case of changes 
+        - name: Finalizing | Setting source
+          shell: source ~/.zshrc
+          args:
+            executable: /bin/zsh
+          when: ansible_os_family in ["Darwin", "Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+
+        # Cleanup brew just in case
+        - name: Finalizing | Wrap up Homebrew
+          block:
+            - name: Finalizing | Update brew cache
+              homebrew:
+                update_cache: true
+            - name: Cleanup brew
+              shell: brew cleanup
+          when: ansible_system == "Darwin"
+          tags: 
+            - always
+          
+        # Cleanup Apt just in case
+        - name: Finalizing | Wrap up Apt
+          block:
+            - name: Finalizing | Update cache
+              apt:
+                update_cache: true
+            - name: Finalizing | Cleanup apt
+              apt:
+                autoclean: true
+          when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+          tags: 
+            - always
+      
+          # Change the first_play variable to false 
+        - name: Finalizing | Set first_play variable to false
+          lineinfile:
+            path: "{{ playbook_dir }}/group_vars/all.yml"
+            regexp: '^first_play:'
+            line: "first_play: false"
+          when: first_play == true
+
+        - name: Finalizing | Update user
+          debug:
+            msg: "Updated the first_play variable to false for future runs."
+          when: first_play == true
       tags:
         - always

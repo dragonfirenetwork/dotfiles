@@ -1,6 +1,6 @@
 # group_vars/all.yml
 
-# Is this the first time this is being run?
+# Do not change, this is used by the setup.sh script and playbook itself.
 first_play: true
 
 # Wallpaper settingss
