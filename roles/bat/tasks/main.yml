@@ -1,0 +1,19 @@
+---
+# roles/bat/tasks/main.yml
+
+- name: Bat | Install via Homebrew
+  homebrew:
+    name: bat
+    state: present
+  when: ansible_os_family == "Darwin"
+  tags:
+    - bat
+
+- name: Bat | Install via Apt
+  apt:
+    name: bat
+    state: present
+  become: true
+  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  tags:
+    - bat
