@@ -3,6 +3,7 @@
 .gitconfig
 .gitignore
 .hushlogin
+.ansible.log
 .stow-local-ignore
 vault.secret
 .first_run
