@@ -37,6 +37,16 @@ DOTFILES_DIR="$HOME/.dotfiles"
 DOTFILES_GIT_REMOTE="https://github.com/dragonfirenetwork/dotfiles.git"
 OS="$(uname -s)"
 
+# Is this the first time running?
+if [ ! -f "group_vars/all.yml" ]; then
+  FIRST_PLAY=true
+else
+  FIRST_PLAY=$(grep "first_play:" group_vars/all.yml | awk -F ": " '{print $2}')
+  if [ "$FIRST_PLAY" != "true" ]; then
+    FIRST_PLAY=false
+  fi
+fi
+
 # Abort function for failure
 abort() {
   printf "%s\n" "$@" >&2
@@ -210,12 +220,11 @@ clone_or_update_dotfiles
 install_ansible_requirements
 create_vault_secret
 
-# Playbook run
-if [[ ! -f "$DOTFILES_DIR/.first_run" && ! $STOP_AUTO_RUN ]]; then
-    printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
-    touch $DOTFILES_DIR/.first_run
-    ansible-playbook $DOTFILES_DIR/main.yml --ask-become-pass
+if [ "$FIRST_PLAY" = true ]; then
+  printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
+  touch $DOTFILES_DIR/.first_run
+  ansible-playbook $DOTFILES_DIR/main.yml --ask-become-pass
 else
-    printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
-    ansible-playbook $DOTFILES_DIR/main.yml
+  printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
+  ansible-playbook $DOTFILES_DIR/main.yml
 fi

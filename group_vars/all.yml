@@ -1,5 +1,8 @@
 # group_vars/all.yml
 
+# Is this the first time this is being run?
+first_play: true
+
 # Wallpaper settingss
 virtual_desktops: 7
 wallpaper_directory_path: "{{ ansible_env.HOME }}/Pictures/Wallpaper"
