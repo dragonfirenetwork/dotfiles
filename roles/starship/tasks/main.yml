@@ -1,0 +1,44 @@
+---
+# roles/starship/tasks/main.yml
+
+- name: MacOSX | Install via Homebrew
+  homebrew:
+    name: starship
+    state: present
+  when: ansible_os_family == "Darwin"
+  tags:
+    - starship
+
+- name: Linux | Debian-based | Install via Apt
+  apt:
+    name: starship
+    state: present
+  when: ansible_os_family == "Debian"
+  tags:
+    - starship
+
+- name: Windows | Install via Chocolatey
+  ansible.builtin.win_chocolatey:
+    name: starship
+    state: present
+  when: ansible_os_family == "Windows"
+  tags:
+    - starship
+
+- name: Check if aliases exist
+  shell: grep -q '^# Starship' "{{ ansible_env.HOME }}/.zshrc"
+  ignore_errors: true
+  register: starship_alias
+
+- name: Add aliases with blank line before the block
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Starship
+      eval "$(starship init zsh)"
+    state: present
+    insertafter: EOF
+    insertbefore: '^$'
+  when: starship_alias.stat.exists
+  tags:
+    - starship
