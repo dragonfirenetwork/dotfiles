@@ -3,6 +3,6 @@
 .gitconfig
 .gitignore
 .hushlogin
-.ansible.log
+ansible.log
 .stow-local-ignore
 vault.secret
