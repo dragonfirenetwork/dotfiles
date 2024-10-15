@@ -17,11 +17,27 @@
   tags:
     - alacritty
 
-- name: Alacritty | Check for needed directories
-  file:
-    path: "{{ ansible_env.HOME }}/.config/alacritty/themes"
-    state: directory
-    mode: '0755'
+- name: Alacritty | Check if themes repository exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
+  register: alacritty_repo_exists
+  tags:
+    - alacritty
+
+- name: Alacritty | Clone Alacritty themes repository
+  git:
+    repo: "https://github.com/alacritty/alacritty-theme.git"
+    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+  when: not alacritty_repo_exists.stat.exists
+  tags:
+    - alacritty
+
+- name: Alacritty | Pull latest changes from themes repository
+  git:
+    repo: "https://github.com/alacritty/alacritty-theme.git"
+    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+    update: yes
+  when: alacritty_repo_exists.stat.exists
   tags:
     - alacritty
 
@@ -36,7 +52,7 @@
   tags:
     - alacritty
 
-- name: Alacritty | Copy configuration file (Linux)
+- name: Alacritty | Copy configuration file (Linux debian-based)
   copy:
     src: alacritty.toml
     dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
@@ -44,14 +60,5 @@
     group: "{{ ansible_env.USER }}"
     mode: 0644
   when: ansible_system != "Darwin"
-  tags:
-    - alacritty
-
-- name: Alacritty | Clone themes repository
-  git:
-    repo: 'https://github.com/alacritty/alacritty-theme.git'
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
-    version: main
-    force: yes
   tags:
     - alacritty
