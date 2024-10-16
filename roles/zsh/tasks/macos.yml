@@ -1,15 +1,6 @@
 ---
 # roles/zsh/tasks/macos.yml
 
-- name: Check for .zshrc file
-  copy:
-    src: .zshrc
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    mode: 0600
-    backup: yes
-  tags:
-    - zsh
-
 - name: Install syntax highlighting
   homebrew:
     name: zsh-syntax-highlighting
@@ -21,5 +12,76 @@
   homebrew:
     name: zsh-autosuggestions
     state: present
+  tags:
+    - zsh
+
+- name: Remove .zshrc if it exists (with backup)
+  file:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    state: absent
+    backup: yes
+  tags:
+    - zsh
+
+- name: Create fresh .zshrc
+  file:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    state: touch
+  tags:
+    - zsh
+
+- name: Set Path in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      # {{ ansible_managed }}
+
+      # Set system PATH just in case
+      export PATH="/usr/local/bin:$PATH"
+  tags:
+    - zsh
+
+- name: Configure Homebrew and utilities in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      if [[ -f /opt/homebrew/bin/brew ]]; then
+          # Homebrew
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+          ## Activate syntax highlighting
+          source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          ## Activate autosuggestions
+          source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+      fi
+  tags:
+    - zsh
+
+- name: Set History settings in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      # History setup
+      HISTFILE=$HOME/.zhistory
+      SAVEHIST=1000
+      HISTSIZE=999
+      setopt share_history
+      setopt hist_expire_dups_first
+      setopt hist_ignore_dups
+      setopt hist_verify
+      bindkey "^[[A" history-search-backward # Up arrow
+      bindkey "^[[B" history-search-forward # Down arrow
+  tags:
+    - zsh
+
+- name: Set OS convenience aliases in .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    block: |
+      # OS convience aliases
+      if [[ -f /opt/homebrew/bin/brew ]]; then
+          alias update='brew update && brew upgrade && brew cleanup'
+      else
+          alias update='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
+      fi
   tags:
     - zsh
