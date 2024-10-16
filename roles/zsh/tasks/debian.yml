@@ -16,21 +16,11 @@
   become: true
   tags:
     - zsh
-    
-- name: Create .zshrc file
-  copy:
-    src: .zshrc
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    mode: 0600
-    backup: yes
-  tags:
-    - zsh
 
 - name: Install syntax highlighting
   apt:
     name: zsh-syntax-highlighting
     state: present
-  become: true
   tags:
     - zsh
 
@@ -38,6 +28,5 @@
   apt:
     name: zsh-autosuggestions
     state: present
-  become: true
   tags:
     - zsh
