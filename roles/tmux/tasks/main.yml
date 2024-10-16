@@ -1,0 +1,10 @@
+---
+# roles/tmux/tasks/main.yml
+
+- name: Setup tmux on MacOSX
+  include_tasks: macos.yml
+  when: ansible_os_family == "Darwin"
+
+- name: Install tmux on Debian-based Linux
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"

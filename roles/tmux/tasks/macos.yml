@@ -1,0 +1,9 @@
+---
+# roles/tmux/tasks/macos.yml
+
+- name: Install tmux
+  homebrew:
+    name: tmux
+    state: present
+  tags:
+    - tmux

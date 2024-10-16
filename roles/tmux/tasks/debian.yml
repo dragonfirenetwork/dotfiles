@@ -1,0 +1,10 @@
+---
+# roles/tmux/tasks/debian.yml
+
+- name: Install tmux
+  apt:
+    name: tmux
+    state: present
+  become: true
+  tags:
+    - tmux
