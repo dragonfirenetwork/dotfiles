@@ -38,10 +38,10 @@
   tags:
     - ssh
 
-- name: Set ssh aliases
-  blockinfile:
+- name: Add aliases
+  lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    block: |
+    line: |
       # SSH aliases
       ssha='eval $(ssh-agent) && ssh-add'
   tags:

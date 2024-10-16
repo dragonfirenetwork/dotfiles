@@ -17,10 +17,10 @@
   tags:
     - asciiquarium
 
-- name: Add aliases with blank line before the block
-  blockinfile:
+- name: Add aliases
+  lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    block: |
+    line: |
       # Asciiquarium
       alias brb=asciiquarium
       alias aq=asciiquarium

@@ -17,10 +17,10 @@
   tags:
     - starship
 
-- name: Add aliases with blank line before the block
-  blockinfile:
+- name: Add aliases
+  lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    block: |
+    line: |
       # Starship
       eval "$(starship init zsh)"
     insertafter: EOF
