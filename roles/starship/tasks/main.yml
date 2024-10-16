@@ -23,7 +23,7 @@
   register: starship_alias
 
 - name: Add aliases with blank line before the block
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |
       # Starship
