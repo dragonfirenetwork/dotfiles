@@ -34,7 +34,7 @@
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     block: |
-      # {{ ansible_managed }}
+      {{ ansible_managed | comment }}
 
       # Set system PATH just in case
       export PATH="/usr/local/bin:$PATH"
