@@ -15,11 +15,11 @@
   tags:
     - zsh
 
-- name: Remove .zshrc if it exists (with backup)
-  file:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    state: absent
-    backup: yes
+- name: Backup existing .zshrc if it exists
+  command: mv "{{ ansible_env.HOME }}/.zshrc" "{{ ansible_env.HOME }}/.zshrc.bak"
+  args:
+    removes: "{{ ansible_env.HOME }}/.zshrc"
+  ignore_errors: true
   tags:
     - zsh
 
