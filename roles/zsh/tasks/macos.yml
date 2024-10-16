@@ -31,9 +31,9 @@
     - zsh
 
 - name: Set Path in .zshrc
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    block: |
+  copy:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    content: |
       {{ ansible_managed | comment }}
 
       # Set system PATH just in case
