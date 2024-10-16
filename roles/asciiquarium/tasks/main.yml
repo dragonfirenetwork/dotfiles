@@ -23,14 +23,13 @@
   register: aq_aliases
 
 - name: Add aliases with blank line before the block
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |
       # Asciiquarium
       alias brb=asciiquarium
       alias aq=asciiquarium
     state: present
-    insertafter: EOF
     insertbefore: '^$'
   when: aq_aliases.rc != 0 
   tags:
