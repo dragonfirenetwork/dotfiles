@@ -39,7 +39,6 @@
 - name: Install Aerospace app via Homebrew Cask
   homebrew_cask:
     name: aerospace
-    tap: nikitabobko/tap
     state: present
   tags:
     - brew
