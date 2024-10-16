@@ -17,20 +17,12 @@
   tags:
     - asciiquarium
 
-- name: Check if aliases exist
-  shell: grep -q '^# Asciiquarium' "{{ ansible_env.HOME }}/.zshrc"
-  ignore_errors: true
-  register: aq_aliases
-
 - name: Add aliases with blank line before the block
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
+    block: |
       # Asciiquarium
       alias brb=asciiquarium
       alias aq=asciiquarium
-    state: present
-    insertbefore: '^$'
-  when: aq_aliases.rc != 0 
   tags:
     - asciiquarium

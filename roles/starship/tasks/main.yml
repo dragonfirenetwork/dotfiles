@@ -17,19 +17,12 @@
   tags:
     - starship
 
-- name: Check if aliases exist
-  shell: grep -q '^# Starship' "{{ ansible_env.HOME }}/.zshrc"
-  ignore_errors: true
-  register: starship_alias
-
 - name: Add aliases with blank line before the block
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
+    block: |
       # Starship
       eval "$(starship init zsh)"
-    state: present
     insertafter: EOF
-  when: starship_alias.rc != 0
   tags:
     - starship
