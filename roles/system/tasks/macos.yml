@@ -1,8 +1,7 @@
 ---
 # roles/system/tasks/macos.yml
 
-# Install system packages via Homebrew
-- name: System | Install system packages
+- name: Install system packages
   homebrew:
     name:
       - autoconf
@@ -29,3 +28,18 @@
     state: present
   tags:
     - system
+
+- name: Tap the Homebrew tap
+  homebrew_tap:
+    name: nikitabobko/tap
+    state: present
+  tags:
+    - brew
+
+- name: Install Aerospace app via Homebrew Cask
+  homebrew_cask:
+    name: aerospace
+    tap: nikitabobko/tap
+    state: present
+  tags:
+    - brew

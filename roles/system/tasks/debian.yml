@@ -2,7 +2,7 @@
 # roles/system/tasks/debian.yml
 
 # Add HashiCorp GPG key for Vagrant
-- name: System | Add HashiCorp GPG key
+- name: Add HashiCorp GPG key
   apt_key:
     url: https://apt.releases.hashicorp.com/gpg
     state: present
@@ -11,7 +11,7 @@
     - system
 
 # Add Btop GPG key (if using the PPA)
-- name: System | Add Btop GPG key
+- name: Add Btop GPG key
   apt_key:
     keyserver: keyserver.ubuntu.com
     id: 91A6E7F0
@@ -22,7 +22,7 @@
     - system
 
 # Add Zoxide GPG key (if using the PPA)
-- name: System | Add Zoxide GPG key
+- name: Add Zoxide GPG key
   apt_key:
     keyserver: keyserver.ubuntu.com
     id: A0B04B9F10496B85
@@ -32,7 +32,7 @@
   tags:
     - system
 
-- name: System | Update cache
+- name: Update cache
   apt:
     update_cache: true
   become: true
@@ -40,12 +40,13 @@
     - system
 
 # Install system packages via Apt
-- name: System | Install system packages (debian-based)
+- name: Install system packages (debian-based)
   apt:
     name:
       - build-essential
       - ca-certificates
       - curl
+      - startx
       - gnupg
       - lsb-release
       - software-properties-common
@@ -74,6 +75,7 @@
       - xz-utils
       - ffmpeg
       - qemu-kvm
+      - i3
     state: present
   become: true
   tags:
