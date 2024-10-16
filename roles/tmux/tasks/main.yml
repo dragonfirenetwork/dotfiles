@@ -8,3 +8,11 @@
 - name: Install tmux on Debian-based Linux
   include_tasks: debian.yml
   when: ansible_os_family == "Debian"
+
+- name: Copy tmux configuration
+  copy:
+    src: tmux.conf
+    dest: "{{ ansible_env.HOME }}/.config/tmux"
+    mode: 0644
+    directory_mode: 0755
+    force: true
