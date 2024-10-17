@@ -12,7 +12,7 @@
   copy:
     src: config.conf
     dest: "{{ ansible_env.HOME }}/.config/neofetch/config.conf"
-    owner: {{ ansible_env.USER }}
+    owner: "{{ ansible_env.USER }}"
     group: "staff"
     mode: 0644
   tags:
