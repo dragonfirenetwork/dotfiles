@@ -35,6 +35,7 @@
     - git
     - alacritty
     - asciiquarium
+    - neofetch
     - bat
     - tmux
   #  - terraform
