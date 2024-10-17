@@ -1,0 +1,19 @@
+---
+# roles/bat/tasks/macos.yml
+
+- name: MacOSX | Install via Homebrew
+  homebrew:
+    name: bat
+    state: present
+  when: ansible_os_family == "Darwin"
+  tags:
+    - bat
+
+- name: Add aliases
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Bat
+      alias cat=bat
+  tags:
+    - starship

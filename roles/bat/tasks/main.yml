@@ -1,28 +1,14 @@
 ---
 # roles/bat/tasks/main.yml
 
-- name: MacOSX | Install via Homebrew
-  homebrew:
-    name: bat
-    state: present
+- name: MacOSX | Load install playbook
+  include_tasks: macos.yml
   when: ansible_os_family == "Darwin"
   tags:
     - bat
 
-- name: Linux | Debian-based | Install via Apt
-  apt:
-    name: bat
-    state: present
-  become: true
-  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+- name: Debian Linux | Load install playbook
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
   tags:
     - bat
-
-- name: Add aliases
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      # Bat
-      alias cat=bat
-  tags:
-    - starship

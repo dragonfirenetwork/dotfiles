@@ -1,0 +1,14 @@
+---
+# roles/finishing_touches/tasks/main.yml
+
+- name: MacOSX | Load finishing touches
+  include_tasks: macos.yml
+  when: ansible_os_family == "Darwin"
+  tags:
+    - always
+
+- name: Debian | Load finishing touches
+  include_tasks: macos.yml
+  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  tags:
+    - always

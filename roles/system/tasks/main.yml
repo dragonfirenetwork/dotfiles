@@ -1,10 +1,14 @@
 ---
 # roles/system/tasks/main.yml
 
-- name: System | Run tasks for MacOS
+- name: MacOSX | Load install playbook
   include_tasks: macos.yml
   when: ansible_os_family == "Darwin"
+  tags:
+    - system
 
-- name: System | Run tasks for Debian-based Linux
+- name: Debian | Load install playbook
   include_tasks: debian.yml
   when: ansible_os_family == "Debian"
+  tags:
+    - system

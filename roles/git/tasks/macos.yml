@@ -5,3 +5,63 @@
   community.general.homebrew:
     name: git
     state: present
+  tags:
+    - git
+
+- name: System | Git | Set user.name
+  community.general.git_config:
+    name: user.name
+    scope: global
+    value: "{{ git_user_name }}"
+  no_log: true
+  tags:
+    - git
+
+- name: System | Git | Set user.email
+  community.general.git_config:
+    name: user.email
+    scope: global
+    value: "{{ git_user_email }}"
+  no_log: true
+  tags:
+    - git
+
+- name: "Git | Set user.signingkey"
+  community.general.git_config:
+    name: user.signingkey
+    scope: global
+    value: "{{ ansible_user_dir }}/.ssh/id_ed25519.pub"
+  tags:
+    - git
+
+- name: "Git | Set init.defaultBranch"
+  community.general.git_config:
+    name: init.defaultBranch
+    scope: global
+    value: main
+  tags:
+    - git
+
+- name: "Git | Set diff.colorMoved"
+  community.general.git_config:
+    name: diff.colorMoved
+    scope: global
+    value: zebra
+  tags:
+    - git
+
+- name: "Git | Set pull.rebase"
+  community.general.git_config:
+    name: pull.rebase
+    scope: global
+    value: true
+  tags:
+    - git
+
+- name: "Git | Set rebase.autoStash"
+  community.general.git_config:
+    name: rebase.autoStash
+    scope: global
+    value: true
+  tags:
+    - git

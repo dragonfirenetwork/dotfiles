@@ -4,7 +4,11 @@
 - name: MacOSX | Load install playbook
   include_tasks: macos.yml
   when: ansible_os_family == "Darwin"
+  tags:
+    - neofetch
 
 - name: Debian Linux | Load install playbook
   include_tasks: debian.yml
   when: ansible_os_family == "Debian"
+  tags:
+    - neofetch

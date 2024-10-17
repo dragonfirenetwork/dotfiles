@@ -1,54 +1,14 @@
 ---
 # roles/git/tasks/main.yml
 
-- name: Git | Run tasks for MacOS
+- name: MacOSX | Load install playbook
   include_tasks: macos.yml
   when: ansible_os_family == "Darwin"
+  tags:
+    - git
 
-- name: Git | Run tasks for Debian-based Linux
+- name: Debian | Load install playbook
   include_tasks: debian.yml
   when: ansible_os_family == "Debian"
-
-- name: System | Git | Set user.name
-  community.general.git_config:
-    name: user.name
-    scope: global
-    value: "{{ git_user_name }}"
-  no_log: true
-
-- name: System | Git | Set user.email
-  community.general.git_config:
-    name: user.email
-    scope: global
-    value: "{{ git_user_email }}"
-  no_log: true
-
-- name: "Git | Set user.signingkey"
-  community.general.git_config:
-    name: user.signingkey
-    scope: global
-    value: "{{ ansible_user_dir }}/.ssh/id_ed25519.pub"
-
-- name: "Git | Set init.defaultBranch"
-  community.general.git_config:
-    name: init.defaultBranch
-    scope: global
-    value: main
-
-- name: "Git | Set diff.colorMoved"
-  community.general.git_config:
-    name: diff.colorMoved
-    scope: global
-    value: zebra
-
-- name: "Git | Set pull.rebase"
-  community.general.git_config:
-    name: pull.rebase
-    scope: global
-    value: true
-
-- name: "Git | Set rebase.autoStash"
-  community.general.git_config:
-    name: rebase.autoStash
-    scope: global
-    value: true
+  tags:
+    - git

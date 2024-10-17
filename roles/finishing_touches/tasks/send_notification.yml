@@ -1,0 +1,9 @@
+---
+# roles/finishing_touches/tasks/send_notifications.yml
+
+- name: Notify user with Gotify
+  debug:
+    msg: "Updated the first_play variable to false for future runs."
+  when: first_play == true
+  tags:
+    - always

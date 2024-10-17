@@ -1,0 +1,29 @@
+---
+# roles/starship/macos.yml
+
+- name: Install starship
+  homebrew:
+    name: starship
+    state: present
+  when: ansible_os_family == "Darwin"
+  tags:
+    - starship
+
+- name: Copy configuration file
+  file:
+    src: "starship.toml"
+    dest: "{{ ansible_env.HOME }}/.config"
+    
+# Note:
+# The setting up of the Starship prompt below should not be uncommented.
+# This step is performed in the 'roles/finishing_touches/tasks/finalize_zshrc.yml'
+# file to ensure that it is the very last thing added to the '.zshrc'. 
+#- name: Add aliases
+#  lineinfile:
+#    path: "{{ ansible_env.HOME }}/.zshrc"
+#    line: |
+#      # Starship
+#      eval "$(starship init zsh)"
+#    insertafter: EOF
+#  tags:
+#    - starship

@@ -29,100 +29,141 @@
 
   # Software to install, uncomment any you wish to skip
   roles:
-    - system
-    - zsh
-    - ssh
-    - git
-    - alacritty
-    - asciiquarium
-    - neofetch
-    - bat
-    - tmux
-  #  - terraform
-  #  - opentofu
-  #  - ansible
-  #  - docker
-  #  - python
-  #  - go
-  #  - php
-  #  - packer
-  #  - audacity
-  #  - autofs
-  #  - betterbird
-  #  - chromium
-  #  - discord
-  #  - foliate
-  #  - fusion360
-  #  - gimp
-  #  - libreoffice
-  #  - lutris
-  #  - raycast
-  #  - rectangle
-  #  - revolt
-  #  - rhythmbox
-  #  - signal
-  #  - steam
-  #  - syncthing
-  #  - thunderbird
-  #  - super-productivity
-  #  - ulauncher
-  #  - vagrant
-  #  - vaultwarden
-  #  - vivaldi
-  #  - pwsh
-  #  - vagrant
-  #  - vlc
-    - starship
+    - name: system
+      tags: system
+
+    - name: zsh
+      tags: zsh
+
+    - name: aerospace
+      when: ansible_os_family == "Darwin"
+      tags: aerospace
+
+    - name: ssh
+      tags: ssh
+
+    - name: git
+      tags: git
+
+    - name: alacritty
+      tags: alacritty
+
+    - name: asciiquarium
+      tags: asciiquarium
+
+    - name: neofetch
+      tags: neofetch
+
+    - name: bat
+      tags: bat
+
+    - name: tmux
+      tags: tmux
+
+    - name: python
+      tags: python
+
+  #  - name: terraform
+  #    tags: terraform
+
+  #  - name: opentofu
+  #    tags: opentofu
+
+  #  - name: docker
+  #    tags: docker
+
+  #  - name: go
+  #    tags: go
+
+  #  - name: php
+  #    tags: php
+
+  #  - name: packer
+  #    tags: packer
+
+  #  - name: audacity
+  #    tags: audacity
+
+  #  - name: autofs
+  #    tags: autofs
+
+  #  - name: betterbird
+  #    tags: betterbird
+
+  #  - name: chromium
+  #    tags: chromium
+
+  #  - name: discord
+  #    tags: discord
+
+  #  - name: foliate
+  #    tags: foliate
+
+  #  - name: fusion360
+  #    tags: fusion360
+
+  #  - name: gimp
+  #    tags: gimp
+
+  #  - name: libreoffice
+  #    tags: libreoffice
+
+  #  - name: lutris
+  #    tags: lutris
+
+  #  - name: raycast
+  #    tags: raycast
+
+  #  - name: rectangle
+  #    tags: rectangle
+
+  #  - name: revolt
+  #    tags: revolt
+
+  #  - name: rhythmbox
+  #    tags: rhythmbox
+
+  #  - name: signal
+  #    tags: signal
+
+  #  - name: steam
+  #    tags: steam
+
+  #  - name: syncthing
+  #    tags: syncthing
+
+  #  - name: thunderbird
+  #    tags: thunderbird
+
+  #  - name: super-productivity
+  #    tags: super-productivity
+
+  #  - name: ulauncher
+  #    tags: ulauncher
+
+  #  - name: vagrant
+  #    tags: vagrant
+
+  #  - name: vaultwarden
+  #    tags: vaultwarden
+
+  #  - name: vivaldi
+  #    tags: vivaldi
+
+  #  - name: pwsh
+  #    tags: pwsh
+
+  #  - name: vagrant
+  #    tags: vagrant
+
+  #  - name: vlc
+  #    tags: vlc
+
+    - name: starship
+      tags: starship
 
   tasks:
-
-    # Wrap up the run
-    - name: Finalizing | Dotfiles
-      block:
-        # Source, just in case of changes 
-        - name: Finalizing | Setting source
-          shell: source ~/.zshrc
-          args:
-            executable: /bin/zsh
-          when: ansible_os_family in ["Darwin", "Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
-
-        # Cleanup brew just in case
-        - name: Finalizing | Wrap up Homebrew
-          block:
-            - name: Finalizing | Update brew cache
-              homebrew:
-                update_homebrew: true
-                upgrade_all: true
-            - name: Cleanup brew
-              shell: brew cleanup
-          when: ansible_system == "Darwin"
-          tags: 
-            - always
-          
-        # Cleanup Apt just in case
-        - name: Finalizing | Wrap up Apt
-          block:
-            - name: Finalizing | Update cache
-              apt:
-                update_cache: true
-            - name: Finalizing | Cleanup apt
-              apt:
-                autoclean: true
-          when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
-          tags: 
-            - always
-      
-          # Change the first_play variable to false 
-        - name: Finalizing | Set first_play variable to false
-          lineinfile:
-            path: "{{ playbook_dir }}/group_vars/all.yml"
-            regexp: '^first_play:'
-            line: "first_play: false"
-          when: first_play == true
-
-        - name: Finalizing | Update user
-          debug:
-            msg: "Updated the first_play variable to false for future runs."
-          when: first_play == true
-      tags:
-        - always
+    - include_tasks: roles/finishing_touches/tasks/main.yml
+    - include_tasks: roles/finishing_touches/tasks/finalize_zshrc.yml
+    - include_tasks: roles/finishing_touches/tasks/update_first_run_variable.yml
+    - include_tasks: roles/finishing_touches/tasks/send_notification.yml

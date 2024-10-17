@@ -1,0 +1,12 @@
+---
+# roles/finishing_touches/tasks/finalize_zshrc.yml
+
+- name: Set Starship prompt in shell
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Starship
+      eval "$(starship init zsh)"
+      insertafter: EOF
+  tags:
+    - always

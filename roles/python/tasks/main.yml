@@ -1,0 +1,14 @@
+---
+# roles/tmux/python/main.yml
+
+- name: MacOSX | Load install playbook
+  include_tasks: macos.yml
+  when: ansible_os_family == "Darwin"
+  tags:
+    - python
+
+- name: Debian | Load install playbook
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+  tags:
+    - python

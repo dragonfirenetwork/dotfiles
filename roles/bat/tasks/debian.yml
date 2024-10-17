@@ -1,0 +1,20 @@
+---
+# roles/bat/tasks/debian.yml
+
+- name: Install via Apt
+  apt:
+    name: bat
+    state: present
+  become: true
+  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  tags:
+    - bat
+
+- name: Add aliases
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Bat
+      alias cat=bat
+  tags:
+    - bat

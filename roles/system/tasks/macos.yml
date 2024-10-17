@@ -27,17 +27,3 @@
     state: present
   tags:
     - system
-
-- name: Tap the Homebrew tap
-  homebrew_tap:
-    name: nikitabobko/tap
-    state: present
-  tags:
-    - brew
-
-- name: Install Aerospace
-  homebrew_cask:
-    name: aerospace
-    state: present
-  tags:
-    - brew

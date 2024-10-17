@@ -8,3 +8,11 @@
   become: true
   tags:
     - tmux
+
+- name: Copy tmux configuration
+  copy:
+    src: tmux.conf
+    dest: "{{ ansible_env.HOME }}/.config/tmux"
+    mode: 0644
+    directory_mode: 0755
+    force: true

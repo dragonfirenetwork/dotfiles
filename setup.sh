@@ -1,6 +1,21 @@
 #!/bin/bash
 set -e
 
+declare -a setup_order=(
+  install_git
+  install_dependencies
+  clone_or_update_dotfiles
+  install_ansible_requirements
+  create_vault_secret
+  run_playbook # MUST be last function set!
+)
+
+# Paths
+DOTFILES_LOG="$HOME/.dotfiles.log"
+DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_GIT_REMOTE="https://github.com/dragonfirenetwork/dotfiles.git"
+OS="$(uname -s)"
+
 # Dracula theme colors
 RESTORE='\033[0m'
 BLACK='\033[00;30m'
@@ -30,12 +45,6 @@ BOOK="${LPURPLE}\xF0\x9F\x93\x8B${RESTORE}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${RESTORE}"
 WARNING="${LRED}\xF0\x9F\x9A\xA8${RESTORE}"
 RIGHT_ANGLE="${LGREEN}\xE2\x88\x9F${RESTORE}"
-
-# Paths
-DOTFILES_LOG="$HOME/.dotfiles.log"
-DOTFILES_DIR="$HOME/.dotfiles"
-DOTFILES_GIT_REMOTE="https://github.com/dragonfirenetwork/dotfiles.git"
-OS="$(uname -s)"
 
 # Is this the first time running?
 if [ ! -f "group_vars/all.yml" ]; then
@@ -167,7 +176,7 @@ clone_or_update_dotfiles() {
   if [[ ! -d "$DOTFILES_DIR" ]]; then
     _cmd "git clone $DOTFILES_GIT_REMOTE $DOTFILES_DIR"
   else
-    _cmd "cd $DOTFILES_DIR && git pull origin main"
+    _cmd "cd $DOTFILES_DIR && git pull origin main --quite"
   fi
   _task_done
 }
@@ -189,10 +198,12 @@ create_vault_secret() {
   if [[ ! -f "$DOTFILES_DIR/vault.secret" ]]; then
     while true; do
         read -s -p "${LCYAN}Enter vault password: ${RESTORE}" vault
+        echo
         read -s -p "${LCYAN}Confirm vault password: ${RESTORE}" vault_confirm
         if [ $vault == $vault_confirm ]; then
             echo "$vault" > "$DOTFILES_DIR/vault.secret"
             chmod 600 "$DOTFILES_DIR/vault.secret"
+            VAULT_SECRET="$DOTFILES_DIR/vault.secret"
             printf "${CHECK_MARK} ${LGREEN}vault.secret created.${RESTORE}\n"
             break
         else 
@@ -202,29 +213,31 @@ create_vault_secret() {
             echo
             printf "${WARNING} ${ORANGE}You will need to enter your vault secret manually in: $DOTFILES_DIR/vault.secret${ORANGE}"
             echo
-            STOP_AUTO_RUN=1
-            break
+            exit 1
         fi
     done
   else
+    VAULT_SECRET="$DOTFILES_DIR/vault.secret"
     printf "${OVERWRITE}${CHECK_MARK} ${LGREEN}vault.secret already exists, skipping.${RESTORE}\n"
   fi
   _task_done
 }
 
-# Main logic
-clear
-install_git
-install_dependencies
-clone_or_update_dotfiles
-install_ansible_requirements
-create_vault_secret
+run_playbook() {
+  if [ "$FIRST_PLAY" = true ]; then
+    printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
+    touch $DOTFILES_DIR/ansible.log
+    ansible-playbook $DOTFILES_DIR/main.yml --vault-password-file $VAULT_SECRET --ask-become-pass
+  else
+    printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
+    ansible-playbook $DOTFILES_DIR/main.yml --vault-password-file $VAULT_SECRET
+  fi
+}
 
-if [ "$FIRST_PLAY" = true ]; then
-  printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
-  touch $DOTFILES_DIR/ansible.log
-  ansible-playbook $DOTFILES_DIR/main.yml --ask-become-pass
-else
-  printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
-  ansible-playbook $DOTFILES_DIR/main.yml
-fi
+# Run functions
+clear
+echo 
+for task in "${setup_order[@]}"
+do
+  $task
+done

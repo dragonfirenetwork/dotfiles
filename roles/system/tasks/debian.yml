@@ -40,7 +40,7 @@
     - system
 
 # Install system packages via Apt
-- name: Install system packages (debian-based)
+- name: Install system packages
   apt:
     name:
       - build-essential

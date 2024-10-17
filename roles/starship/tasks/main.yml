@@ -1,28 +1,14 @@
 ---
 # roles/starship/tasks/main.yml
 
-- name: MacOSX | Install via Homebrew
-  homebrew:
-    name: starship
-    state: present
+- name: MacOSX | Load install playbook
+  include_tasks: macos.yml
   when: ansible_os_family == "Darwin"
   tags:
     - starship
 
-- name: Linux | Debian-based | Install via Apt
-  apt:
-    name: starship
-    state: present
+- name: Debian | Load install playbook
+  include_tasks: debian.yml
   when: ansible_os_family == "Debian"
-  tags:
-    - starship
-
-- name: Add aliases
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      # Starship
-      eval "$(starship init zsh)"
-    insertafter: EOF
   tags:
     - starship

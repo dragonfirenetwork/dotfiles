@@ -1,0 +1,20 @@
+---
+# roles/asciiquarium/tasks/macos.yml
+
+- name: Install asciiquarium
+  homebrew:
+    name: asciiquarium
+    state: present
+  when: ansible_os_family == "Darwin"
+  tags:
+    - asciiquarium
+
+- name: Add aliases
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Asciiquarium
+      alias brb=asciiquarium
+      alias aq=asciiquarium
+  tags:
+    - asciiquarium
