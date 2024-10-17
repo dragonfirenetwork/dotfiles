@@ -1,7 +1,7 @@
 ---
 # pre_tasks/debian.yml
 
-- name: System Setup | Debian-based | Repositories | Add sources.list for debian hosts
+- name: Add sources.list for debian hosts
   copy:
     src: "{{ ansible_distribution | lower }}_sources.list"
     dest: /etc/apt/sources.list
@@ -11,8 +11,9 @@
   when: ansible_distribution in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - pre_tasks
+    - debian_setup
 
-- name: System Setup | Debian-based | Install package management tools
+- name: Install package management tools
   package:
     name:
       - aptitude
@@ -22,17 +23,19 @@
   become: true
   tags:
     - pre_tasks
+    - debian_setup
 
-- name: System Setup | Debian-based | Upgrade all installed packages to the latest version
+- name: Upgrade all installed packages to the latest version
   apt:
     upgrade: yes
   notify: apt_update
   become: true
   tags:
     - pre_tasks
+    - debian_setup
 
 # Enable passwordless sudo for user
-- name: System Setup | Debian-based | Enable passwordless sudo for user
+- name: Enable passwordless sudo for user
   ansible.builtin.template:
     src: "user-sudo.j2"
     dest: /etc/sudoers.d/{{ ansible_env['USER'] }}
@@ -40,18 +43,20 @@
   become: true
   tags:
     - pre_tasks
+    - debian_setup
 
 # Check if .config exists, if not create it
-- name: System Setup | Debian-based | Ensure .config directory exists
+- name: Ensure .config directory exists
   file:
     path: "{{ ansible_env.HOME }}/.config"
     state: directory
     mode: 0755
   tags:
     - pre_tasks
+    - debian_setup
 
 # Hush the terminal login
-- name: System Setup | General | Hush the terminal login
+- name: Hush the terminal login
   file:
     path: "{{ ansible_env.HOME }}/.hushlogin"
     state: touch
@@ -60,3 +65,4 @@
     mode: 0600
   tags:
     - pre_tasks
+    - debian_setup

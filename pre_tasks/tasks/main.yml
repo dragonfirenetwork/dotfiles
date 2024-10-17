@@ -1,0 +1,16 @@
+---
+# rolse/pre_tasks/tasks/main.yml
+
+- name: Load MacOSX pre-tasks
+  include_tasks: pre_tasks/macos.yml
+  when: ansible_os_family == "Darwin"
+  tags:
+    - pre_tasks
+    - mac_setup
+
+- name: Load Debian pre-tasks
+  include_tasks: pre_tasks/debian.yml
+  when: ansible_os_family == "Debian"
+  tags:
+    - pre_tasks
+    - debian_setup

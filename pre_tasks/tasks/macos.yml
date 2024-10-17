@@ -1,77 +1,69 @@
 ---
 # pre_tasks/macos.yml
 
-# Detect Mac architecture (Apple Silicon vs. Intel)
-- name: System Setup | Detect Mac architecture
+- name: Detect Mac architecture
   command: uname -m
   register: mac_arch
   changed_when: false
   tags:
     - pre_tasks
+    - mac_setup
 
-# Ensure Xcode Command Line Tools are installed silently
-- name: System Setup | Xcode | Ensure Xcode Command Line Tools are installed (macOS)
+- name: Xcode | Ensure Xcode Command Line Tools are installed
   block:
     - name: Check if Xcode CLT is installed
       stat:
         path: /Library/Developer/CommandLineTools
       register: clt_check
-      tags:
-        - pre_tasks
 
-    - name: System Setup | Xcode | Trigger Xcode CLT installation prompt
+    - name: Xcode | Trigger Xcode CLT installation prompt
       shell: xcode-select --install
       args:
         executable: /bin/bash
       when: not clt_check.stat.exists
       register: clt_install
       changed_when: clt_install.rc == 0
-      tags:
-        - pre_tasks
 
-    - name: System Setup | Xcode | Wait for Xcode CLT installation to complete
+    - name: Xcode | Wait for Xcode CLT installation to complete
       wait_for:
         path: /Library/Developer/CommandLineTools/usr/bin/git
         timeout: 600
       when: not clt_check.stat.exists
-      tags:
-        - pre_tasks
 
-    - name: System Setup | Xcode | Verify Xcode Command Line Tools installation
+    - name: Xcode | Verify Xcode Command Line Tools installation
       stat:
         path: /Library/Developer/CommandLineTools
       register: clt_verify
-      tags:
-        - pre_tasks
 
-    - name: System Setup | Xcode | Fail if Xcode Command Line Tools installation failed
+    - name: Xcode | Fail if Xcode Command Line Tools installation failed
       fail:
         msg: "Xcode Command Line Tools installation failed."
       when: not clt_verify.stat.exists
-      tags:
-        - pre_tasks
   tags:
     - pre_tasks
+    - mac_setup
 
 # Update, upgrade and cleanup Homebrew
-- name: System Setup | Homebrew | Update and upgrade Homebrew
+- name: Update and upgrade Homebrew
   community.general.homebrew:
       update_homebrew: true
       upgrade_all: true
   tags:
     - pre_tasks
+    - mac_setup
 
 # Check if .config exists, if not create it
-- name: System Setup | General | Ensure .config directory exists
+- name: Ensure .config directory exists
   file:
     path: "{{ ansible_env.HOME }}/.config"
     state: directory
     mode: '0755'
   tags:
     - pre_tasks
+    - mac_setup
 
 # Enable passwordless sudo for homebrew
-- name: System Setup | General | Enable passwordless sudo for homebrew
+- name: Enable passwordless sudo for homebrew
   ansible.builtin.template:
     src: "user_sudo.j2"
     dest: /private/etc/sudoers.d/{{ ansible_env['USER'] }}
@@ -79,17 +71,19 @@
   become: true
   tags:
     - pre_tasks
+    - mac_setup
 
 # Check if the .hushlogin file exists
-- name: System Setup | General | Check if .hushlogin exists
+- name: Check if .hushlogin exists
   stat:
     path: "{{ ansible_env.HOME }}/.hushlogin"
   register: hushlogin_file
   tags:
     - pre_tasks
+    - mac_setup
 
 # Hush the terminal login
-- name: System Setup | General | Hush the terminal login
+- name: Hush the terminal login
   file:
     path: "{{ ansible_env.HOME }}/.hushlogin"
     state: touch
@@ -99,3 +93,4 @@
   when: hushlogin_file.stat.exists == false
   tags:
     - pre_tasks
+    - mac_setup

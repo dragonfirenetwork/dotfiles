@@ -1,0 +1,7 @@
+---
+# roles/notifications/tasks/main.yml
+
+- name: Gotify notifications
+  include_tasks: gotify.yml
+  tags:
+    - gotify
