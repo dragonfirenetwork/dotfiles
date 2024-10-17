@@ -16,7 +16,6 @@
       - tree
       - jq
       - ripgrep
-      - neofetch
       - gnupg
       - coreutils
       - findutils
