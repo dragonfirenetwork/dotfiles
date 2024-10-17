@@ -1,0 +1,19 @@
+---
+# roles/neofetch/tasks/macos.yml
+
+- name: Install neofetch
+  homebrew:
+    name: neofetch
+    state: present
+  tags:
+    - neofetch
+
+- name: Set configuration file
+  copy:
+    src: config.conf
+    dest: "{{ ansible_env.HOME }}/.config/neofetch/config.conf"
+    owner: {{ ansible_env.USER }}
+    group: "staff"
+    mode: 0644
+  tags:
+    - neofetch
