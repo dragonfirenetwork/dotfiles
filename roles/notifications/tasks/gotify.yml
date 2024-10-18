@@ -5,20 +5,10 @@
   uri: 
     url: "https://{{ gotify_host }}/message?token={{ gotify_token }}"
     method: POST
-    body_format: form-multipart
+    body_format: json
     body: 
       title: "Computer Setup Complete!"
       message: "Your computer has finished setting up."
       priority: 3
-  when: has_internet
-
-- name: Send failure notification
-  uri: 
-    url: "https://{{ gotify_host }}/message?token={{ gotify_token }}"
-    method: POST
-    body_format: form-multipart
-    body: 
-      title: "Computer Setup FAILED!"
-      message: "Your computer failed to set up properly."
-      priority: 9
-  when: not has_internet
+  tags:
+    - gotify

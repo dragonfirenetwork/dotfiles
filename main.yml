@@ -1,27 +1,10 @@
 ---
 # .dotfiles/main.yml
 
-- name: Internet Connection Check
-  hosts: localhost
-  connection: local
-  gather_facts: false
-
-  tasks:
-    - name: Internet Connection Check
-      include_tasks: pre_tasks/check_connection.yml
-      tags:
-        - always
-
-- name: Notify user of no internet connection
-  when: not has_internet
-  tasks:
-    - include_tasks: roles/notifications/tasks/gotify.yml
-
 - name: Dotfiles Configuration
   hosts: localhost
   connection: local
   gather_facts: true
-  when: has_internet
 
   vars_files:
     - group_vars/all.yml
