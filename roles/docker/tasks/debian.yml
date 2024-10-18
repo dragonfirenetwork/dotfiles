@@ -1,38 +1,42 @@
 ---
 # roles/docker/tasks/debian.yml
 
-- name: Install Docker and related packages
-  block:
-    - name: Add Docker GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker APT repository
-      apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
-        state: present
-
-    - name: Update APT cache after adding Docker repository
-      apt:
-        update_cache: yes
-
-    - name: Install Docker and related packages
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-buildx-plugin
-          - docker-compose-plugin
-        state: present
-
-    - name: Add user to Docker group
-      user:
-        name: "{{ ansible_user | default('your_username') }}"
-        groups: docker
-        append: yes
-  when: "'docker' in default_roles or 'docker' in run_roles"
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
   tags:
-    - pre_tasks
-    - docker_setup
+    - docker
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+    state: present
+  tags:
+    - docker
+
+- name: Update APT cache after adding Docker repository
+  apt:
+    update_cache: yes
+  tags:
+    - docker
+
+- name: Install Docker and related packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+  tags:
+    - docker
+
+- name: Add user to Docker group
+  user:
+    name: "{{ ansible_user | default('your_username') }}"
+    groups: docker
+    append: yes
+  tags:
+    - docker
