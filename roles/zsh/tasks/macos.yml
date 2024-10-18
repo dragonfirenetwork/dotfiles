@@ -53,14 +53,12 @@
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |
-      if [[ -f /opt/homebrew/bin/brew ]]; then
-          # Homebrew
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-          ## Activate syntax highlighting
-          source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-          ## Activate autosuggestions
-          source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-      fi
+      # Homebrew
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+      ## Activate syntax highlighting
+      source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      ## Activate autosuggestions
+      source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   tags:
     - zsh
 

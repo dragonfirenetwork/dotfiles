@@ -11,12 +11,12 @@
 
   pre_tasks:
     - name: Internet Connection Check
-      include_tasks: pre_tasks/check_connection.yml
+      include_tasks: pre_tasks/tasks/check_connection.yml
       tags:
         - always
 
     - name: Pre-tasks
-      include_tasks: pre_tasks/main.yml
+      include_tasks: pre_tasks/tasks/main.yml
       tags:
         - pre_tasks
 
@@ -154,9 +154,13 @@
 
     - name: starship
       tags: starship
+  
+  post_tasks:
+    - name: Set success
+      set_fact:
+        send_success: true
 
-  tasks:
     - include_tasks: roles/finishing_touches/tasks/main.yml
     - include_tasks: roles/finishing_touches/tasks/finalize_zshrc.yml
     - include_tasks: roles/finishing_touches/tasks/update_first_run_variable.yml
-    - include_tasks: roles/finishing_touches/tasks/send_notification.yml
+    - include_tasks: roles/notifications/tasks/main.yml

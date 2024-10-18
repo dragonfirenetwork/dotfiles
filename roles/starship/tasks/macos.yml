@@ -10,9 +10,12 @@
     - starship
 
 - name: Copy configuration file
-  file:
+  copy:
     src: "starship.toml"
     dest: "{{ ansible_env.HOME }}/.config"
+    mode: 0644
+    owner: "{{ ansible_env.USER }}"
+    group: "staff"
     
 # Note:
 # The setting up of the Starship prompt below should not be uncommented.

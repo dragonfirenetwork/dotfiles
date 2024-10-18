@@ -1,24 +1,83 @@
 # General Configuration
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# format = """
+# ╭─(white)$username$hostname in \
+# $directory\
+# $git_branch$git_status\
+# $fill\
+# $python\
+# $php\
+# $nodejs\
+# $golang\
+# $rust\
+# $zig\
+# $package\
+# $aws\
+# $docker_context\
+# $jobs\
+# $cmd_duration\
+# $line_break\
+# ╰─$character"""
+
+# GLOBAL FORMAT
 format = """
-╭─(white)$username$hostname in \
-$directory\
-$git_branch$git_status\
-$fill\
-$python\
-$php\
-$nodejs\
-$golang\
-$rust\
-$zig\
-$package\
-$aws\
+$username\
+$hostname \
+$localip\
+$shlvl\
+$kubernetes\
+${custom.giturl}\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
 $docker_context\
-$jobs\
+${custom.docker}\
+$package\
+$c\
+$deno\
+$dotnet\
+$golang\
+$zig\
+$guix_shell\
+$helm\
+$java\
+$lua\
+$nim\
+$nodejs\
+$perl\
+$php\
+$purescript\
+$python\
+$rust\
+$swift\
+$terraform\
+$typst\
+$vlang\
+$vagrant\
+$zig\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$direnv\
+$env_var\
+$sudo\
 $cmd_duration\
 $line_break\
-╰─$character"""
+$jobs\
+$battery\
+$time\
+$status\
+$os\
+$container\
+$shell\
+$directory\
+$character"""
 
 # Add line between commands
 add_newline = true

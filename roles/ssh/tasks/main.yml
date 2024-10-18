@@ -43,6 +43,6 @@
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |
       # SSH aliases
-      ssha='eval $(ssh-agent) && ssh-add'
+      alias ssha='eval $(ssh-agent) && ssh-add'
   tags:
     - ssh

@@ -7,6 +7,6 @@
     line: |
       # Starship
       eval "$(starship init zsh)"
-      insertafter: EOF
+    insertafter: EOF
   tags:
     - always

@@ -10,5 +10,7 @@
       title: "Computer Setup Complete!"
       message: "Your computer has finished setting up."
       priority: 3
+  # no_log: true
+  when: send_success | default(false)
   tags:
     - gotify

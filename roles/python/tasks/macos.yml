@@ -1,10 +1,10 @@
 ---
-# roles/python/tasks
+# roles/python/tasks/macos.yml
 
 - name: Install python packages
   homebrew:
     name:
-      - python@3.9
+      - python
       - pipenv
       - virtualenv
     state: present
