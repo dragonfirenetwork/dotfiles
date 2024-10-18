@@ -1,14 +1,6 @@
 ---
 # roles/python/tasks
 
-# Set Ansible Python interpreter to Homebrew's Python 3
-- name: Ensure python interpreter is set to Python 3
-  set_fact:
-    ansible_python_interpreter: "{{ homebrew_prefix }}/bin/python3"
-  tags:
-    - python
-
-# Install Python packages via Homebrew
 - name: Install python packages
   homebrew:
     name:
