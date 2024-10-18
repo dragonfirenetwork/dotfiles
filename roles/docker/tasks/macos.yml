@@ -1,10 +1,9 @@
 ---
 # roles/docker/tasks/macos.yml
 
-# Install Docker Desktop via Homebrew Cask if Docker role is included
 - name: Install Docker Desktop
   homebrew_cask:
     name: docker
-    state: present
+    state: absent
   tags:
     - docker
