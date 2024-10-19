@@ -27,3 +27,10 @@
     state: present
   tags:
     - system
+
+- name: Create .config directory
+  file:
+    path: "{{ ansible_env.HOME }}/.config"
+    state: present
+  tags:
+    - system
