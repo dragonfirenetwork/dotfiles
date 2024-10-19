@@ -1,0 +1,40 @@
+---
+# roles/teleport/tasks/debian.yml
+
+- name: Check if Teleport is already installed
+  stat:
+    path: "/usr/bin/teleport"
+  register: teleport_installed
+  tags:
+    - teleport
+
+- name: Install Teleport
+  block:
+    - name: Download Teleport .deb package for Intel (amd64)
+      get_url:
+        url: "https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb"
+        dest: "/tmp/wifiman-desktop-amd64.deb"
+        mode: '0644'
+
+    - name: Install Teleport package for Intel (amd64)
+      dpkg:
+        name: "/tmp/wifiman-desktop-amd64.deb"
+        state: present
+
+    - name: Fix missing dependencies
+      command: apt-get install -f -y
+
+    - name: Verify Teleport installation
+      stat:
+        path: "/usr/bin/teleport"
+      register: teleport_post_install
+
+    - name: Remove Teleport .deb package for Intel (amd64)
+      file:
+        path: "/tmp/wifiman-desktop-amd64.deb"
+        state: absent
+
+  when: not teleport_installed.stat.exists
+  become: true
+  tags:
+    - teleport

@@ -1,0 +1,72 @@
+---
+# roles/teleport/tasks/macos.yml
+
+- name: Check if Teleport is already installed
+  stat:
+    path: "/Applications/Teleport.app"
+  register: teleport_installed
+  tags:
+    - teleport
+
+- name: Install Teleport
+  block:
+    - name: Download Teleport for Apple Silicon (arm64)
+      get_url:
+        url: "https://desktop.wifiman.com/wifiman-desktop-1.1.0-arm64.pkg"
+        dest: "/tmp/wifiman-desktop-arm64.pkg"
+        mode: '0644'
+      tags:
+        - teleport
+      when: ansible_architecture == 'arm64'
+
+    - name: Download Teleport for Intel (amd64)
+      get_url:
+        url: "https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.pkg"
+        dest: "/tmp/wifiman-desktop-amd64.pkg"
+        mode: '0644'
+      tags:
+        - teleport
+      when: ansible_architecture == 'x86_64'
+
+    - name: Install Teleport Apple Silicon (arm64)
+      command: sudo installer -pkg /tmp/wifiman-desktop-arm64.pkg -target /
+      args:
+        creates: "/Applications/Teleport.app"
+      tags:
+        - teleport
+      when: ansible_architecture == 'arm64'
+
+    - name: Install Teleport Intel (amd64)
+      command: sudo installer -pkg /tmp/wifiman-desktop-amd64.pkg -target /
+      args:
+        creates: "/Applications/Teleport.app"
+      tags:
+        - teleport
+      when: ansible_architecture == 'x86_64'
+
+    - name: Verify Teleport installation
+      stat:
+        path: "/Applications/Teleport.app"
+      register: teleport_post_install
+      tags:
+        - teleport
+
+    - name: Remove Teleport installer for Apple Silicon (arm64)
+      file:
+        path: "/tmp/wifiman-desktop-arm64.pkg"
+        state: absent
+      tags:
+        - teleport
+      when: ansible_architecture == 'arm64'
+
+    - name: Remove Teleport installer for Intel (amd64)
+      file:
+        path: "/tmp/wifiman-desktop-amd64.pkg"
+        state: absent
+      tags:
+        - teleport
+      when: ansible_architecture == 'x86_64'
+
+  when: not teleport_installed.stat.exists
+  tags:
+    - teleport

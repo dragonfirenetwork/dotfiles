@@ -38,8 +38,8 @@
     - role: git
       tags: git
 
-    - role: vpn
-      tags: vpn
+    - role: teleport
+      tags: teleport
 
     - role: alacritty
       tags: alacritty
