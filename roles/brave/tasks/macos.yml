@@ -1,0 +1,9 @@
+---
+# roles/brave/tasks/macos.yml
+
+- name: Install brave browser
+  homebrew_cask:
+    name: brave
+    state: present
+  tags:
+    - brave
