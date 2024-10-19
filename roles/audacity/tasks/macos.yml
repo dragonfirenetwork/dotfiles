@@ -1,0 +1,10 @@
+---
+# roles/audacity/tasks/macos.yml
+
+- name: Install audacity
+  hombrew_cask:
+    name: audacity
+    state: present
+  when: ansible_os_family == "Darwin"
+  tags:
+    - audacity

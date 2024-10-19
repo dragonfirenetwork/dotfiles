@@ -1,0 +1,12 @@
+---
+# roles/audacity/tasks/debian.yml
+
+- name: Install audacity
+  flatpack:
+    name: org.audacityteam.Audacity
+    method: user
+    state: present
+  become_user: glitchbox
+  when: ansible_os_family == "Debian"
+  tags:
+    - audacity
