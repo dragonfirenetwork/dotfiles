@@ -1,0 +1,21 @@
+---
+# roles/mailspring/tasks/debian.yml
+
+- name: Downlaod mailspring .deb package
+  get_url:
+    url: "https://updates.getmailspring.com/download?platform=linuxDeb"
+    dest: "/tmp/mailspring.deb"
+    mode: 0644
+  become: true
+
+- name: Install mailspring
+  apt:
+    deb: "/tmp/mailspring.deb"
+    update_cache: yes
+  become: true
+
+- name: Remove .deb package
+  file:
+    path: "/tmp/mailspring.deb"
+    state: absent
+  become: true

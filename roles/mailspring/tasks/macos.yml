@@ -1,0 +1,9 @@
+---
+# roles/mailspring/tasks/macos.yml
+
+- name: Install mailspring
+  homebrew_cask:
+    name: mailspring
+    state: present
+  tags:
+    - mailspring
