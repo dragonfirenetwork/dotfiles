@@ -1,0 +1,18 @@
+---
+# roles/chromium/tasks/debian.yml
+
+- name: Check if chromium Browser is already installed
+  stat:
+    path: "/usr/bin/chromium-browser"
+  register: chromium_installed
+  tags:
+    - chromium_browser
+
+- name: Install chromium browser
+  apt:
+    name: chromium-browser
+    state: present
+  when: not chromium_installed.stat.exists
+  become: true
+  tags:
+    - chromium
