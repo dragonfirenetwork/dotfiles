@@ -1,9 +1,9 @@
 ---
 # roles/docker/tasks/macos.yml
 
-- name: Install Docker Desktop
-  homebrew_cask:
+- name: Install Docker
+  homebrew:
     name: docker
-    state: absent
+    state: present
   tags:
     - docker
