@@ -1,7 +1,7 @@
 ---
 # roles/raycast/tasks/macos.yml
 
-- name: "Install RayCast"
+- name: Install RayCast
   homebrew_cask:
     name: raycast
     state: present
