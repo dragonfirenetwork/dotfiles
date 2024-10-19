@@ -1,17 +1,35 @@
 ---
 # roles/betterbird/tasks/macos.yml
 
-- name: Download arm64 version
-  set_fact: 
-    betterbird_download_url: https://www.betterbird.eu/downloads/get.php?os=mac-arm64&lang=en-US&version=release
-  when: ansible_facts['ansible_machine'] == 'arm64'
+- name: Check if Betterbird is already installed
+  stat:
+    path: "/Applications/Betterbird.app"
+  register: betterbird_installed
   tags:
     - betterbird
 
-- name: Download x86 version
-  set_fact: 
-    betterbird_download_url: https://www.betterbird.eu/downloads/get.php?os=mac&lang=en-US&version=release
-  when: ansible_facts['ansible_machine'] == 'x86_64'
+- name: Skip installation if Betterbird is already installed
+  meta: end_play
+  when: betterbird_installed.stat.exists
+  tags:
+    - betterbird
+
+- name: Set Betterbird download URL based on architecture
+  set_fact:
+    betterbird_download_url: >-
+      {% if ansible_architecture == 'arm64' %}
+        https://www.betterbird.eu/downloads/get.php?os=mac-arm64&lang=en-US&version=release
+      {% elif ansible_architecture == 'x86_64' %}
+        https://www.betterbird.eu/downloads/get.php?os=mac&lang=en-US&version=release
+      {% else %}
+        ""
+      {% endif %}
+  tags:
+    - betterbird
+
+- name: Skip if architecture is not supported
+  meta: skip_remaining_tasks
+  when: betterbird_download_url == ""
   tags:
     - betterbird
 
@@ -35,7 +53,7 @@
   shell: |
     echo "{{ hdiutil_attach.stdout | regex_search('(/Volumes/Betterbird[^\n]*)') }}"
   register: mount_point
-  chagned_when: false
+  changed_when: false
   tags:
     - betterbird
 
@@ -43,7 +61,7 @@
   copy:
     src: "{{ mount_point.stdout }}/Betterbird.app"
     dest: "/Applications/Betterbird.app"
-  remote_src: yes
+    remote_src: yes
   tags:
     - betterbird
 
