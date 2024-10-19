@@ -80,8 +80,8 @@
     - role: audacity
       tags: audacity
 
-    - role: betterbird
-      tags: betterbird
+    - role: mailspring
+      tags: mailspring
 
   #  - role: chromium
   #    tags: chromium
