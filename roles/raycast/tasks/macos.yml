@@ -5,6 +5,5 @@
   homebrew_cask:
     name: raycast
     state: present
-  when: ansible_os_family == "Darwin"
   tags:
     - raycast
