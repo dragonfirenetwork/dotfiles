@@ -1,0 +1,17 @@
+---
+# roles/nordvpn/tasks/macos.yml
+
+- name: Check if already installed
+  stat:
+    path: "/Applications/NordVPN"
+  register: nordvpn_installed
+  tags:
+    - nordvpn
+
+- name: Install Nord VPN
+  homebrew_cask:
+    name: nordvpn
+    state: present
+  when: not nordvpn_installed.stat.exists
+  tags:
+    - nordvpn 

@@ -1,0 +1,35 @@
+---
+# roles/nordvpn/tasks/debian.yml
+
+- name: Check if Nord is installed
+  stat:
+    path: ""
+  register: nordvpn_installed
+
+- name: Install Nord VPN
+  vars:
+    nordvpn_install_script: "https://downloads.nordcdn.com/apps/linux/install.sh"
+
+  block:
+    - name: Install Nord VPN
+      shell: bash -c "sh <(curl -sSf {{ nordvpn_install_script }})"
+      args:
+        executable: /bin/bash
+      register: nordvpn_install_result
+    
+    - name: Ensure the group exists
+      group:
+        name: nordvpn
+        state: present
+
+    - name: Add user to group
+      user:
+        name: {{ ansible_env.USER }}
+        groups: nordvpn
+        append: yes
+      register: user_group_added
+
+  when: not nordvpn_installed.stat.exists
+  become: true
+  tags:
+    - nordvpn

@@ -41,6 +41,9 @@
     - role: teleport
       tags: teleport
 
+    - role: nordvpn
+      tags: nordvpn
+
     - role: alacritty
       tags: alacritty
 
