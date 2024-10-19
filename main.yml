@@ -71,17 +71,17 @@
   #  - name: php
   #    tags: php
 
+  #  - name: composer
+  #    tags: composer
+
   #  - name: packer
   #    tags: packer
 
-  #  - name: audacity
-  #    tags: audacity
+    - name: audacity
+      tags: audacity
 
-  #  - name: autofs
-  #    tags: autofs
-
-  #  - name: betterbird
-  #    tags: betterbird
+    - name: betterbird
+      tags: betterbird
 
   #  - name: chromium
   #    tags: chromium
@@ -104,8 +104,8 @@
   #  - name: lutris
   #    tags: lutris
 
-  #  - name: raycast
-  #    tags: raycast
+    - name: raycast
+      tags: raycast
 
   #  - name: rectangle
   #    tags: rectangle
