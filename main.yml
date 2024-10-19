@@ -86,8 +86,8 @@
     - role: brave
       tags: brave
 
-  #  - role: chromium
-  #    tags: chromium
+    - role: chromium
+      tags: chromium
 
   #  - role: discord
   #    tags: discord
