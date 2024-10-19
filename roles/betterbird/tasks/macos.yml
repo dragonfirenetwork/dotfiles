@@ -1,21 +1,24 @@
 ---
 # roles/betterbird/tasks/macos.yml
 
-- name: Set download URL
+- name: Download arm64 version
   set_fact: 
-    betterbird_download_url: >-
-      {% if ansible_facts['ansible_machine'] == 'arm64' %}
-        https://www.betterbird.eu/downloads/get.php?os=mac-arm64&lang=en-US&version=release
-      {% else %}
-        https://www.betterbird.eu/downloads/get.php?os=mac&lang=en-US&version=release
-      {% endif %}
+    betterbird_download_url: https://www.betterbird.eu/downloads/get.php?os=mac-arm64&lang=en-US&version=release
+  when: ansible_facts['ansible_machine'] == 'arm64'
+  tags:
+    - betterbird
+
+- name: Download x86 version
+  set_fact: 
+    betterbird_download_url: https://www.betterbird.eu/downloads/get.php?os=mac&lang=en-US&version=release
+  when: ansible_facts['ansible_machine'] == 'x86_64'
   tags:
     - betterbird
 
 - name: Download betterbird DMG
-  get_uri:
+  get_url:
     url: "{{ betterbird_download_url }}"
-    dest: "/temp/Betterbird.dmg"
+    dest: "/tmp/Betterbird.dmg"
     mode: 0644
   tags:
     - betterbird
