@@ -83,6 +83,9 @@
     - role: mailspring
       tags: mailspring
 
+    - role: brave
+      tags: brave
+
   #  - role: chromium
   #    tags: chromium
 
