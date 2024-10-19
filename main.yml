@@ -22,137 +22,134 @@
 
   # Software to install, uncomment any you wish to skip
   roles:
-    - name: system
+    - role: system
       tags: system
 
-    - name: zsh
+    - role: zsh
       tags: zsh
 
-    - name: aerospace
+    - role: aerospace
       when: ansible_os_family == "Darwin"
       tags: aerospace
 
-    - name: ssh
+    - role: ssh
       tags: ssh
 
-    - name: git
+    - role: git
       tags: git
 
-    - name: alacritty
+    - role: alacritty
       tags: alacritty
 
-    - name: asciiquarium
+    - role: asciiquarium
       tags: asciiquarium
 
-    - name: neofetch
+    - role: neofetch
       tags: neofetch
 
-    - name: bat
+    - role: bat
       tags: bat
 
-    - name: tmux
+    - role: tmux
       tags: tmux
 
-    - name: python
+    - role: python
       tags: python
 
-  #  - name: terraform
+  #  - role: terraform
   #    tags: terraform
 
-  #  - name: opentofu
+  #  - role: opentofu
   #    tags: opentofu
 
-    - name: docker
+    - role: docker
       tags: docker
 
-  #  - name: go
+  #  - role: go
   #    tags: go
 
-  #  - name: php
+  #  - role: php
   #    tags: php
 
-  #  - name: composer
+  #  - role: composer
   #    tags: composer
 
-  #  - name: packer
+  #  - role: packer
   #    tags: packer
 
-    - name: audacity
+    - role: audacity
       tags: audacity
 
-    - name: betterbird
+    - role: betterbird
       tags: betterbird
 
-  #  - name: chromium
+  #  - role: chromium
   #    tags: chromium
 
-  #  - name: discord
+  #  - role: discord
   #    tags: discord
 
-  #  - name: foliate
+  #  - role: foliate
   #    tags: foliate
 
-  #  - name: fusion360
+  #  - role: fusion360
   #    tags: fusion360
 
-  #  - name: gimp
+  #  - role: gimp
   #    tags: gimp
 
-  #  - name: libreoffice
+  #  - role: libreoffice
   #    tags: libreoffice
 
-  #  - name: lutris
+  #  - role: lutris
   #    tags: lutris
 
-    - name: raycast
+    - role: raycast
       tags: raycast
 
-  #  - name: rectangle
+  #  - role: rectangle
   #    tags: rectangle
 
-  #  - name: revolt
+  #  - role: revolt
   #    tags: revolt
 
-  #  - name: rhythmbox
+  #  - role: rhythmbox
   #    tags: rhythmbox
 
-  #  - name: signal
+  #  - role: signal
   #    tags: signal
 
-  #  - name: steam
+  #  - role: steam
   #    tags: steam
 
-  #  - name: syncthing
+  #  - role: syncthing
   #    tags: syncthing
 
-  #  - name: thunderbird
-  #    tags: thunderbird
-
-  #  - name: super-productivity
+  #  - role: super-productivity
   #    tags: super-productivity
 
-  #  - name: ulauncher
+  #  - role: ulauncher
   #    tags: ulauncher
 
-  #  - name: vagrant
+  #  - role: vagrant
   #    tags: vagrant
 
-  #  - name: vaultwarden
+  #  - role: vaultwarden
   #    tags: vaultwarden
 
-  #  - name: vivaldi
+  #  - role: vivaldi
   #    tags: vivaldi
 
-  #  - name: pwsh
+  #  - role: pwsh
   #    tags: pwsh
 
-  #  - name: vagrant
+  #  - role: vagrant
   #    tags: vagrant
 
-  #  - name: vlc
+  #  - role: vlc
   #    tags: vlc
 
-    - name: starship
+    - role: starship
       tags: starship
   
   post_tasks:
