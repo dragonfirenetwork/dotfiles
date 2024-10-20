@@ -10,15 +10,28 @@
 
 - name: Install Teleport
   block:
-    - name: Download Teleport .deb package for Intel (amd64)
+    - name: Set Teleport package URL based on architecture
+      set_fact:
+        teleport_deb_url: >
+          {% if ansible_architecture == 'x86_64' %}
+            https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb
+          {% elif ansible_architecture == 'aarch64' %}
+            https://desktop.wifiman.com/wifiman-desktop-1.1.0-arm64.deb
+          {% else %}
+            https://desktop.wifiman.com/wifiman-desktop-1.1.0-default.deb
+          {% endif %}
+      tags:
+        - teleport
+  
+    - name: Download Teleport .deb package
       get_url:
-        url: "https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb"
-        dest: "/tmp/wifiman-desktop-amd64.deb"
+        url: "{{ teleport_deb_url }}"
+        dest: "/tmp/wifiman-desktop.deb"
         mode: 0644
 
-    - name: Install Teleport package for Intel (amd64)
+    - name: Install Teleport package
       dpkg:
-        name: "/tmp/wifiman-desktop-amd64.deb"
+        name: "/tmp/wifiman-desktop.deb"
         state: present
 
     - name: Update apt cache
