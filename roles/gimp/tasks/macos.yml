@@ -1,7 +1,7 @@
 ---
 # roles/gimp/tasks/macos.yml
 
-- name: Install gimp browser
+- name: Install gimp
   homebrew_cask:
     name: gimp
     state: present
