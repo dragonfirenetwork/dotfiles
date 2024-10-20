@@ -2,4 +2,5 @@
 # pre_tasks/handlers/main.yml
 
 - name: apt_update
-  apt: update_cache=yes
+  apt:
+    apt_update: yes
