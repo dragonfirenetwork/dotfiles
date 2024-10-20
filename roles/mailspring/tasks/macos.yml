@@ -1,9 +1,23 @@
 ---
 # roles/mailspring/tasks/macos.yml
 
-- name: Install mailspring
-  homebrew_cask:
-    name: mailspring
-    state: present
+- name: Check if Mailspring is installed
+  stat:
+    path: "/Applications/Mailspring.app"
+  register: mailspring_installed
+  tags:
+    - mailspring
+
+- name: Install Mailspring
+  block:
+    - name: Install mailspring
+      homebrew_cask:
+        name: mailspring
+        state: present
+    
+    - name: Add to dock
+      set_fact:
+        dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Mailspring', 'path': '/Applications/Mailspring.app', 'pos': 4 } ] }}"
+  when: not mailspring_installed.stat.exists
   tags:
     - mailspring

@@ -1,11 +1,6 @@
 ---
 # roles/nordvpn/tasks/debian.yml
 
-- name: Check if Nord is installed
-  stat:
-    path: ""
-  register: nordvpn_installed
-
 - name: Install Nord VPN
   vars:
     nordvpn_install_script: "https://downloads.nordcdn.com/apps/linux/install.sh"
@@ -28,8 +23,7 @@
         groups: nordvpn
         append: yes
       register: user_group_added
-
-  when: not nordvpn_installed.stat.exists
+  
   become: true
   tags:
     - nordvpn

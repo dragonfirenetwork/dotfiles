@@ -7,3 +7,7 @@
     state: present
   tags:
     - brave
+
+- name: Add to dock
+  set_fact:
+    dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Brave', 'path': '/Applications/Brave.app', 'pos': 6 } ] }}"
