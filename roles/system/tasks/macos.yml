@@ -219,3 +219,131 @@
     state: present
   tags:
     - system
+
+- name: Finder Tasks
+  block:
+    - name: Set path which Finder should open on start
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: NewWindowTarget
+        type: string
+        value: "PfHm"
+        state: present
+    
+    - name: Set file path which Finder should open on start
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: NewWindowTargetPath
+        type: string
+        value: "file://~/Desktop/"
+        state: present
+
+    - name: Set Finder default view
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: FXPreferredViewStyle
+        type: string
+        value: "clmv"
+        state: present
+    
+    - name: Keep folders on top when sorting by name
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: _FXSortFoldersFirst
+        type: bool
+        value: true
+        state: present
+    
+    - name: Disable the warning when changing a file extension
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: FXEnableExtensionChangeWarning
+        type: bool
+        value: true
+        state: present
+
+    - name: Show bottom path bar by default
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: ShowPathBar
+        type: bool
+        value: true
+        state: present
+
+    - name: Avoid creating .DS_Store files on network volumes
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: DSDontWriteNetworkStores
+        type: bool
+        value: true
+        state: present
+
+    - name: Avoid creating .DS_Store files on USB volumes
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: DSDontWriteUSBStores
+        type: bool
+        value: true
+        state: present
+
+    - name: Disable the warning before emptying the Trash
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: WarnOnEmptyTrash
+        type: bool
+        value: true
+        state: present
+
+    - name: Show icons for external hard drives on Desktop
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: ShowExternalHardDrivesOnDesktop
+        type: bool
+        value: false
+        state: present
+
+    - name: Show icons for hard drives on Desktop
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: ShowHardDrivesOnDesktop
+        type: bool
+        value: false
+        state: present
+
+    - name: Finder - Show icons for mounted servers on Desktop
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: ShowMountedServersOnDesktop
+        type: bool
+        value: false
+        state: present
+
+    - name: Show icons for removable media on Desktop
+      community.general.osx_defaults:
+        domain: com.apple.finder
+        key: ShowRemovableMediaOnDesktop
+        type: bool
+        value: false
+        state: present
+  tags:
+    - system
+
+- name: Input Tasks
+  block:
+    - name: Disable natural scroll for mouse and trackpad
+      community.general.osx_defaults:
+        domain: NSGlobalDomain
+        key: com.apple.swipescrolldirection
+        type: bool
+        value: true
+        state: present
+
+    - name: Trackpad - Enabling trackpad controls
+      community.general.osx_defaults:
+        domain: NSGlobalDomain
+        key: ContextMenuGesture
+        type: int
+        value: 1
+        state: present
+  tags:
+    - system
