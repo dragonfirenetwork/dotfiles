@@ -21,7 +21,7 @@
   apt:
     name: zsh-syntax-highlighting
     state: present
-    become: true
+  become: true
   tags:
     - zsh
 
@@ -29,7 +29,7 @@
   apt:
     name: zsh-autosuggestions
     state: present
-    become: true
+  become: true
   tags:
     - zsh
 
