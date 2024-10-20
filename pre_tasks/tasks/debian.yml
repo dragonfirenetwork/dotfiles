@@ -8,14 +8,7 @@
         src: "../files/{{ ansible_distribution | lower }}_sources.list"
         dest: /etc/apt/sources.list
         backup: yes
-      when: ansible_distribution in ["Debian", "Ubuntu", "LinuxMint", "Kali", "Parrot"]
-    
-    - name: Add Pop!_OS sources.list
-      copy:
-        src: "../files/pop_os_sources.list"
-        dest: /etc/apt/sources.list
-        backup: yes
-      when: ansible_distribution == "Pop!_OS"
+      when: ansible_distribution == "Debian"
   notify: apt_update
   become: true
   tags:
