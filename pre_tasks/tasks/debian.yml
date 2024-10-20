@@ -27,15 +27,6 @@
     - pre_tasks
     - debian_setup
 
-- name: Upgrade all installed packages to the latest version
-  apt:
-    upgrade: yes
-  notify: apt_update
-  become: true
-  tags:
-    - pre_tasks
-    - debian_setup
-
 # Enable passwordless sudo for user
 - name: Enable passwordless sudo for user
   ansible.builtin.template:
