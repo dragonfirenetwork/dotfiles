@@ -1,20 +1,6 @@
 ---
 # pre_tasks/debian.yml
 
-- name: Ensure correct sources.list
-  block:
-    - name: Add sources.list for debian hosts
-      copy:
-        src: "../files/{{ ansible_distribution | lower }}_sources.list"
-        dest: /etc/apt/sources.list
-        backup: yes
-      when: ansible_distribution == "Debian"
-  notify: apt_update
-  become: true
-  tags:
-    - pre_tasks
-    - debian_setup
-
 - name: Install package management tools
   package:
     name:
@@ -29,10 +15,13 @@
 
 # Enable passwordless sudo for user
 - name: Enable passwordless sudo for user
-  ansible.builtin.template:
-    src: "user-sudo.j2"
-    dest: /etc/sudoers.d/{{ ansible_env['USER'] }}
-    mode: 0440
+  community.general.sudoers:
+    name: "{{ ansible_env.USER }}"
+    user: "{{ ansible_env.USER }}"
+    commands: "ALL"
+    nopassword: true
+    sudoers_path: "/etc/sudoers.d"
+    state: present
   become: true
   tags:
     - pre_tasks
