@@ -5,7 +5,7 @@
   block:
     - name: Add sources.list for debian hosts
       copy:
-        src: "{{ ansible_distribution | lower }}_sources.list"
+        src: "../files/{{ ansible_distribution | lower }}_sources.list"
         dest: /etc/apt/sources.list
         backup: yes
       when: ansible_distribution in ["Debian", "Ubuntu", "LinuxMint", "Kali", "Parrot"]
@@ -16,6 +16,7 @@
         dest: /etc/apt/sources.list
         backup: yes
       when: ansible_distribution == "Pop!_OS"
+  notify: apt_update
   become: true
   tags:
     - pre_tasks
