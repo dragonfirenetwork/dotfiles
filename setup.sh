@@ -211,11 +211,11 @@ run_playbook() {
     printf "\n${WARNING} ${ORANGE}Running Ansible playbook for the first time, you'll have to enter your password...${RESTORE}\n"
     touch $DOTFILES_DIR/ansible.log
     cd $DOTFILES_DIR
-    ansible-playbook $DOTFILES_DIR/main.yml --vault-password-file $VAULT_SECRET --ask-become-pass
+    ansible-playbook main.yml --vault-password-file $VAULT_SECRET --ask-become-pass
   else
     printf "\n${LGREEN}Running Ansible playbook...${RESTORE}\n"
     cd $DOTFILES_DIR
-    ansible-playbook $DOTFILES_DIR/main.yml --vault-password-file $VAULT_SECRET
+    ansible-playbook main.yml --vault-password-file $VAULT_SECRET
   fi
 }
 
