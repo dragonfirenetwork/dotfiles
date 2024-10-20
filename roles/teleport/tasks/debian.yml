@@ -13,12 +13,12 @@
     - name: Download Teleport .deb package
       get_url:
         url: "https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb"
-        dest: "/tmp/wifiman-desktop.deb"
+        dest: "/tmp/wifiman-desktop-1.1.0-amd64.deb"
         mode: 0644
 
     - name: Install Teleport package
       dpkg:
-        name: "/tmp/wifiman-desktop.deb"
+        name: "/tmp/wifiman-desktop-1.1.0-amd64.deb"
         state: present
 
     - name: Update apt cache
