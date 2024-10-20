@@ -10,20 +10,9 @@
 
 - name: Install Teleport
   block:
-    - name: Set Teleport package URL based on architecture
-      set_fact:
-        teleport_deb_url: >
-          {% if ansible_architecture == 'x86_64' %}
-            https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb
-          {% elif ansible_architecture == 'aarch64' %}
-            https://desktop.wifiman.com/wifiman-desktop-1.1.0-arm64.deb
-          {% else %}
-            https://desktop.wifiman.com/wifiman-desktop-1.1.0-default.deb
-          {% endif %}
-  
     - name: Download Teleport .deb package
       get_url:
-        url: "{{ teleport_deb_url }}"
+        url: "https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb"
         dest: "/tmp/wifiman-desktop.deb"
         mode: 0644
 
