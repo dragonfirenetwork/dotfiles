@@ -1,0 +1,31 @@
+---
+# roles/vivaldi/tasks/debian.yml
+
+- name: Check if vivaldi browser is already installed
+  stat:
+    path: "/usr/bin/vivaldi"
+  register: vivaldi_installed
+  tags:
+    - vivaldi
+
+- name: Install vivaldi
+  block:
+    - name: Download vivaldi .deb package
+      get_url:
+        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_6.9.3447.54-1_amd64.deb"
+        dest: "/tmp/vivaldi.deb"
+        mode: 0644
+
+    - name: Install vivaldi
+      apt:
+        deb: "/tmp/vivaldi.deb"
+        update_cache: yes
+
+    - name: Remove .deb package
+      file: 
+        path: "/tmp/vivaldi.deb"
+        state: absent
+  become: true
+  when: not vivaldi_installed.stat.exists
+  tags:
+    - vivaldi

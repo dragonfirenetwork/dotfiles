@@ -1,0 +1,9 @@
+---
+# roles/vivaldi/tasks/macos.yml
+
+- name: Install vivaldi
+  homebrew_cask:
+    name: vivaldi
+    state: present
+  tags:
+    - vivaldi
