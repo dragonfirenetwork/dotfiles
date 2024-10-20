@@ -78,13 +78,13 @@
 - name: Create .config directory
   file:
     path: "{{ ansible_env.HOME }}/.config"
-    state: present
+    state: directory
   tags:
     - system
 
 - name: Create autostart directory
   file:
     path: "{{ ansible_env.HOME }}/.config/autostart/"
-    state: present
+    state: directory
   tags:
     - system
