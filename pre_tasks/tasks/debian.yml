@@ -12,7 +12,7 @@
     
     - name: Add Pop!_OS sources.list
       copy:
-        src: "pop_os_sources.list"
+        src: "../files/pop_os_sources.list"
         dest: /etc/apt/sources.list
         backup: yes
       when: ansible_distribution == "Pop!_OS"
