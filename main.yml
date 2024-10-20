@@ -95,8 +95,8 @@
     - role: chromium
       tags: chromium
 
-  #  - role: discord
-  #    tags: discord
+    - role: discord
+      tags: discord
 
   #  - role: foliate
   #    tags: foliate
@@ -146,8 +146,8 @@
   #  - role: vaultwarden
   #    tags: vaultwarden
 
-  #  - role: vivaldi
-  #    tags: vivaldi
+    - role: vivaldi
+      tags: vivaldi
 
   #  - role: pwsh
   #    tags: pwsh
