@@ -1,0 +1,9 @@
+---
+# roles/tldr/tasks/tldr/macos.yml
+
+- name: Install tldr
+  homebrew:
+    name: tldr
+    state: present
+  tags:
+    - tldr

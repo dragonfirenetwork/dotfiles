@@ -1,0 +1,10 @@
+---
+# roles/tldr/tasks/debian.yml
+
+- name: Install tldr
+  apt:
+    name: tldr
+    state: present
+  become: true
+  tags:
+    - tldr
