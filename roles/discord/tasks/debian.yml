@@ -1,0 +1,23 @@
+---
+# roles/discord/tasks/debian.yml
+
+- name: Install discord
+  block:
+    - name: Download .deb package
+      get_url:
+        url: "https://discord.com/api/download?platform=linux&format=deb"
+        path: "/tmp/discord.deb"
+        mode: 0644
+
+    - name: Install discord
+      apt:
+        deb: "/tmp/discord.deb"
+        update_cache: yes
+
+    - name: Remove .deb package
+      file:
+        path: "/tmp/discord.deb"
+        state: absent
+  become: true
+  tags:
+    - discord

@@ -1,0 +1,9 @@
+---
+# roles/discord/tasks/macos.yml
+
+- name: Install discord
+  homebrew_cask:
+    name: discord
+    state: present
+  tags:
+    - discord
