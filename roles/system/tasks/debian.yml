@@ -46,7 +46,6 @@
       - build-essential
       - ca-certificates
       - curl
-      - startx
       - gnupg
       - lsb-release
       - apt-transport-https
