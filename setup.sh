@@ -196,7 +196,7 @@ install_ansible_requirements() {
 move_vault_secret() {
   _task "Moving vault.secret into .dotfiles"
   if [[ ! -f "vault.secret" ]]; then
-    echo "${WARNING}${RED}No vault.secret found! This will create it, but you MUST enter your secret and rerun this script.${RED}"
+    echo "${RED}No vault.secret found! This will create it, but you MUST enter your secret and rerun this script.${RED}"
     touch vault.secret
     exit 1
   else
