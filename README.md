@@ -22,6 +22,16 @@ Make the script executable:
 chmod +x setup.sh
 ```
 
+## Create the vault.secret file
+
+Since certain variables are encrypted with Ansible Vault, you'll need to create a 'vault.secret' file.
+Once created, enter your secret and save it.
+
+```
+touch vault.secret
+nano vault.secret
+```
+
 ## Run the 'setup.sh' script
 
 Now, run the ```setup.sh``` script to begin the setup process. This script will handle installing Git (if needed), cloning this repository, and installing all the necessary packages based on your configuration.
