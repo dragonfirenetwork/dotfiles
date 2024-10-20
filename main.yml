@@ -56,6 +56,9 @@
     - role: bat
       tags: bat
 
+    - role: tldr
+      tags: tldr
+
     - role: tmux
       tags: tmux
 
@@ -139,9 +142,6 @@
 
   #  - role: ulauncher
   #    tags: ulauncher
-
-  #  - role: vagrant
-  #    tags: vagrant
 
   #  - role: vaultwarden
   #    tags: vaultwarden

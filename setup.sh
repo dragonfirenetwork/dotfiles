@@ -176,7 +176,7 @@ clone_or_update_dotfiles() {
   if [[ ! -d "$DOTFILES_DIR" ]]; then
     _cmd "git clone $DOTFILES_GIT_REMOTE $DOTFILES_DIR"
   else
-    _cmd "cd $DOTFILES_DIR && git pull origin main --quite"
+    _cmd "cd $DOTFILES_DIR && git pull origin main --quiet"
   fi
   _task_done
 }
