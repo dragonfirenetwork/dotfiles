@@ -5,7 +5,6 @@
   homebrew:
     name: bat
     state: present
-  when: ansible_os_family == "Darwin"
   tags:
     - bat
 

@@ -6,7 +6,6 @@
     name: bat
     state: present
   become: true
-  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - bat
 
