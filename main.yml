@@ -128,8 +128,8 @@
   #  - role: signal
   #    tags: signal
 
-  #  - role: steam
-  #    tags: steam
+    - role: steam
+      tags: steam
 
   #  - role: syncthing
   #    tags: syncthing
