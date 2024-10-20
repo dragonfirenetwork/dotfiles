@@ -1,0 +1,11 @@
+---
+# roles/foliate/tasks/debian.yml
+
+- name: Install foliate
+  flatpak:
+    name: com.github.johnfactotum.Foliate
+    method: user
+    state: present
+  become: true
+  tags:
+    - foliate

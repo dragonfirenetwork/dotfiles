@@ -1,0 +1,8 @@
+---
+# roles/foliate/task/main.yml
+
+- name: Debian Linux | Load install playbook
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+  tags:
+    - foliate
