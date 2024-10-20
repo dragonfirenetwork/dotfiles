@@ -1,0 +1,10 @@
+---
+# roles/gimp/tasks/debian.yml
+
+- name: Install gimp
+  apt:
+    name: gimp
+    state: present
+  become: true
+  tags:
+    - gimp

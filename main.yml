@@ -104,8 +104,8 @@
   #  - role: fusion360
   #    tags: fusion360
 
-  #  - role: gimp
-  #    tags: gimp
+    - role: gimp
+      tags: gimp
 
   #  - role: libreoffice
   #    tags: libreoffice
