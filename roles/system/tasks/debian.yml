@@ -64,8 +64,6 @@
       - logrotate
       - rsync
       - locales
-      - language-pack-en
-      - language-pack-jp
       - rar
       - unrar
       - xz-utils
