@@ -98,8 +98,8 @@
     - role: discord
       tags: discord
 
-  #  - role: foliate
-  #    tags: foliate
+    - role: foliate
+      tags: foliate
 
   #  - role: fusion360
   #    tags: fusion360
