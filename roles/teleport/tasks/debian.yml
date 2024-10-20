@@ -20,8 +20,6 @@
           {% else %}
             https://desktop.wifiman.com/wifiman-desktop-1.1.0-default.deb
           {% endif %}
-      tags:
-        - teleport
   
     - name: Download Teleport .deb package
       get_url:
@@ -45,7 +43,7 @@
 
     - name: Remove Teleport .deb package for Intel (amd64)
       file:
-        path: "/tmp/wifiman-desktop-amd64.deb"
+        path: "/tmp/wifiman-desktop.deb"
         state: absent
 
   when: not teleport_installed.stat.exists
