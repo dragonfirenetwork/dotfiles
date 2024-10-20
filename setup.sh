@@ -6,7 +6,7 @@ declare -a setup_order=(
   install_dependencies
   clone_or_update_dotfiles
   install_ansible_requirements
-  create_vault_secret
+  move_vault_secret
   run_playbook # MUST be last function set!
 )
 
@@ -192,33 +192,17 @@ install_ansible_requirements() {
   _task_done
 }
 
-# Create the vault.secret file
-create_vault_secret() {
-  _task "Checking for vault.secret file"
-  if [[ ! -f "$DOTFILES_DIR/vault.secret" ]]; then
-    while true; do
-        read -s -p "${LCYAN}Enter vault password: ${RESTORE}" vault
-        echo
-        read -s -p "${LCYAN}Confirm vault password: ${RESTORE}" vault_confirm
-        if [ $vault == $vault_confirm ]; then
-            echo "$vault" > "$DOTFILES_DIR/vault.secret"
-            chmod 600 "$DOTFILES_DIR/vault.secret"
-            VAULT_SECRET="$DOTFILES_DIR/vault.secret"
-            printf "${CHECK_MARK} ${LGREEN}vault.secret created.${RESTORE}\n"
-            break
-        else 
-            printf "${OVERWRITE}${LRED}[X] Checking for vault.secret file${LRED}\n"
-            printf "${LRED}The passwords you entered did not match${LRED}"
-            printf "${LRED}The playbook will not run now automatically.${LRED}"
-            echo
-            printf "${WARNING} ${ORANGE}You will need to enter your vault secret manually in: $DOTFILES_DIR/vault.secret${ORANGE}"
-            echo
-            exit 1
-        fi
-    done
+# Move vault.secret into directory
+move_vault_secret() {
+  _task "Moving vault.secret into .dotfiles"
+  if [[ ! -f "vault.secret" ]]; then
+    echo "${WARNING}${RED}No vault.secret found! This will create it, but you MUST enter your secret and rerun this script.${RED}"
+    touch vault.secret
+    exit 1
   else
+    chmod 600 "$DOTFILES_DIR/vault.secret"
+    mv vault.secret .dotfiles/vault.secret
     VAULT_SECRET="$DOTFILES_DIR/vault.secret"
-    printf "${OVERWRITE}${CHECK_MARK} ${LGREEN}vault.secret already exists, skipping.${RESTORE}\n"
   fi
   _task_done
 }

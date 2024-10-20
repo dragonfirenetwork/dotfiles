@@ -1,14 +1,22 @@
 ---
 # pre_tasks/debian.yml
 
-- name: Add sources.list for debian hosts
-  copy:
-    src: "{{ ansible_distribution | lower }}_sources.list"
-    dest: /etc/apt/sources.list
-    backup: yes
-  notify: apt_update
+- name: Ensure correct sources.list
+  block:
+    - name: Add sources.list for debian hosts
+      copy:
+        src: "{{ ansible_distribution | lower }}_sources.list"
+        dest: /etc/apt/sources.list
+        backup: yes
+      when: ansible_distribution in ["Debian", "Ubuntu", "LinuxMint", "Kali", "Parrot"]
+    
+    - name: Add Pop!_OS sources.list
+      copy:
+        src: "'pop!_os_sources.list'"
+        dest: /etc/apt/sources.list
+        backup: yes
+      when: ansible_distribution == "Pop!_OS"
   become: true
-  when: ansible_distribution in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - pre_tasks
     - debian_setup
