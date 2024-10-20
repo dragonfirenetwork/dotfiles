@@ -1,0 +1,10 @@
+---
+# roles/vlc/tasks/debian.yml
+
+- name: Install vlc
+  apt:
+    name: vlc
+    state: present
+  become: true
+  tags:
+    - vlc

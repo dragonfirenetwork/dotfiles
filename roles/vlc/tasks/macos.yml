@@ -1,0 +1,9 @@
+---
+# roles/vlc/tasks/macos.yml
+
+- name: Install vlc
+  homebrew_cask:
+    name: vlc
+    state: present
+  tags:
+    - vlc
