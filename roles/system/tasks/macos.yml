@@ -31,6 +31,178 @@
 - name: Create .config directory
   file:
     path: "{{ ansible_env.HOME }}/.config"
+    state: directory
+    owner: "{{ ansible_env.USER }}"
+    group: "staff"
+    mode: 0755
+  tags:
+    - system
+
+- name: Screenshots configuration
+  block:
+    - name: Create screenshot directory
+      file:
+        path: "{{ ansible_env.HOME }}/Pictures/Screenshots"
+        state: directory
+        owner: "{{ ansible_env.USER }}"
+        group: "staff"
+        mode: 0755
+
+    - name: Save screenshots to custom directory
+      community.general.osx_defaults:
+        domain: com.apple.screencapture
+        key: location
+        type: string
+        value: "{{ ansible_env.HOME }}/Pictures/Screenshots"
+        state: present
+
+    - name: Set default prefix for screenshots
+      community.general.osx_defaults:
+        domain: com.apple.screencapture
+        key: name
+        type: string
+        value: "src"
+        state: present
+  tags:
+    - system
+
+- name: Screensaver configuration
+  block:
+    - name: Get current screensaver
+      shell: >
+        defaults -currentHost read com.apple.screensaver | grep -o "Shuffle Landscape"
+      register: screensaver_current
+      changed_when: false
+      failed_when: "screensaver_current.rc == 2"
+      check_mode: false
+    
+    - name: Set screensaver
+      command: >
+        defaults -currentHost write com.apple.screensaver "moduleDict" \
+        -dict-add "path" -string "/System/Library/Screen Savers/Shuffle Landscape.saver"
+      when: (screensaver_current.stdout != "Shuffle Landscape")
+    
+    - name: Show clock on screensaver
+      community.general.osx_defaults:
+        domain: com.apple.screensaver
+        key: showClock
+        type: bool
+        value: true
+        state: present
+      changed_when: false
+    
+    - name: Start after
+      community.general.osx_defaults:
+        domain: com.apple.screensaver
+        key: idleTime
+        type: int
+        value: 300
+        state: present
+      changed_when: false
+  tags:
+    - system
+
+- name: Security configuration
+  block:
+    - name: Require password when wake
+      community.general.osx_defaults:
+        domain: com.apple.screensaver
+        key: askForPassword
+        type: int
+        value: 1
+        state: present
+      changed_when: false
+    
+    - name: Require password immediately after sleep or screensaver
+      community.general.osx_defaults:
+        domain: com.apple.screensaver
+        key: askForPasswordDelay
+        type: int
+        value: 0
+        state: present
+      changed_when: false
+    
+    - name: Turn off feedback assistant
+      community.general.osx_defaults:
+        domain: com.apple.appleseed.FeedbackAssistant
+        key: Autogather
+        type: bool
+        value: true
+        state: present
+    
+    - name: Disable Personalized Ads
+      community.general.osx_defaults:
+        domain: com.apple.AdLib
+        key: allowApplePersonalizedAdvertising
+        type: bool
+        value: false
+        state: present
+
+    - name: Check for updates every 7 days
+      community.general.osx_defaults:
+        domain: com.apple.SoftwareUpdate
+        key: ScheduleFrequency
+        type: int
+        value: 7
+        state: present
+  tags:
+    - system
+
+- name: Set HostName, ComputerName, and LocalHostName
+  ansible.builtin.hostname:
+    name: "{{ ansible_distribution | lower }}"
+  tags:
+    - system
+
+- name: Automatically quit printer app once the print jobs complete
+  community.general.osx_defaults:
+    domain: com.apple.print.PrintingPrefs
+    key: "Quit When Finished"
+    type: bool
+    value: true
     state: present
   tags:
     - system
+
+- name: Menu Bar | Trigger Bluetooth menu icon visibility
+  community.general.osx_defaults:
+    domain: com.apple.controlcenter
+    key: "NSStatusItem Visible Bluetooth"
+    type: bool
+    value: true
+    state: present
+  tags:
+    - system
+
+- name: Language & Region | Enables the input menu in the menu bar
+  community.general.osx_defaults:
+    domain: com.apple.TextInputMenu
+    key: visible
+    type: bool
+    value: true
+    state: present
+  tags:
+    - system
+
+- name: Language & Region | Set main languages
+  community.general.osx_defaults:
+    domain: NSGlobalDomain
+    key: AppleLanguages
+    type: array
+    value: 
+      - en-US
+      - ja-JP
+    state: present
+  tags:
+    - system
+
+- name: Applications | Prevent Photos from opening automatically when devices are plugged in
+  community.general.osx_defaults:
+    domain: com.apple.ImageCapture
+    key: disableHotPlug
+    type: bool
+    value: true
+    state: present
+  tags:
+    - system
+

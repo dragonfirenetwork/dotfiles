@@ -1,24 +1,86 @@
 ---
 # roles/finishing_touches/tasks/macos.yml
 
-- name: Update Homebrew cache
-  homebrew:
-    update_homebrew: true
-    upgrade_all: true
-  when: ansible_os_family == "Darwin"
-  tags:
-    - always
-
-- name: Cleanup Homebrew
-  shell: brew cleanup
-  when: ansible_os_family == "Darwin"
-  tags: 
-    - always
-
 - name: Set source # Source, just in case of changes 
   shell: source ~/.zshrc
   args:
     executable: /bin/zsh
   when: ansible_os_family == "Darwin"
+  tags:
+    - always
+
+- name: Install dockutil.
+  homebrew:
+    name: dockutil
+    state: present
+  notify: 
+    - update_homebrew
+    - cleanup_homebrew
+  tags: 
+    - always
+
+- name: Remove default dock items
+  vars:
+    dockitems_remove:
+      - TV
+      - Podcasts
+      - Launchpad
+      - 'App Store'
+      - Safari
+      - Mail
+      - FaceTime
+      - Maps
+      - Photos
+      - Contacts
+      - Calendar
+  include_tasks: macos_dock_remove.yml
+  loop: "{{ dockitems_remove }}"
+  loop_control:
+    extended: true
+    extended_allitems: false
+  tags:
+    - always
+
+- name: Add default apps to dock
+  vars:
+    dockitems_persist:
+      - name: Teleport
+        path: "/Applications/Teleport.app"
+        pos: 1
+      - name: NordVPN
+        path: "/Applications/NordVPN.app"
+        pos: 2
+      - name: Messages
+        path: "/Applications/Messages.app/"
+        pos: 3
+      - name: Mailspring
+        path: "/Applications/Mailspring.app"
+        pos: 4
+      - name: Alacritty
+        path: "/Applications/Alacritty.app"
+        pos: 5
+      - name: Brave
+        path: "/Applications/Brave.app"
+        pos: 6
+      - name: Vivaldi
+        path: "/Applications/Vivaldi.app"
+        pos: 7
+      - name: Chromium
+        path: "/Applications/Chromium.app"
+        pos: 8
+      - name: Music
+        path: "/Applications/Music.app"
+        pos: 9
+  block:
+    - include_tasks: macos_dock_add.yml
+      loop: "{{ dockitems_persist }}"
+      loop_control:
+        extended: true
+        extended_allitems: false
+    - include_tasks: macos_dock_persist.yml
+      loop: "{{ dockitems_persist }}"
+      loop_control:
+        extended: true
+        extended_allitems: false
   tags:
     - always

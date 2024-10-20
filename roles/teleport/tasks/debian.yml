@@ -35,12 +35,6 @@
         path: "/tmp/wifiman-desktop-amd64.deb"
         state: absent
 
-    - name: Ensure autostart
-      copy:
-        src: "/usr/share/applications/teleport"
-        dest: "{{ ansible_env.HOME }}/.config/autostart/"
-        mode: 0644
-
   when: not teleport_installed.stat.exists
   become: true
   tags:

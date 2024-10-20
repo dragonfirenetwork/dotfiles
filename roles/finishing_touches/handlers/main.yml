@@ -1,0 +1,12 @@
+---
+# roles/finishing_touches/handlers/macos.yml
+
+- name: update_homebrew
+  homebrew:
+    update_homebrew: true
+    upgrade_all: true
+  when: ansible_os_family == "Darwin"
+
+- name: cleanup_homebrew
+  shell: brew cleanup
+  when: ansible_os_family == "Darwin"

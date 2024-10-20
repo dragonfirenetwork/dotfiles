@@ -14,4 +14,4 @@
     state: present
   when: not nordvpn_installed.stat.exists
   tags:
-    - nordvpn 
+    - nordvpn
