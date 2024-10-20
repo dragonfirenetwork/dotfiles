@@ -200,7 +200,6 @@ move_vault_secret() {
     touch vault.secret
     exit 1
   else
-    chmod 600 "$DOTFILES_DIR/vault.secret"
     mv vault.secret .dotfiles/vault.secret
     VAULT_SECRET="$DOTFILES_DIR/vault.secret"
   fi
