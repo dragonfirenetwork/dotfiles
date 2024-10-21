@@ -1,11 +1,19 @@
 ---
 # roles/foliate/tasks/debian.yml
 
-- name: Foliate | Install via Flatpack
-  flatpak:
-    name: com.github.johnfactotum.Foliate
-    method: user
-    state: present
+- name: Foliate | Setup and configure
+  block:
+    - name: Foliate | Add Flathub repository
+      flatpak_remote:
+        name: flathub
+        url: https://flathub.org/repo/flathub.flatpakrepo
+        state: present
+
+    - name: Foliate | Install via Flatpak
+      flatpak:
+        name: com.github.johnfactotum.Foliate
+        method: user
+        state: present
   become: true
   tags:
     - foliate
