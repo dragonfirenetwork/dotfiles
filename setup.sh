@@ -150,7 +150,7 @@ install_dependencies() {
     _cmd "brew install ansible"
   elif [[ "$OS" == "Linux" ]]; then
     if grep -qEi "(debian|ubuntu|pop|mint)" /etc/*release; then
-      _cmd "sudo apt update -y && sudo apt install -y python3 python3-pip software-properties-common"
+      _cmd "sudo apt update -y && sudo apt install -y python3 python3-pip python3-venv software-properties-common"
       _cmd "sudo add-apt-repository --yes --update ppa:ansible/ansible"
       _cmd "sudo apt install -y ansible"
     elif grep -qEi "arch" /etc/*release; then
@@ -166,7 +166,15 @@ install_dependencies() {
     abort "${X_MARK} ${LRED}Unsupported operating system: $OS${RESTORE}"
   fi
 
-  _cmd "pip3 install watchdog"
+  _task "Setting up Python virtual environment"
+  _cmd "python3 -m venv $HOME/ansible-venv"
+
+  _task "Activating Python virtual environment"
+  source "$HOME/ansible-venv/bin/activate"
+
+  _task "Installing Python dependencies inside virtual environment"
+  _cmd "pip install watchdog"
+
   _task_done
 }
 
