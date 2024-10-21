@@ -1,13 +1,6 @@
 ---
 # roles/nordvpn/tasks/debian.yml
 
-- name: Check if NordVPN is already installed
-  stat:
-    path: "/usr/bin/nordvpn"
-  register: nordvpn_installed
-  tags:
-    - nordvpn
-
 - name: Install NordVPN
   block:
     - name: Install python3-apt
@@ -48,8 +41,7 @@
         name: "{{ ansible_env.USER }}"
         groups: "nordvpn"
         append: yes
-
-  when: not nordvpn_installed.stat.exists
+  
   become: true
   tags:
     - nordvpn
