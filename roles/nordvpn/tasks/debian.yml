@@ -19,15 +19,13 @@
         update_cache: yes
 
     - name: NordVPN | Add NordVPN's official GPG key
-      get_url:
+      apt_key:
         url: "https://repo.nordvpn.com/gpg/nordvpn_public.asc"
-        dest: /usr/share/keyrings/nordvpn.gpg
-        mode: '0644'
-      become: true
+        state: present
 
     - name: NordVPN | Adding repository
       apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/nordvpn.gpg] https://repo.nordvpn.com//deb/nordvpn/debian stable main"
+        repo: "deb https://repo.nordvpn.com//deb/nordvpn/debian stable main"
         filename: "nordvpn"
         state: present
         update_cache: yes
