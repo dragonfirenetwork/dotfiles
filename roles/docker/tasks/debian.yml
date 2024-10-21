@@ -1,5 +1,6 @@
 ---
 # These steps are based on the official Docker documentation: https://docs.docker.com/engine/install/ubuntu/#installation-methods
+
 - name: "Docker | Update APT cache"
   ansible.builtin.apt:
     update_cache: true
@@ -14,11 +15,25 @@
     state: present
   become: true
 
+# New Task: Ensure the keyrings directory exists
+- name: "Docker | Ensure keyrings directory exists"
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  become: true
+
+# Updated Task: Add Docker’s official GPG key using get_url
 - name: "Docker | Add Docker’s official GPG key"
-  ansible.builtin.apt_key:
+  ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
-    keyring: /etc/apt/keyrings/docker.gpg
-    state: present
+    dest: /etc/apt/keyrings/docker.gpg
+    mode: "0644"
+    owner: root
+    group: root
+    validate_certs: yes
   become: true
 
 - name: "Docker | Get System Architecture"
@@ -30,7 +45,11 @@
 
 - name: "Docker | Add Docker’s stable repository"
   ansible.builtin.apt_repository:
-    repo: deb [arch={{ dpkg_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    repo: >-
+      deb [arch={{ dpkg_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.gpg] 
+      https://download.docker.com/linux/ubuntu 
+      {{ ansible_distribution_release }} 
+      stable
     mode: "0644"
   become: true
 
@@ -63,7 +82,7 @@
 
 - name: "Docker | Ensure docker data directory exists"
   ansible.builtin.file:
-    path: "{{  ansible_user_dir }}/.local/lib/docker"
+    path: "{{ ansible_user_dir }}/.local/lib/docker"
     state: directory
     mode: "0710"
   become: true
