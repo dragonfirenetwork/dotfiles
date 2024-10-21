@@ -11,6 +11,14 @@
       tags:
         - neofetch
 
+    - name: Ensure configuration directory exists
+      file:
+        path: "{{ ansible_env.HOME }}/.config/neofetch"
+        state: directory
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: 0755
+
     - name: Set configuration file
       copy:
         src: config.conf
