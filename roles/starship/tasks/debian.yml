@@ -1,32 +1,27 @@
 ---
 # roles/starship/tasks/debian.yml
 
-- name: Install starship
-  apt:
-    name: starship
-    state: present
-  when: ansible_os_family == "Debian"
+- name: Setup Starship
+  block:
+
+    - name: Install starship
+      apt:
+        name: starship
+        state: present
+      when: ansible_os_family == "Debian"
+      tags:
+        - starship
+
+    - name: Copy configuration file
+      copy:
+        src: "starship.toml"
+        dest: "{{ ansible_env.HOME }}/.config"
+        mode: 0644
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+
+    # Adding to the zshrc will be done in the finalize_zshrc to ensure it's EOF plaement.
+  
+  become: true
   tags:
     - starship
-
-- name: Copy configuration file
-  copy:
-    src: "starship.toml"
-    dest: "{{ ansible_env.HOME }}/.config"
-    mode: 0644
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
-
-# Note:
-# The setting up of the Starship prompt below should not be uncommented.
-# This step is performed in the 'roles/finishing_touches/tasks/finalize_zshrc.yml'
-# file to ensure that it is the very last thing added to the '.zshrc'. 
-#- name: Add aliases
-#  lineinfile:
-#    path: "{{ ansible_env.HOME }}/.zshrc"
-#    line: |
-#      # Starship
-#      eval "$(starship init zsh)"
-#    insertafter: EOF
-#  tags:
-#    - starship

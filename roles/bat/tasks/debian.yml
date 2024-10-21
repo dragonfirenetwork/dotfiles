@@ -1,19 +1,21 @@
 ---
 # roles/bat/tasks/debian.yml
 
-- name: Install via Apt
-  apt:
-    name: bat
-    state: present
-  become: true
-  tags:
-    - bat
+- name: Setup bat
+  block:
 
-- name: Add aliases
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      # Bat
-      alias cat=bat
+    - name: Install via Apt
+      apt:
+        name: bat
+        state: present
+
+    - name: Add aliases
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: |
+          # Bat
+          alias cat=bat
+
+  become: true
   tags:
     - bat

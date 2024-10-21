@@ -1,19 +1,24 @@
 ---
 # roles/neofetch/tasks/debian.yml
 
-- name: Install neofetch
-  apt:
-    name: neofetch
-    state: present
-  tags:
-    - neofetch
+- name: Setup Neofetch
+  block:
 
-- name: Set configuration file
-  copy:
-    src: config.conf
-    dest: "{{ ansible_env.HOME }}/.config/neofetch/config.conf"
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
-    mode: 0644
+    - name: Install neofetch
+      apt:
+        name: neofetch
+        state: present
+      tags:
+        - neofetch
+
+    - name: Set configuration file
+      copy:
+        src: config.conf
+        dest: "{{ ansible_env.HOME }}/.config/neofetch/config.conf"
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: 0644
+
+  become: true
   tags:
     - neofetch
