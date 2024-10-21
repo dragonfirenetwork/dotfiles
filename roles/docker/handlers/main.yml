@@ -5,17 +5,3 @@
     state: restarted
   become: true
   when: not ansible_host_environment_is_wsl
-
-- name: stop_packagekitd
-  service:
-    name: packagekit
-    state: stopped
-  ignore_errors: true
-  become: true
-
-- name: kill_packagekitd
-  shell: pkill packagekitd
-  args:
-    warn: false
-  ignore_errors: true
-  become: true

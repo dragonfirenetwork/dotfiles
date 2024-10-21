@@ -22,7 +22,6 @@
         url: "https://repo.nordvpn.com/gpg/nordvpn_public.asc"
         dest: /usr/share/keyrings/nordvpn.gpg
         mode: '0644'
-      update_cache: yes
 
     - name: NordVPN | Adding repository
       apt_repository:
