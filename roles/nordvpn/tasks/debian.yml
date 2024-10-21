@@ -26,22 +26,12 @@
         group: root
         validate_certs: yes
 
-    - name: NordVPN | Wait until apt lock is released
-      wait_for:
-        path: /var/lib/apt/lists/lock
-        state: absent
-        timeout: 300
-
     - name: NordVPN | Adding repository
       apt_repository:
         repo: "deb [signed-by=/usr/share/keyrings/nordvpn.gpg] https://repo.nordvpn.com//deb/nordvpn/debian stable main"
         filename: "nordvpn"
         state: present
         update_cache: yes
-      register: repo_add
-      retries: 5
-      delay: 10
-      until: repo_add is succeded
 
     - name: NordVPN | Installing Nord VPN
       apt:
