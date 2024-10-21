@@ -3,10 +3,19 @@
 
 - name: Starship | Setup and configuration
   block:
-    - name: Starship | Install starship
-      apt:
-        name: starship
-        state: present
+    - name: "Starship | Install Starship"
+      ansible.builtin.command:
+        cmd: which starship
+      register: starship_installed
+      changed_when: false
+      failed_when: false
+
+    - name: "Starship | Install Starship"
+      when: starship_installed.rc != 0
+      ansible.builtin.shell:
+        cmd: set -o pipefail && curl -fsSL https://starship.rs/install.sh | sudo sh -s -- --force
+      args:
+        creates: /usr/local/bin/starship
 
     - name: Starship | Copy configuration file
       copy:
@@ -17,7 +26,6 @@
         group: "{{ ansible_env.USER }}"
 
     # Adding to the zshrc will be done in the finalize_zshrc to ensure it's EOF plaement.
-  
   become: true
   tags:
     - starship
