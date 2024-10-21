@@ -158,6 +158,9 @@
     - role: vlc
       tags: vlc
 
+    - role: vscode
+      tags: vscode
+
     - role: starship
       tags: starship
   
