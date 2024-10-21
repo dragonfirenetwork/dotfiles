@@ -8,5 +8,6 @@
       # Starship
       eval "$(starship init zsh)"
     insertafter: EOF
+  become_user: "{{ ansible_env.USER }}"
   tags:
     - always
