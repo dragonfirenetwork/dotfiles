@@ -1,0 +1,26 @@
+---
+# roles/vscode/tasks/debian.yml
+
+- name: Setup VS Code
+  block:
+
+    - name: Download .deb package
+      get_url:
+        url: "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+        dest: "/tmp/vscode.deb"
+        mode: 0644
+
+    - name: Install VS Code
+      apt:
+        deb: "/tmp/vscode.deb"
+        state: present
+        update_cache: yes
+
+    - name: Remove .deb package
+      file:
+        path: "/tmp/vscode.deb"
+        state: absent
+
+  become: true
+  tags:
+    - vscode

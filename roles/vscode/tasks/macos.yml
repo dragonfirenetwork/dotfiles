@@ -1,0 +1,9 @@
+---
+# roles/vscode/tasks/macos.yml
+
+- name: Install VS Code
+  homebrew_cask:
+    name: visual-studio-code
+    state: present
+  tags:
+    - vscode
