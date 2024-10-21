@@ -18,7 +18,7 @@
 
     - name: Install Teleport package
       apt:
-        name: "/tmp/wifiman-desktop-1.1.0-amd64.deb"
+        deb: "/tmp/wifiman-desktop-1.1.0-amd64.deb"
         state: present
 
     - name: Update apt cache
