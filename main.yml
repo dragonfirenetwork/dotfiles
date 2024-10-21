@@ -86,8 +86,8 @@
   #  - role: packer
   #    tags: packer
 
-    - role: audacity
-      tags: audacity
+  #  - role: audacity
+  #    tags: audacity
 
     - role: mailspring
       tags: mailspring
