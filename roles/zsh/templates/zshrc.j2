@@ -1,0 +1,22 @@
+{{ ansible_managed | comment }}
+
+# Set system PATH just in case
+if [[ ":$PATH:" != *":/usr/local/bin:"* ]]; then
+  export PATH="/usr/local/bin:$PATH"
+fi
+
+# History setup
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+setopt share_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_verify
+bindkey "^[[A" history-search-backward # Up arrow
+bindkey "^[[B" history-search-forward # Down arrow
+
+# OS convenience aliases
+alias update='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
+alias la='ls -la'
+

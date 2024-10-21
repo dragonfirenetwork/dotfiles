@@ -1,96 +1,45 @@
 ---
 # roles/zsh/tasks/debian.yml
 
-- name: ZSH | Install via Apt
-  apt:
-    name: zsh
-    state: present
+- name: ZSH | Setup and configure
+  block:
+    - name: ZSH | Install via Apt
+      apt:
+        name: zsh
+        state: latest
+
+    - name: ZSH | Set default shell to Zsh
+      command: chsh -s "$(which zsh)" "{{ ansible_env.USER }}"
+
+    - name: ZSH | Install syntax highlighting
+      apt:
+        name: zsh-syntax-highlighting
+        state: latest
+
+    - name: ZSH | Install auto-suggestions
+      apt:
+        name: zsh-autosuggestions
+        state: latest
+
+    - name: ZSH | Check if .zshrc exists already
+      stat:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+      register: zshrc_file
+
+    - name: ZSH | Backup existing .zshrc if it exists
+      copy:
+        src: "{{ ansible_env.HOME }}/.zshrc"
+        dest: "{{ ansible_env.HOME }}/.zshrc.bak"
+        remote_src: yes
+        backup: yes
+      when: zshrc_file.stat.exists
+
+    - name: ZSH | Create .zshrc from template
+      template:
+        src: zshrc.j2
+        dest: "{{ ansible_env.HOME }}/.zshrc"
+        mode: '0644'
+  
   become: true
-  tags:
-    - zsh
-
-- name: ZSH | Set default terminal
-  user:
-    name: "{{ ansible_env.USER }}"
-    shell: /usr/bin/zsh
-  become: true
-  tags:
-    - zsh
-
-- name: ZSH | Install syntax highlighting
-  apt:
-    name: zsh-syntax-highlighting
-    state: present
-  become: true
-  tags:
-    - zsh
-
-- name: ZSH | Install auto-suggestions
-  apt:
-    name: zsh-autosuggestions
-    state: present
-  become: true
-  tags:
-    - zsh
-
-- name: ZSH | Check if .zshrc exists already
-  stat:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-  register: zshrc_file
-  tags:
-    - zsh
-
-- name: ZSH | Backup existing .zshrc if it exists
-  command: mv "{{ ansible_env.HOME }}/.zshrc" "{{ ansible_env.HOME }}/.zshrc.bak"
-  args:
-    removes: "{{ ansible_env.HOME }}/.zshrc"
-  ignore_errors: true
-  when: zshrc_file.stat.exists
-  tags:
-    - zsh
-
-- name: ZSH | Create new .zshrc
-  file:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    state: touch
-    mode: '0644'
-  tags:
-    - zsh
-
-- name: ZSH | Set Path in .zshrc
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      {{ ansible_managed | comment }}
-
-      # Set system PATH just in case
-      export PATH="/usr/local/bin:$PATH"
-  tags:
-    - zsh
-
-- name: ZSH | Set History settings in .zshrc
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      # History setup
-      HISTFILE=$HOME/.zhistory
-      SAVEHIST=1000
-      HISTSIZE=999
-      setopt share_history
-      setopt hist_expire_dups_first
-      setopt hist_ignore_dups
-      setopt hist_verify
-      bindkey "^[[A" history-search-backward # Up arrow
-      bindkey "^[[B" history-search-forward # Down arrow
-  tags:
-    - zsh
-
-- name: ZSH | Set OS convenience aliases in .zshrc
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      # OS convenience aliases
-      alias update='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
-      alias la='ls -la'
   tags:
     - zsh
