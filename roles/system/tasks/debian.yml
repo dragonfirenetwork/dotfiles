@@ -35,6 +35,7 @@
 - name: System | Update cache
   apt:
     update_cache: true
+    upgrade: full
   become: true
   tags:
     - system
