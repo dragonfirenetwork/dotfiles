@@ -158,6 +158,9 @@
 
     - role: starship
       tags: starship
+    
+    - role: wallpaper
+      tags: wallpaper
   
   post_tasks:
     - name: Set success
