@@ -1,6 +1,0 @@
----
-# pre_tasks/handlers/main.yml
-
-- name: apt_update
-  apt:
-    apt_update: yes

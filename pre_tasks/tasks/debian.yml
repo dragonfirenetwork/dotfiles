@@ -7,7 +7,14 @@
       - aptitude
       - software-properties-common
     state: latest
-  notify: apt_update
+  become: true
+  tags:
+    - pre_tasks
+    - debian_setup
+
+- name: Update APT cache
+  apt:
+    update_cache: true
   become: true
   tags:
     - pre_tasks
