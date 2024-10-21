@@ -1,6 +1,8 @@
 ---
 # roles/system/tasks/debian.yml
 
+### This the old way to add GPG keys, DO NOT USE APT_KEY ANYMORE. 
+### Instead, use the GET_URL method.
 ## Add HashiCorp GPG key for Vagrant
 #- name: Add HashiCorp GPG key
 #  apt_key:
