@@ -15,14 +15,6 @@
     state: present
   become: true
 
-# New Task: Remove old Docker GPG keys from legacy keyrings
-- name: "Docker | Remove old Docker GPG keys from trusted.gpg"
-  ansible.builtin.shell: |
-    apt-key list | grep -B 1 "Docker" | grep pub | awk '{print $2}' | tr -d / | xargs -r apt-key del
-  become: true
-  ignore_errors: true
-  changed_when: false
-
 - name: "Docker | Remove Docker GPG key files from /etc/apt/trusted.gpg.d/"
   ansible.builtin.file:
     path: "/etc/apt/trusted.gpg.d/docker.gpg"
@@ -34,7 +26,7 @@
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
-    mode: "0755"
+    mode: 0755
     owner: root
     group: root
   become: true
@@ -44,19 +36,10 @@
   ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
     dest: /etc/apt/keyrings/docker.gpg
-    mode: "0644"
+    mode: 0644
     owner: root
     group: root
     validate_certs: yes
-  become: true
-
-# Ensure the keyring file is owned by root and has correct permissions
-- name: "Docker | Ensure docker.gpg has correct permissions"
-  ansible.builtin.file:
-    path: /etc/apt/keyrings/docker.gpg
-    mode: "0644"
-    owner: root
-    group: root
   become: true
 
 - name: "Docker | Get System Architecture"
@@ -74,35 +57,9 @@
       {{ ansible_distribution_release }}
       stable
     filename: docker
-    mode: "0644"
+    mode: 0644
     update_cache: true
   become: true
-
-# Optional: Remove other legacy keys (e.g., Asciiquarium PPA)
-- name: "Docker | Remove Asciiquarium PPA GPG key from trusted.gpg"
-  ansible.builtin.shell: |
-    apt-key list | grep -B 1 "ytvwld/asciiquarium" | grep pub | awk '{print $2}' | tr -d / | xargs -r apt-key del
-  become: true
-  ignore_errors: true
-  changed_when: false
-
-- name: "Docker | Move Asciiquarium PPA GPG key to keyrings"
-  ansible.builtin.command: >
-    gpg --dearmor -o /etc/apt/keyrings/asciiquarium.gpg /usr/share/keyrings/asciiquarium-archive-keyring.gpg
-  args:
-    creates: /etc/apt/keyrings/asciiquarium.gpg
-  become: true
-  when: ansible_facts.packages['gnupg'] is defined
-
-- name: "Docker | Update Asciiquarium PPA repository to use new keyring"
-  ansible.builtin.apt_repository:
-    repo: "ppa:ytvwld/asciiquarium"
-    filename: asciiquarium
-    state: present
-    codename: "{{ ansible_distribution_release }}"
-    signed_by: /etc/apt/keyrings/asciiquarium.gpg
-  become: true
-  when: ansible_facts.packages['gnupg'] is defined
 
 - name: "Docker | Install Docker Engine"
   ansible.builtin.apt:
@@ -135,13 +92,13 @@
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.local/lib/docker"
     state: directory
-    mode: "0710"
+    mode: 0710
   become: true
 
 - name: "Docker | Copy daemon.json"
   ansible.builtin.template:
     dest: "/etc/docker/daemon.json"
     src: "daemon.json"
-    mode: "0644"
+    mode: 0644
   become: true
   notify: restart_docker
