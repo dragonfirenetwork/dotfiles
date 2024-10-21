@@ -10,32 +10,44 @@
 
 - name: Install NordVPN
   block:
-    - name: Download NordVPN install script
-      get_url:
-        url: "https://downloads.nordcdn.com/apps/linux/install.sh"
-        dest: "/tmp/install_nordvpn.sh"
-        mode: 0755
+    - name: Install python3-apt
+      ansible.builtin.apt:
+        name: python3-apt
+        state: present
+        force_apt_get: yes
+        update_cache: yes
 
-    - name: Run NordVPN install script
-      command: /bin/bash /tmp/install_nordvpn.sh
-      args:
-        creates: "/usr/bin/nordvpn"
+    - name: Installing gnupg2
+      ansible.builtin.apt:
+        name: gnupg2
+        state: present
+        force_apt_get: yes
 
-    - name: Ensure the 'nordvpn' group exists
-      group:
-        name: nordvpn
+    - name: Add GPG signing key
+      ansible.builtin.apt_key:
+        url: "https://repo.nordvpn.com/gpg/nordvpn_public.asc"
         state: present
 
-    - name: Add user to 'nordvpn' group
-      user:
-        name: "{{ ansible_user }}"
-        groups: nordvpn
-        append: yes
+    - name: Adding repository
+      ansible.builtin.apt_repository:
+        repo: "deb https://repo.nordvpn.com//deb/nordvpn/debian stable main"
+        filename: "nordvpn"
+        state: present
+        update_cache: yes
 
-    - name: Remove NordVPN install script
-      file:
-        path: "/tmp/install_nordvpn.sh"
-        state: absent
+    - name: Installing Nord VPN
+      ansible.builtin.apt:
+        name: "nordvpn"
+        state: present
+        force_apt_get: yes
+        update_cache: yes
+
+    - name: Add user to group
+      become: true
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: "nordvpn"
+        append: yes
 
   when: not nordvpn_installed.stat.exists
   become: true
