@@ -24,7 +24,7 @@
 
 - name: Finishing Touches | Set default desktop environment to i3wm
   ini_file:
-    path: "/var/lib/AccountsService/users/{{ ansible_user }}"
+    path: "/var/lib/AccountsService/users/{{ ansible_env.USER }}"
     section: "User"
     option: "XSession"
     value: "i3"
