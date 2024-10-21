@@ -7,9 +7,7 @@
     - name: Install prerequisites
       apt:
         name:
-          - software-properties-common
-          - wget
-          - gnupg
+          - apt-transport-https
         state: present
         update_cache: yes
 
@@ -20,14 +18,14 @@
         mode: 0755
 
     - name: Add Asciiquarium PPA GPG key to keyrings
-      ansible.builtin.get_url:
-        url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x1A1B22F99CFDA64BD3B8D551F3985DE9980B9063"
+      get_url:
+        url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF3985DE9980B9063"
         dest: "/etc/apt/keyrings/asciiquarium.gpg"
         mode: 0644
 
     - name: Add Asciiquarium APT repository with signed-by
       apt_repository:
-        repo: "deb [signed-by=/etc/apt/keyrings/asciiquarium.gpg] ppa:ytvwld/asciiquarium jammy main"
+        repo: "deb [signed-by=/etc/apt/keyrings/asciiquarium.gpg] http://ppa.launchpad.net/ytvwld/asciiquarium/ubuntu {{ ansible_distribution_release }} main"
         state: present
         filename: "asciiquarium"
 
