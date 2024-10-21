@@ -8,19 +8,19 @@
     - wallpaper
 
 - name: Set wallpapers on i3wm
-  import_tasks: desktop_environments/i3wm.yml
+  import_tasks: roles/wallpaper/desktop_environments/i3wm.yml
   when: "'i3' in desktop_environment or ansible_env.DESKTOP_SESSION == 'i3'"
   tags:
     - wallpaper
 
 - name: Set wallpaper on GNOME
-  import_tasks: desktop_environments/gnome.yml
+  import_tasks: roles/wallpaper/desktop_environments/gnome.yml
   when: "'gnome' in desktop_environment"
   tags:
     - wallpaper
 
 - name: Set wallpaper on KDE Plasma
-  import_tasks: desktop_environments/kde.yml
+  import_tasks: roles/wallpaper/desktop_environments/kde.yml
   when: "'kde' in desktop_environment or 'plasma' in desktop_environment"
   tags:
     - wallpaper
