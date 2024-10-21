@@ -16,6 +16,13 @@
         dest: "/tmp/wifiman.deb"
         mode: '0644'
 
+    - name: Teleport | Install required dependencies
+      apt:
+        name: libwebkit2gtk-4.0-37
+        state: present
+        update_cache: true
+      ignore_errors: true  # In case it's not available but the newer version is already installed
+
     - name: Teleport | Install Teleport via Apt
       apt:
         deb: "/tmp/wifiman.deb"
