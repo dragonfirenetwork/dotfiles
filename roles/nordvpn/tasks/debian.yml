@@ -7,22 +7,23 @@
       apt:
         name: python3-apt
         state: present
-        force_apt_get: yes
-        update_cache: true
+        update_cache: yes
 
     - name: NordVPN | Installing gnupg2
       apt:
         name: gnupg2
         state: present
-        force_apt_get: yes
-        update_cache: true
+        
+    - name: NordVPN | Update Apt cache
+      apt:
+        update_cache: yes
 
     - name: NordVPN | Add NordVPN's official GPG key
       get_url:
         url: "https://repo.nordvpn.com/gpg/nordvpn_public.asc"
         dest: /usr/share/keyrings/nordvpn.gpg
         mode: '0644'
-        validate_certs: yes
+      become: true
 
     - name: NordVPN | Adding repository
       apt_repository:
@@ -35,7 +36,6 @@
       apt:
         name: "nordvpn"
         state: present
-        force_apt_get: yes
         update_cache: yes
 
     - name: NordVPN | Add user to group
