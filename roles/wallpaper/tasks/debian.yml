@@ -8,7 +8,7 @@
     - wallpaper
 
 - name: Set wallpapers on i3wm
-  import_tasks: i3wm.yml
+  include_tasks: i3wm.yml
   when: "'i3' in desktop_environment or ansible_env.DESKTOP_SESSION == 'i3'"
   tags:
     - wallpaper
@@ -20,7 +20,7 @@
     - wallpaper
 
 - name: Set wallpaper on KDE Plasma
-  import_tasks: kde.yml
+  include_tasks: kde.yml
   when: "'kde' in desktop_environment or 'plasma' in desktop_environment"
   tags:
     - wallpaper
