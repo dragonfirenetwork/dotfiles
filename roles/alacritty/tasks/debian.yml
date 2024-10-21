@@ -1,45 +1,40 @@
 ---
 # roles/alacritty/tasks/debian.yml
 
-- name: Install via Apt
-  apt:
-    name: alacritty
-    state: present
+- name: Debian Alacritty install
+  block:
+    - name: Install via Apt
+      apt:
+        name: alacritty
+        state: present
+
+    - name: Check if themes repository exists
+      stat:
+        path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
+      register: alacritty_repo_exists
+
+    - name: Clone Alacritty themes repository
+      git:
+        repo: "https://github.com/alacritty/alacritty-theme.git"
+        dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+      when: not alacritty_repo_exists.stat.exists
+
+    - name: Pull latest changes from themes repository
+      git:
+        repo: "https://github.com/alacritty/alacritty-theme.git"
+        dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+        update: yes
+      when: alacritty_repo_exists.stat.exists
+
+    - name: Copy configuration file
+      copy:
+        src: alacritty.toml
+        dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: 0644
+
+  become: true
   when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
-  tags:
-    - alacritty
-
-- name: Check if themes repository exists
-  stat:
-    path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
-  register: alacritty_repo_exists
-  tags:
-    - alacritty
-
-- name: Clone Alacritty themes repository
-  git:
-    repo: "https://github.com/alacritty/alacritty-theme.git"
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
-  when: not alacritty_repo_exists.stat.exists
-  tags:
-    - alacritty
-
-- name: Pull latest changes from themes repository
-  git:
-    repo: "https://github.com/alacritty/alacritty-theme.git"
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
-    update: yes
-  when: alacritty_repo_exists.stat.exists
-  tags:
-    - alacritty
-
-- name: Copy configuration file (Linux debian-based)
-  copy:
-    src: alacritty.toml
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
-    mode: 0644
-  when: ansible_system != "Darwin"
   tags:
     - alacritty
