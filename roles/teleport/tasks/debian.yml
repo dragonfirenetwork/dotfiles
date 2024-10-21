@@ -25,11 +25,6 @@
       apt: 
         update_cache: yes
 
-    - name: Verify Teleport installation
-      stat:
-        path: "/usr/bin/teleport"
-      register: teleport_post_install
-
     - name: Remove Teleport .deb package for Intel (amd64)
       file:
         path: "/tmp/wifiman-desktop.deb"
