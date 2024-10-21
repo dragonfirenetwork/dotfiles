@@ -2,7 +2,7 @@
 # roles/docker/tasks/debian.yml
 
 - name: Check if Docker is already installed
-  state:
+  stat:
     path: "/usr/bin/docker"
   register: docker_installed
   tags:
