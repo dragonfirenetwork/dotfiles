@@ -6,7 +6,7 @@
     - name: Brave | Add Brave APT repository key
       get_url:
         url: "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg"
-        dest: "/etc/apt/keyrings/brave-browser-archive-keyring.gpg"
+        dest: "/usr/share/keyrings/brave-browser-archive-keyring.gpg"
         owner: root
         group: root
         validate_certs: yes
@@ -15,7 +15,7 @@
 
     - name: Brave | Add Brave APT repository
       apt_repository: 
-        repo: "deb [signed-by=/etc/apt/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
+        repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
         filename: "brave-browser-release"
         state: present
 

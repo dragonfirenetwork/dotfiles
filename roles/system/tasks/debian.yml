@@ -77,7 +77,7 @@
 
 - name: System | Ensure keyring directory exists
   file:
-    path: "/etc/apt/keyrings/"
+    path: "/usr/share/keyrings/"
     state: directory
   tags:
     - system

@@ -13,7 +13,7 @@
     - name: Steam | Download Steam GPG key
       get_url:
         url: "https://repo.steampowered.com/steam/archive/stable/steam.gpg"
-        dest: "/etc/apt/keyrings/steam.gpg"
+        dest: "/usr/share/keyrings/steam.gpg"
         mode: '0644'
         validate_certs: yes
 
