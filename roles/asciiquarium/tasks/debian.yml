@@ -4,10 +4,20 @@
 - name: Setup Asciiquarium
   block:
 
+    - name: Add repository
+      apt_repository:
+        repo: ppa:ytvwld/asciiquarium
+        state: present
+
+    - name: Update cache
+      apt:
+        update_cache: yes
+
     - name: Install asciiquarium
       apt:
         name: asciiquarium
         state: present
+        update_cache: yes
 
     - name: Add aliases
       lineinfile:
