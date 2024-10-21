@@ -13,12 +13,12 @@
     - name: Download Teleport .deb package
       get_url:
         url: "https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb"
-        dest: "/tmp/wifiman-desktop-1.1.0-amd64.deb"
+        dest: "/tmp/wifiman.deb"
         mode: 0644
 
     - name: Install Teleport package
       apt:
-        deb: "/tmp/wifiman-desktop-1.1.0-amd64.deb"
+        deb: "/tmp/wifiman.deb"
         state: present
 
     - name: Update apt cache
@@ -27,7 +27,7 @@
 
     - name: Remove Teleport .deb package for Intel (amd64)
       file:
-        path: "/tmp/wifiman-desktop.deb"
+        path: "/tmp/wifiman.deb"
         state: absent
 
   when: not teleport_installed.stat.exists
