@@ -6,8 +6,8 @@
     - name: Discord | Download .deb package
       get_url:
         url: "https://discord.com/api/download?platform=linux&format=deb"
-        path: "/tmp/discord.deb"
-        mode: 0644
+        dest: "/tmp/discord.deb"
+        mode: '0644'
 
     - name: Discord | Install discord
       apt:
