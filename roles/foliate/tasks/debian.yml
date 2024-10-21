@@ -6,7 +6,7 @@
     - name: Foliate | Add Flathub repository
       flatpak_remote:
         name: flathub
-        url: https://flathub.org/repo/flathub.flatpakrepo
+        flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
         state: present
 
     - name: Foliate | Install via Flatpak
