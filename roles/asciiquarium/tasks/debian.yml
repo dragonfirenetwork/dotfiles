@@ -1,20 +1,23 @@
 ---
 # roles/asciiquarium/tasks/macos.yml
 
-- name: Install asciiquarium
-  apt:
-    name: asciiquarium
-    state: present
-  when: ansible_os_family == "Debian"
-  tags:
-    - asciiquarium
+- name: Setup Asciiquarium
+  block:
 
-- name: Add aliases
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
-      # Asciiquarium
-      alias brb=asciiquarium
-      alias aq=asciiquarium
+    - name: Install asciiquarium
+      apt:
+        name: asciiquarium
+        state: present
+
+    - name: Add aliases
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: |
+          # Asciiquarium
+          alias brb=asciiquarium
+          alias aq=asciiquarium
+
+  become: true
+  when: ansible_os_family == "Debian"
   tags:
     - asciiquarium
