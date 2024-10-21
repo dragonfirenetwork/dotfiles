@@ -10,11 +10,6 @@
     - group_vars/all.yml
 
   pre_tasks:
-    - name: Internet Connection Check
-      include_tasks: pre_tasks/tasks/check_connection.yml
-      tags:
-        - always
-
     - name: Pre-tasks
       include_tasks: pre_tasks/tasks/main.yml
       tags:
