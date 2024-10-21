@@ -22,8 +22,6 @@
         url: "https://repo.nordvpn.com/gpg/nordvpn_public.asc"
         dest: /usr/share/keyrings/nordvpn.gpg
         mode: '0644'
-        owner: root
-        group: root
         validate_certs: yes
 
     - name: NordVPN | Adding repository
