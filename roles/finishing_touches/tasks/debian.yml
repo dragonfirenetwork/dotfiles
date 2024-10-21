@@ -22,12 +22,3 @@
   when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - always
-
-- name: Finishing Touches | Restart PackageKit Service
-  service:
-    name: packagekit
-    state: started
-  when: packagekitd_running
-  become: true
-  tags:
-    - system

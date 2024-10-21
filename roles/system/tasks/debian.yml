@@ -99,12 +99,6 @@
   tags:
     - system
 
-- name: System | Set fact if PackageKit is running
-  set_fact:
-    packagekitd_running: "{{ packagekitd_check.rc == 0 }}"
-  tags:
-    - system
-
 - name: System | Stop and Kill PackageKit
   block:
     - name: Stop PackageKit Service
@@ -120,6 +114,5 @@
       ignore_errors: true
 
   become: true
-  when: packagekitd_running
   tags:
     - system
