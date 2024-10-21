@@ -98,3 +98,28 @@
     state: directory
   tags:
     - system
+
+- name: System | Set fact if PackageKit is running
+  set_fact:
+    packagekitd_running: "{{ packagekitd_check.rc == 0 }}"
+  tags:
+    - system
+
+- name: System | Stop and Kill PackageKit
+  block:
+    - name: Stop PackageKit Service
+      service:
+        name: packagekit
+        state: stopped
+      ignore_errors: true
+
+    - name: Kill PackageKit Daemon
+      shell: pkill packagekitd
+      args:
+        warn: false
+      ignore_errors: true
+
+  become: true
+  when: packagekitd_running
+  tags:
+    - system
