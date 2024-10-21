@@ -3,7 +3,7 @@
 
 - name: Install brave browser
   homebrew_cask:
-    name: brave
+    name: brave-browser
     state: present
   tags:
     - brave
