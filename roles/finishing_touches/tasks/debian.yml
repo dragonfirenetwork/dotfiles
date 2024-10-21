@@ -4,14 +4,14 @@
 - name: Finishing Touches | Update Apt cache
   apt:
     update_cache: true
-  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  become: true
   tags:
     - always
 
 - name: Finishing Touches | Cleanup Apt
   apt:
     autoclean: true
-  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  become: true
   tags: 
     - always
 
@@ -19,6 +19,17 @@
   shell: source ~/.zshrc
   args:
     executable: /bin/zsh
-  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  tags:
+    - always
+
+- name: Finishing Touches | Set default desktop environment to i3wm
+  ini_file:
+    path: "/var/lib/AccountsService/users/{{ ansible_user }}"
+    section: "User"
+    option: "XSession"
+    value: "i3"
+    create: yes
+  notify: Restart AccountsService
+  become: true
   tags:
     - always

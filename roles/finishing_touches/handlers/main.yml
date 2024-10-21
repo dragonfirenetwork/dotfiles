@@ -10,3 +10,8 @@
 - name: cleanup_homebrew
   shell: brew cleanup
   when: ansible_os_family == "Darwin"
+
+- name: Restart AccountsService
+  service:
+    name: accountsservice
+    state: restarted

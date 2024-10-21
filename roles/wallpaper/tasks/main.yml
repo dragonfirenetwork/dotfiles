@@ -5,6 +5,6 @@
   include_tasks: macos.yml
   when: ansible_os_family == "Darwin"
 
-- name: Linux | Load install playbook
-  include_tasks: linux.yml
-  when: ansible_system == "Linux"
+- name: Debian | Load install playbook
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
