@@ -1,36 +1,33 @@
 ---
 # roles/brave/tasks/debian.yml
 
-- name: Check if Brave Browser is already installed
-  stat:
-    path: "/usr/bin/brave-browser"
-  register: brave_installed
-  tags:
-    - brave_browser
-
-- name: Install Brave
+- name: Brave | Setup and configuration
   block:
-    - name: Add Brave GPG key
-      apt_key:
-        url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-        state: present
+    - name: Brave | Add Brave APT repository key
+      get_url:
+        url: "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg"
+        dest: "/etc/apt/keyrings/brave-browser-archive-keyring.gpg"
+        owner: root
+        group: root
+        validate_certs: yes
+        mode: '0644'
+        force: true
 
-    - name: Add Brave APT repository
+    - name: Brave | Add Brave APT repository
       apt_repository: 
-        repo: "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
-        state: present
+        repo: "deb [signed-by=/etc/apt/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
         filename: "brave-browser-release"
+        state: present
 
-    - name: Update APT cache
+    - name: Brave | Update APT cache
       apt:
         update_cache: yes
-    
-    - name: Install Brave browser
+
+    - name: Brave | Install Brave browser
       apt:
         name: brave-browser
         state: present
-
-  when: not brave_installed.stat.exists
+  
   become: true
   tags:
     - brave

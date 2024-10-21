@@ -1,18 +1,14 @@
 ---
 # roles/starship/tasks/debian.yml
 
-- name: Setup Starship
+- name: Starship | Setup and configuration
   block:
-
-    - name: Install starship
+    - name: Starship | Install starship
       apt:
         name: starship
         state: present
-      when: ansible_os_family == "Debian"
-      tags:
-        - starship
 
-    - name: Copy configuration file
+    - name: Starship | Copy configuration file
       copy:
         src: "starship.toml"
         dest: "{{ ansible_env.HOME }}/.config"

@@ -1,38 +1,38 @@
 ---
 # roles/system/tasks/debian.yml
 
-# Add HashiCorp GPG key for Vagrant
-- name: Add HashiCorp GPG key
-  apt_key:
-    url: https://apt.releases.hashicorp.com/gpg
-    state: present
-  become: true
-  tags:
-    - system
+## Add HashiCorp GPG key for Vagrant
+#- name: Add HashiCorp GPG key
+#  apt_key:
+#    url: https://apt.releases.hashicorp.com/gpg
+#    state: present
+#  become: true
+#  tags:
+#    - system
+#
+## Add Btop GPG key (if using the PPA)
+#- name: Add Btop GPG key
+#  apt_key:
+#    keyserver: keyserver.ubuntu.com
+#    id: 91A6E7F0
+#    state: present
+#  become: true
+#  when: ansible_distribution == "Ubuntu"
+#  tags:
+#    - system
+#
+## Add Zoxide GPG key (if using the PPA)
+#- name: Add Zoxide GPG key
+#  apt_key:
+#    keyserver: keyserver.ubuntu.com
+#    id: A0B04B9F10496B85
+#    state: present
+#  become: true
+#  when: ansible_distribution == "Ubuntu"
+#  tags:
+#    - system
 
-# Add Btop GPG key (if using the PPA)
-- name: Add Btop GPG key
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 91A6E7F0
-    state: present
-  become: true
-  when: ansible_distribution == "Ubuntu"
-  tags:
-    - system
-
-# Add Zoxide GPG key (if using the PPA)
-- name: Add Zoxide GPG key
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: A0B04B9F10496B85
-    state: present
-  become: true
-  when: ansible_distribution == "Ubuntu"
-  tags:
-    - system
-
-- name: Update cache
+- name: System | Update cache
   apt:
     update_cache: true
   become: true
@@ -40,7 +40,7 @@
     - system
 
 # Install system packages via Apt
-- name: Install system packages
+- name: System | Install system packages
   apt:
     name:
       - build-essential
@@ -75,14 +75,21 @@
   tags:
     - system
 
-- name: Create .config directory
+- name: System | Ensure keyring directory exists
+  file:
+    path: "/etc/apt/keyrings/"
+    state: directory
+  tags:
+    - system
+
+- name: System | Create .config directory
   file:
     path: "{{ ansible_env.HOME }}/.config"
     state: directory
   tags:
     - system
 
-- name: Create autostart directory
+- name: System | Create autostart directory
   file:
     path: "{{ ansible_env.HOME }}/.config/autostart/"
     state: directory

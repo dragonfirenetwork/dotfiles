@@ -1,10 +1,9 @@
 ---
 # roles/python/tasks/debian.yml
 
-- name: Setup Python
+- name: Python | Install via Apt
   block:
-
-    - name: Install python packages
+    - name: Python | Install python packages
       apt:
         name:
           - python3
@@ -15,7 +14,7 @@
         state: present
         update_cache: true
 
-    - name: Ensure python interpreter is set to python 3
+    - name: Python | Ensure python interpreter is set to python 3
       set_fact:
         ansible_python_interpreter: /usr/bin/python3
 

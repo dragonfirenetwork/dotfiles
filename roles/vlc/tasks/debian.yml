@@ -1,7 +1,7 @@
 ---
 # roles/vlc/tasks/debian.yml
 
-- name: Install vlc
+- name: VLC | Install via Apt
   apt:
     name: vlc
     state: present

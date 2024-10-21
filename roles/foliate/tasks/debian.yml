@@ -1,7 +1,7 @@
 ---
 # roles/foliate/tasks/debian.yml
 
-- name: Install foliate
+- name: Foliate | Install via Flatpack
   flatpak:
     name: com.github.johnfactotum.Foliate
     method: user

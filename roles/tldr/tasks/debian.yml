@@ -1,7 +1,7 @@
 ---
 # roles/tldr/tasks/debian.yml
 
-- name: Install tldr
+- name: TLDR | Install via Apt
   apt:
     name: tldr
     state: present

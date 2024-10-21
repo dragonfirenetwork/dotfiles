@@ -1,23 +1,23 @@
 ---
 # roles/steam/tasks/debian.yml
 
-- name: Check if Steam is already installed
+- name: Steam | Check if Steam is already installed
   stat:
     path: "/usr/bin/steam"
   register: steam_installed
   tags:
     - steam
 
-- name: Install Steam
+- name: Steam | Setup and configuration
   block:
-    - name: Download Steam GPG key
+    - name: Steam | Download Steam GPG key
       get_url:
         url: "https://repo.steampowered.com/steam/archive/stable/steam.gpg"
-        dest: "/usr/share/keyrings/steam.gpg"
-        mode: 0644
+        dest: "/etc/apt/keyrings/steam.gpg"
+        mode: '0644'
         validate_certs: yes
 
-    - name: Add Steam APT repository
+    - name: Steam | Add Steam APT repository
       copy:
         dest: "/etc/apt/sources.list.d/steam-stable.list"
         content: |
@@ -25,19 +25,25 @@
           deb-src [arch=amd64,i386 signed-by=/usr/share/keyrings/steam.gpg] https://repo.steampowered.com/steam/ stable steam
         owner: root
         group: root
-        mode: 0644
-      notify: Update apt cache
+        mode: '0644'
 
-    - name: Check if i386 architecture is added
+    - name: Steam | Update apt cache
+      apt:
+        update_cache: true
+
+    - name: Steam | Check if i386 architecture is added
       command: dpkg --print-foreign-architectures
       register: foreign_archs
 
-    - name: Add i386 architecture
+    - name: Steam | Add i386 architecture
       command: dpkg --add-architecture i386
       when: "'i386' not in foreign_archs.stdout.split()"
-      notify: Update apt cache
+    
+    - name: Steam | Update apt cache
+      apt:
+        update_cache: true
 
-    - name: Ensure dependencies and Steam launcher are installed
+    - name: Steam | Ensure dependencies and Steam launcher are installed
       apt:
         name:
           - libgl1-mesa-dri:amd64

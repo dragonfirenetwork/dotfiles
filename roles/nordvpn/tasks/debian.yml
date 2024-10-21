@@ -1,43 +1,48 @@
 ---
 # roles/nordvpn/tasks/debian.yml
 
-- name: Install NordVPN
+- name: NordVPN | Download and installation
   block:
-    - name: Install python3-apt
-      ansible.builtin.apt:
+    - name: NordVPN | Install python3-apt
+      apt:
         name: python3-apt
         state: present
         force_apt_get: yes
-        update_cache: yes
+        update_cache: true
 
-    - name: Installing gnupg2
-      ansible.builtin.apt:
+    - name: NordVPN | Installing gnupg2
+      apt:
         name: gnupg2
         state: present
         force_apt_get: yes
+        update_cache: true
 
-    - name: Add GPG signing key
-      ansible.builtin.apt_key:
+    - name: NordVPN | Add NordVPN's official GPG key
+      get_url:
         url: "https://repo.nordvpn.com/gpg/nordvpn_public.asc"
-        state: present
+        dest: /etc/apt/keyrings/nordvpn.gpg
+        mode: '0644'
+        owner: root
+        group: root
+        validate_certs: yes
 
-    - name: Adding repository
-      ansible.builtin.apt_repository:
-        repo: "deb https://repo.nordvpn.com//deb/nordvpn/debian stable main"
+
+    - name: NordVPN | Adding repository
+      apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/nordvpn.gpg] https://repo.nordvpn.com//deb/nordvpn/debian stable main"
         filename: "nordvpn"
         state: present
         update_cache: yes
 
-    - name: Installing Nord VPN
-      ansible.builtin.apt:
+    - name: NordVPN | Installing Nord VPN
+      apt:
         name: "nordvpn"
         state: present
         force_apt_get: yes
         update_cache: yes
 
-    - name: Add user to group
-      become: true
-      ansible.builtin.user:
+    - name: NordVPN | Add user to group
+      user:
         name: "{{ ansible_env.USER }}"
         groups: "nordvpn"
         append: yes

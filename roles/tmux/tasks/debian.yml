@@ -1,20 +1,20 @@
 ---
 # roles/tmux/tasks/debian.yml
 
-- name: Setup Tmux
+- name: Tmux | Setup and configure
   block:
 
-    - name: Install tmux
+    - name: Tmux | Install tmux via Apt
       apt:
         name: tmux
         state: present
 
-    - name: Copy tmux configuration
+    - name: Tmux | Copy tmux configuration
       copy:
         src: tmux.conf
         dest: "{{ ansible_env.HOME }}/.config/tmux"
-        mode: 0644
-        directory_mode: 0755
+        mode: '0644'
+        directory_mode: '0755'
         force: true
 
   become: true

@@ -1,7 +1,7 @@
 ---
 # roles/audacity/tasks/debian.yml
 
-- name: Install audacity
+- name: Audacity | Install via flatpack
   flatpack:
     name: org.audacityteam.Audacity
     method: user

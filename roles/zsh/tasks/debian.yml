@@ -1,7 +1,7 @@
 ---
 # roles/zsh/tasks/debian.yml
 
-- name: Install Zsh
+- name: ZSH | Install via Apt
   apt:
     name: zsh
     state: present
@@ -9,15 +9,15 @@
   tags:
     - zsh
 
-- name: "Set default terminal"
-  ansible.builtin.user:
+- name: ZSH | Set default terminal
+  user:
     name: "{{ ansible_env.USER }}"
     shell: /usr/bin/zsh
   become: true
   tags:
     - zsh
 
-- name: Install syntax highlighting
+- name: ZSH | Install syntax highlighting
   apt:
     name: zsh-syntax-highlighting
     state: present
@@ -25,7 +25,7 @@
   tags:
     - zsh
 
-- name: Install auto-suggestions
+- name: ZSH | Install auto-suggestions
   apt:
     name: zsh-autosuggestions
     state: present
@@ -33,14 +33,14 @@
   tags:
     - zsh
 
-- name: Check if .zshrc exists already
+- name: ZSH | Check if .zshrc exists already
   stat:
     path: "{{ ansible_env.HOME }}/.zshrc"
   register: zshrc_file
   tags:
     - zsh
 
-- name: Backup existing .zshrc if it exists
+- name: ZSH | Backup existing .zshrc if it exists
   command: mv "{{ ansible_env.HOME }}/.zshrc" "{{ ansible_env.HOME }}/.zshrc.bak"
   args:
     removes: "{{ ansible_env.HOME }}/.zshrc"
@@ -49,15 +49,15 @@
   tags:
     - zsh
 
-- name: Create new .zshrc
+- name: ZSH | Create new .zshrc
   file:
     path: "{{ ansible_env.HOME }}/.zshrc"
     state: touch
-    mode: 0644
+    mode: '0644'
   tags:
     - zsh
 
-- name: Set Path in .zshrc
+- name: ZSH | Set Path in .zshrc
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |
@@ -68,7 +68,7 @@
   tags:
     - zsh
 
-- name: Set History settings in .zshrc
+- name: ZSH | Set History settings in .zshrc
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |
@@ -85,7 +85,7 @@
   tags:
     - zsh
 
-- name: Set OS convenience aliases in .zshrc
+- name: ZSH | Set OS convenience aliases in .zshrc
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |

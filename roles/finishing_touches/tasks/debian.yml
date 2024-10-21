@@ -1,21 +1,21 @@
 ---
 # roles/finishing_touches/tasks/debian.yml
 
-- name: Update Apt cache
+- name: Finishing Touches | Update Apt cache
   apt:
     update_cache: true
   when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - always
 
-- name: Cleanup Apt
+- name: Finishing Touches | Cleanup Apt
   apt:
     autoclean: true
   when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags: 
     - always
 
-- name: Set source # Source, just in case of changes 
+- name: Finishing Touches | Set source # Source, just in case of changes 
   shell: source ~/.zshrc
   args:
     executable: /bin/zsh
