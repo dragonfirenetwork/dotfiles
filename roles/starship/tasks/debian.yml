@@ -3,19 +3,16 @@
 
 - name: Starship | Setup and configuration
   block:
-    - name: "Starship | Install Starship"
-      ansible.builtin.command:
-        cmd: which starship
-      register: starship_installed
-      changed_when: false
-      failed_when: false
-
-    - name: "Starship | Install Starship"
-      when: starship_installed.rc != 0
-      ansible.builtin.shell:
-        cmd: set -o pipefail && curl -fsSL https://starship.rs/install.sh | sudo sh -s -- --force
-      args:
-        creates: /usr/local/bin/starship
+    - name: Starship | Download dependencies
+      apt:
+        name: snapd
+        update_cache: true
+    
+    - name: Starship | Install Starship using Snap
+      community.general.snap:
+        name: starship
+        channel: edge
+        state: present
 
     - name: Starship | Copy configuration file
       copy:
