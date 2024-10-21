@@ -8,7 +8,7 @@
     - always
 
 - name: Debian | Load finishing touches
-  include_tasks: macos.yml
-  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
   tags:
     - always
