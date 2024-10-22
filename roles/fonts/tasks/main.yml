@@ -1,0 +1,8 @@
+---
+# roles/fonts/tasks/main.yml
+
+- name: Debian | Load install playbook
+  include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+  tags:
+    - fonts

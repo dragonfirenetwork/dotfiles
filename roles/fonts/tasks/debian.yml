@@ -1,0 +1,37 @@
+---
+# roles/fonts/tasks/debian.yml
+
+- name: Fonts | Setup and configuration
+  block:
+    - name: Fonts | Ensure fonts directory exists
+      file:
+        path: "{{ ansible_env.HOME }}/.fonts"
+        state: directory
+      
+    - name: Fonts | Download the JetbrainsMono Nerd Font
+      unarchive:
+        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip"
+        dest: "{{ ansible_env.HOME}}/.fonts/"
+        remote_src: yes
+
+    - name: Fonts | Download the Nerd Fonts
+      unarchive:
+        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip"
+        dest: "{{ ansible_env.HOME}}/.fonts/"
+        remote_src: yes
+
+    - name: Fonts | Download the MesloLG Nerd Font
+      unarchive:
+        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip"
+        dest: "{{ ansible_env.HOME}}/.fonts/"
+        remote_src: yes
+
+    - name: Fonts | Download the Symbols Nerd Font
+      unarchive:
+        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip"
+        dest: "{{ ansible_env.HOME}}/.fonts/"
+        remote_src: yes
+ 
+  become: true
+  tags:
+    - fonts
