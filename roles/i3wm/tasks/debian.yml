@@ -1,0 +1,18 @@
+---
+# roles/i3wm/tasks/debian.yml
+
+- name: i3wm | Setup and configuration
+  block:
+    - name: i3wm | Copy configuration file
+      copy:
+        src: i3wm_config
+        dest: "{{ ansible_env.HOME }}/.config/i3/config"
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: '0644'
+    
+    - name: i3wm | 
+
+  become: true
+  tags:
+    - i3wm
