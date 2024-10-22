@@ -38,6 +38,8 @@
         - { src: 'config.rasi', dest: 'rofi/config.rasi' }
         - { src: 'dracula.rasi', dest: 'rofi/dracula.rasi' }
         - { src: 'catppuccin-mocha.rasi', dest: 'rofi/catppuccin-mocha.rasi' }
+      loop_control:
+        label: "{{ item.dest }}"
 
     - name: i3wm | Insert wallpaper configuration into i3 config
       blockinfile:
