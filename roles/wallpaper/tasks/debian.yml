@@ -1,19 +1,6 @@
 ---
 # roles/wallpaper/tasks/debian.yml
 
-#- name: Set wallpapers on i3wm
-#  include_tasks: i3wm.yml
-#  when: "'i3' in desktop_environment or ansible_env.DESKTOP_SESSION == 'i3'"
-#
-#- name: Set wallpaper on GNOME
-#  import_tasks: gnome.yml
-#  when: "'gnome' in desktop_environment"
-#
-#- name: Set wallpaper on KDE Plasma
-#  include_tasks: kde.yml
-#  when: "'kde' in desktop_environment or 'plasma' in desktop_environment"
-
-
 - name: Wallpaper | {{ ansible_distrobution }} | Setup and configuration
   block:
     - name: Wallpaper | {{ ansible_distrobution }} | Detect desktop environment
@@ -24,7 +11,6 @@
       file:
         path: "{{ wallpaper_directory_path }}"
         state: directory
-        mode: '0744'
 
     - name: Wallpaper | {{ ansible_distrobution }} | Copy wallpapers to the local directory
       copy:
@@ -32,11 +18,10 @@
         dest: "{{ wallpaper_directory_path }}/{{ item.image }}"
         owner: "{{ ansible_env.USER }}"
         group: "{{ ansible_env.USER }}"
-        mode: '0744'
       loop: "{{ wallpaper.virtual_desktop_wallpaper.values() | list | unique }}"
       loop_control:
         label: "{{ item.image }}"
 
-  become_user: glitchbox
+  become: true
   tags:
     - wallpaper
