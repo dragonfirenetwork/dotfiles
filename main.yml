@@ -175,6 +175,5 @@
 
     - include_tasks: roles/finishing_touches/tasks/main.yml
     - include_tasks: roles/finishing_touches/tasks/finalize_zshrc.yml
-    - include_tasks: roles/wallpaper/tasks/main.yml
     - include_tasks: roles/finishing_touches/tasks/update_first_run_variable.yml
-    - include_tasks: roles/notifications/tasks/main.yml
+    # - include_tasks: roles/notifications/tasks/main.yml
