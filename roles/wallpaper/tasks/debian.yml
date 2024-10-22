@@ -3,10 +3,6 @@
 
 - name: Wallpaper | {{ ansible_distrobution }} | Setup and configuration
   block:
-    - name: Wallpaper | {{ ansible_distrobution }} | Detect desktop environment
-      set_fact:
-        desktop_environment: "{{ ansible_env.XDG_CURRENT_DESKTOP | default('') | lower }}"
-    
     - name: Wallpaper | {{ ansible_distrobution }} | Ensure the Wallpaper directory exists
       file:
         path: "{{ wallpaper_directory_path }}"

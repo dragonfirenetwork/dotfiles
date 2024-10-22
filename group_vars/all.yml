@@ -29,32 +29,32 @@ wallpaper_directory_path: "{{ ansible_env.HOME }}/Pictures/Wallpaper"
 
 # For GNOME and KDE
 main_wallpaper:
-  image: spy_x_family_your_forger_3.png
+  image: spy_x_family_yor_forger_3.png
   position: fill
 
 # For virtual desktops and spaces
 wallpaper:
   virtual_desktop_wallpaper:
     desktop1: 
-      image: spy_x_family_your_forger_3.png
+      image: spy_x_family_yor_forger_3.png
       position: fill
     desktop2: 
-      image: spy_x_family_your_forger_3.png
+      image: spy_x_family_yor_forger_3.png
       position: fill
     desktop3: 
       image: j_park_kid.jpg
       position: fill
     desktop4: 
-      image: spy_x_family_your_forger_3.png
+      image: spy_x_family_yor_forger_3.png
       position: fill
     desktop5: 
-      image: spy_x_family_your_forger_3.png
+      image: spy_x_family_yor_forger_3.png
       position: fill
     desktop6: 
       image: allucard.png
       position: fill
     desktop7: 
-      image: spy_x_family_your_forger_cg.png
+      image: spy_x_family_yor_forger_cg.png
       position: fill
 
 fonts:
