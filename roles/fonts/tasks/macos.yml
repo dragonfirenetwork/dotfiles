@@ -1,0 +1,11 @@
+---
+# roles/fonts/tasks/macos.yml
+
+- name: Fonts | Download and install Nerd Fonts
+  unarchive:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/Library/Fonts"
+    remote_src: yes
+  loop: "{{ fonts }}"
+  tags:
+    - fonts
