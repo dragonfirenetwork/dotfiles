@@ -24,7 +24,7 @@
       file:
         path: "{{ wallpaper_directory_path }}"
         state: directory
-        mode: '0755'
+        mode: '0744'
 
     - name: Wallpaper | {{ ansible_distrobution }} | Copy wallpapers to the local directory
       copy:
