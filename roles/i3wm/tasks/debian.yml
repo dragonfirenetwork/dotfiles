@@ -3,15 +3,52 @@
 
 - name: i3wm | Setup and configuration
   block:
-    - name: i3wm | Copy configuration file
+    - name: i3wm | Install required packages
+      apt:
+        name:
+          - picom
+          - feh
+          - polybar
+          - rofi
+        state: present
+        update_cache: true
+
+    - name: i3wm | Ensure required directories exist
+      file:
+        path: "{{ ansible_env.HOME }}/.config/{{ item }}"
+        state: directory
+      loop:
+        - i3
+        - picom
+        - polybar
+        - rofi
+
+    - name: i3wm | Copy configuration files
       copy:
-        src: i3wm_config
-        dest: "{{ ansible_env.HOME }}/.config/i3/config"
+        src: "{{ item.src }}"
+        dest: "{{ ansible_env.HOME }}/.config/{{ item.dest }}"
         owner: "{{ ansible_env.USER }}"
         group: "{{ ansible_env.USER }}"
         mode: '0644'
-    
-    - name: i3wm | 
+      loop:
+        - { src: 'i3wm_config', dest: 'i3/config' }
+        - { src: 'picom.conf', dest: 'picom/picom.conf' }
+        - { src: 'config.ini', dest: 'polybar/config.ini' }
+        - { src: 'launch_polybar.sh', dest: 'polybar/launch_polybar.sh' }
+        - { src: 'config.rasi', dest: 'rofi/config.rasi' }
+        - { src: 'dracula.rasi', dest: 'rofi/dracula.rasi' }
+        - { src: 'catppuccin-mocha.rasi', dest: 'rofi/catppuccin-mocha.rasi' }
+
+    - name: i3wm | Insert wallpaper configuration into i3 config
+      blockinfile:
+        path: "{{ ansible_env.HOME }}/.config/i3/config"
+        marker: "## {mark} WALLPAPER"
+        block: |
+          {% for desktop, wallpaper_config in wallpaper.virtual_desktop_wallpaper.items() %}
+          exec --no-startup-id feh --bg-{{ wallpaper_config.position }} {{ wallpaper_directory_path }}/{{ wallpaper_config.image }}
+          {% endfor %}
+        insertafter: '^## WALLPAPER START'
+        create: yes
 
   become: true
   tags:
