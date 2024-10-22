@@ -5,32 +5,19 @@
   block:
     - name: Fonts | Ensure fonts directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.fonts"
+        path: "{{ ansible_env.HOME }}/local/share/.fonts"
         state: directory
-      
-    - name: Fonts | Download the JetbrainsMono Nerd Font
-      unarchive:
-        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip"
-        dest: "{{ ansible_env.HOME}}/.fonts/"
-        remote_src: yes
 
-    - name: Fonts | Download the Nerd Fonts
+    - name: Fonts | Download and install Nerd Fonts
       unarchive:
-        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip"
-        dest: "{{ ansible_env.HOME}}/.fonts/"
+        src: "{{ item.src }}"
+        dest: "{{ ansible_env.HOME }}/.local/share/fonts"
         remote_src: yes
-
-    - name: Fonts | Download the MesloLG Nerd Font
-      unarchive:
-        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip"
-        dest: "{{ ansible_env.HOME}}/.fonts/"
-        remote_src: yes
-
-    - name: Fonts | Download the Symbols Nerd Font
-      unarchive:
-        src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip"
-        dest: "{{ ansible_env.HOME}}/.fonts/"
-        remote_src: yes
+      loop:
+        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip
+        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
+        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip
  
   become: true
   tags:
