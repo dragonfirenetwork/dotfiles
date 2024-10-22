@@ -10,14 +10,10 @@
 
     - name: Fonts | Download and install Nerd Fonts
       unarchive:
-        src: "{{ item.src }}"
+        src: "{{ item }}"
         dest: "{{ ansible_env.HOME }}/.local/share/fonts"
         remote_src: yes
-      loop:
-        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
-        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip
-        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
-        - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip
+      loop: "{{ fonts }}"
  
   become: true
   tags:

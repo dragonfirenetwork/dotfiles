@@ -57,6 +57,12 @@ wallpaper:
       image: spy_x_family_your_forger_cg.png
       position: fill
 
+fonts:
+  - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+  - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip
+  - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
+  - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip
+
 git_user_name: "dragonfirenetwork"
 git_user_email: !vault |
   $ANSIBLE_VAULT;1.1;AES256
