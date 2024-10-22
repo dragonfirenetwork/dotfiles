@@ -161,6 +161,12 @@
     
     - role: wallpaper
       tags: wallpaper
+
+    - role: fonts
+      tags: fonts
+
+    - role: i3wm
+      tags: i3wm
   
   post_tasks:
     - name: Set success
