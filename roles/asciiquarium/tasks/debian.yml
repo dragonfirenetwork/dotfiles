@@ -66,4 +66,14 @@
       notify:
         - Remove extracted tarball
 
+    - name: Asciiquarium | Add aliases to .zshrc
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: |
+          # Asciiquarium
+          alias brb=asciiquarium
+          alias aq=asciiquarium
+
   when: is_installed | length < 1
+  tags:
+    - asciiquarium
