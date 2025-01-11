@@ -1,4 +1,4 @@
-# Dragonfire Dotfiles
+# Dragonfire Network Dotfiles
 
 This repository contains the Ansible-based setup for configuring your development environment and installing key packages. 
 It’s designed to be flexible and customizable, allowing you to pick and choose the components that best suit your needs.
