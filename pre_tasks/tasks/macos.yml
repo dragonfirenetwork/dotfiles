@@ -94,3 +94,12 @@
   tags:
     - pre_tasks
     - mac_setup
+
+# Add Hashicorp Homebrew Tap
+- name: Add Hasicorp Homebrew Tap
+  community.general.homebrew_tap:
+    name: hashicorp/tap
+    state: present
+  tags:
+    - pre_tasks
+    - mac_setup

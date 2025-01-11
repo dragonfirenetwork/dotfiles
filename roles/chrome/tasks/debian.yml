@@ -1,0 +1,33 @@
+---
+# roles/chrome/tasks/debian.yml
+
+- name: Chrome | Check if Chrome is already installed
+  stat:
+    path: "/usr/bin/google-chrome"
+  register: chrome_installed
+  tags:
+    - chrome
+
+- name: Chrome | Setup and Configuration
+  block:
+    - name: Download .deb package
+      get_url:
+        url: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+        dest: "/tmp/google-chrome-stable_current_amd64.deb"
+        mode: '0644'
+
+    - name: Install via Apt
+      apt:
+        deb: "/tmp/google-chrome-stable_current_amd64.deb"
+        state: present
+        update_cache: yes
+
+    - name: Remove .deb package
+      file:
+        path: "/tmp/google-chrome-stable_current_amd64.deb"
+        state: absent
+
+  become: true
+  when: not chrome_installed
+  tags:
+    - chrome

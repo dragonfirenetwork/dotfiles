@@ -63,6 +63,11 @@ fonts:
   - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip
   - https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip
 
+mac_dockitems_persist:
+  - Finder
+  - Messages
+  - Music
+
 git_user_name: "dragonfirenetwork"
 git_user_email: !vault |
   $ANSIBLE_VAULT;1.1;AES256

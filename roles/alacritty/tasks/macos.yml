@@ -1,49 +1,50 @@
 ---
 # roles/alacritty/tasks/macos.yml
 
-- name: Install via Homebrew
-  homebrew:
-    name: alacritty
-    state: present
-  tags:
-    - alacritty
-
-- name: Check if themes repository exists
+- name: Alacritty | Check if Alacritty is already installed
   stat:
-    path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
-  register: alacritty_repo_exists
+    path: "/Applications/Alacritty.app"
+  register: alacritty_installed
   tags:
     - alacritty
 
-- name: Clone Alacritty themes repository
-  git:
-    repo: "https://github.com/alacritty/alacritty-theme.git"
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
-  when: not alacritty_repo_exists.stat.exists
-  tags:
-    - alacritty
+- name: Alacritty | Setup and Configuration
+  block:
+    - name: Install via Homebrew
+      homebrew:
+        name: alacritty
+        state: present
 
-- name: Pull latest changes from themes repository
-  git:
-    repo: "https://github.com/alacritty/alacritty-theme.git"
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
-    update: yes
-  when: alacritty_repo_exists.stat.exists
-  tags:
-    - alacritty
+    - name: Check if themes repository exists
+      stat:
+        path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
+      register: alacritty_repo_exists
 
-- name: Copy configuration file (MacOS)
-  copy:
-    src: alacritty.toml
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
-    owner: "{{ ansible_env.USER }}"
-    group: "staff"
-    mode: 0644
-  tags:
-    - alacritty
+    - name: Clone Alacritty themes repository
+      git:
+        repo: "https://github.com/alacritty/alacritty-theme.git"
+        dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+      when: not alacritty_repo_exists.stat.exists
 
-- name: Add to dock
-  set_fact:
-    dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Alacritty', 'path': '/Applications/Alacritty.app', 'pos': 5 } ] }}"
+    - name: Pull latest changes from themes repository
+      git:
+        repo: "https://github.com/alacritty/alacritty-theme.git"
+        dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+        update: yes
+      when: alacritty_repo_exists.stat.exists
+
+    - name: Copy configuration file (MacOS)
+      copy:
+        src: alacritty.toml
+        dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
+        owner: "{{ ansible_env.USER }}"
+        group: "staff"
+        mode: 0644
+
+    - name: Add to dock
+      set_fact:
+        dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Alacritty', 'path': '/Applications/Alacritty.app', 'pos': '5' } ] }}"
+
+  when: not alacritty_installed.stat.exists
   tags:
     - alacritty

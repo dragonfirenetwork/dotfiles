@@ -15,7 +15,7 @@
       tags:
         - pre_tasks
 
-  # Software to install, uncomment any you wish to skip
+  # Software to install
   roles:
     - role: system
       tags: system
@@ -24,7 +24,6 @@
       tags: zsh
 
     - role: aerospace
-      when: ansible_os_family == "Darwin"
       tags: aerospace
 
     - role: ssh
@@ -36,8 +35,8 @@
     - role: teleport
       tags: teleport
 
-    - role: nordvpn
-      tags: nordvpn
+    - role: wireguard
+      tags: wireguard
 
     - role: alacritty
       tags: alacritty
@@ -60,29 +59,17 @@
     - role: python
       tags: python
 
-  #  - role: terraform
-  #    tags: terraform
-
-  #  - role: opentofu
-  #    tags: opentofu
+    - role: terraform
+      tags: terraform
 
     - role: docker
       tags: docker
 
-  #  - role: go
-  #    tags: go
+    # - role: packer
+    #  tags: packer
 
-  #  - role: php
-  #    tags: php
-
-  #  - role: composer
-  #    tags: composer
-
-  #  - role: packer
-  #    tags: packer
-
-  #  - role: audacity
-  #    tags: audacity
+    - role: audacity
+      tags: audacity
 
     - role: mailspring
       tags: mailspring
@@ -171,9 +158,7 @@
   post_tasks:
     - name: Set success
       set_fact:
-        send_success: true
+        send_success: false
 
-    - include_tasks: roles/finishing_touches/tasks/finalize_zshrc.yml
-    - include_tasks: roles/finishing_touches/tasks/update_first_run_variable.yml
     - include_tasks: roles/finishing_touches/tasks/main.yml
-    # - include_tasks: roles/notifications/tasks/main.yml
+    - include_tasks: roles/notifications/tasks/main.yml

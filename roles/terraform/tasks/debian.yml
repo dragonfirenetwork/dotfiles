@@ -1,0 +1,42 @@
+---
+# roles/terraform/tasks/debian.yml
+
+- name: Terraform | Check if Terraform is already installed
+  stat:
+    path: "/usr/local/bin/terraform"
+  register: terraform_installed
+  tags:
+    - terraform
+
+- name: Terraform | Setup and Configuration
+  block:
+    - name: Terraform | Download HashiCorp GPG key
+      get_url:
+        url: "https://apt.releases.hashicorp.com/gpg"
+        dest: "/usr/share/keyrings/hashicorp-archive-keyring.gpg"
+        mode: '0644'
+        validate_certs: yes
+
+    - name: Terraform | Add HashiCorp APT repository
+      copy:
+        dest: "/etc/apt/sources.list.d/hashicorp.list"
+        content: |
+          deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Terraform | Update apt cache
+      apt:
+        update_cache: true
+
+    - name: Terraform | Install Terraform
+      apt:
+        name: terraform
+        state: present
+        update_cache: yes
+
+  become: true
+  when: not terraform_installed.stat.exists
+  tags:
+    - terraform

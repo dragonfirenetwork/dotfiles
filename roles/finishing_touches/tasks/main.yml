@@ -12,3 +12,14 @@
   when: ansible_os_family == "Debian"
   tags:
     - always
+
+- name: Finalize ZSHRC file
+  include_tasks: finalize_zshrc.yml
+  when: ansible_os_family in ("Darwin", "Debian")
+  tags:
+    - always
+
+- name: Update first run variable
+  include_tasks: update_first_run_variable.yml
+  tags:
+    - always

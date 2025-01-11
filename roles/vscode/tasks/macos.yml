@@ -1,9 +1,88 @@
 ---
 # roles/vscode/tasks/macos.yml
 
-- name: Install VS Code
-  homebrew_cask:
-    name: visual-studio-code
-    state: present
+- name: VS Code | Check if VS Code is already installed
+  stat:
+    path: "/Applications/Visual Studio Code.app"
+  register: vscode_installed
+  tags:
+    - vscode
+
+- name: VS Code | Initial Installation
+  block:
+    - name: Install VS Code
+      homebrew_cask:
+        name: visual-studio-code
+        state: present
+
+    - name: Ensure 'code' command is available in PATH
+      file:
+        src: "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+        dest: "/usr/local/bin/code"
+        state: link
+        force: yes
+
+    - name: Install VS Code Extensions (Initial Installation)
+      command: code --install-extension {{ item }}
+      loop:
+        - dracula-theme.theme-dracula
+        - TabNine.tabnine-vscode
+      environment:
+        PATH: "{{ ansible_env.PATH }}"
+      args:
+        creates: "{{ lookup('env','HOME') }}/.vscode/extensions/{{ item }}"
+      notify:
+        - Reload VS Code
+
+    - name: Set dock position
+      set_fact:
+        dockitems_persist: "{{ dockitems_persist + [ { 'name': 'VSCode', 'path': '/Applications/Visual Studio Code.app', 'pos': '6' } ] }}"
+
+  when: not vscode_installed.stat.exists
+  tags:
+    - vscode
+
+- name: VS Code | Configuration
+  block:
+    - name: Ensure 'code' command is available in PATH (Configuration)
+      file:
+        src: "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+        dest: "/usr/local/bin/code"
+        state: link
+        force: yes
+
+    - name: Install VS Code Extensions (Configuration)
+      command: code --install-extension {{ item }}
+      loop:
+        - dracula-theme.theme-dracula
+        - TabNine.tabnine-vscode
+      environment:
+        PATH: "{{ ansible_env.PATH }}"
+      args:
+        creates: "{{ lookup('env','HOME') }}/.vscode/extensions/{{ item }}"
+      notify:
+        - Reload VS Code
+
+    - name: Configure settings.json
+      copy:
+        dest: "{{ lookup('env','HOME') }}/Library/Application Support/Code/User/settings.json"
+        content: |
+          {
+              "workbench.colorTheme": "Dracula",
+              "tabnine.experimentalAutoImports": true,
+              "editor.fontSize": 14,
+              "editor.fontFamily": "JetBrains Mono",
+              "explorer.confirmDragAndDrop": false,
+              "explorer.confirmDelete": false,
+              "yaml.customTags": [
+                  "!vault",
+                  "!vault*"
+              ]
+          }
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+        mode: '0644'
+      notify:
+        - Reload VS Code
   tags:
     - vscode

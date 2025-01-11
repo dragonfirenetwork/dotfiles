@@ -6,3 +6,4 @@
 ansible.log
 .stow-local-ignore
 vault.secret
+programs

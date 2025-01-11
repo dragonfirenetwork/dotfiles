@@ -1,0 +1,8 @@
+---
+# roles/vscode/handlers/main.yml
+
+- name: Reload VS Code
+  shell: osascript -e 'tell application "Visual Studio Code" to reload window'
+  when: vscode_installed.stat.exists
+  tags:
+    - vscode

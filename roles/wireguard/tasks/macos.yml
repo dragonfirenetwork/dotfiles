@@ -1,0 +1,19 @@
+---
+# roles/wireguard/tasks/macos.yml
+
+- name: Wireguard | Check if Wireguard is already installed
+  stat:
+    path: '/Applications/Wireguard.app'
+  register: wireguard_installed
+  tags:
+    - wireguard
+  
+- name: Wireguard | Setup and Configuration
+  block:
+    - name: Install via Homebrew
+      homebrew:
+        name: wireguard-tools
+        state: present
+  when: not wireguard_installed.stat.exists
+  tags:
+    - wireguard

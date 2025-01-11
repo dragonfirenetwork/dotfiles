@@ -1,0 +1,9 @@
+---
+# roles/terraform/tasks/macos.yml
+
+- name: Terraform | Install via Homebrew Tap
+  homebrew:
+    name: terraform
+    state: present
+  tags:
+    - terraform

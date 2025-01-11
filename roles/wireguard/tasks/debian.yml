@@ -1,0 +1,9 @@
+---
+# roles/wireguard/tasks/debian.yml
+
+- name: Wireguard | Install via Apt
+  apt:
+    name: wireguard
+    state: present
+  tags:
+    - wireguard

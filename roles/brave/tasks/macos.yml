@@ -1,13 +1,24 @@
 ---
 # roles/brave/tasks/macos.yml
 
-- name: Install brave browser
-  homebrew_cask:
-    name: brave-browser
-    state: present
+- name: Brave | Check if Brave is already installed
+  stat:
+    path: '/Applications/Brave.app'
+  register: brave_installed
   tags:
     - brave
 
-- name: Add to dock
-  set_fact:
-    dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Brave', 'path': '/Applications/Brave.app', 'pos': 6 } ] }}"
+- name: Brave | Setup and Configuration
+  block:
+    - name: Install brave browser
+      homebrew_cask:
+        name: brave-browser
+        state: present
+
+    - name: Add to dock
+      set_fact:
+        dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Brave', 'path': '/Applications/Brave.app', 'pos': '8' } ] }}"
+  
+  when: not brave_installed.stat.exists
+  tags:
+    - brave

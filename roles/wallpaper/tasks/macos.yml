@@ -14,7 +14,6 @@
     src: "{{ item.image }}"
     dest: "{{ wallpaper_directory_path }}/{{ item.image }}"
     owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
     mode: '0644'
   loop: "{{ wallpaper.virtual_desktop_wallpaper.values() | list | unique }}"
   loop_control:

@@ -41,7 +41,7 @@
   tags:
     - always
 
-- name: Add default apps to dock
+- name: Add wanted apps to dock
   block:
     - include_tasks: macos_dock_add.yml
       loop: "{{ dockitems_persist }}"

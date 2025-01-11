@@ -2,19 +2,6 @@
 # roles/system/tasks/macos.yml
 
 # This will be updated depending on what apps are installed and added dynamically.
-# Some defaults are set like Messages and Music.
-- name: Create array for dock apps
-  set_fact:
-    dockitems_persist:
-      - name: Messages
-        path: "/Applications/Messages.app"
-        pos: 3
-      - name: Music
-        path: "/Applications/Music.app"
-        pos: 9
-  tags:
-    - system
-
 - name: Install system packages
   homebrew:
     name:
@@ -345,5 +332,19 @@
         type: int
         value: 1
         state: present
+  tags:
+    - system
+
+- name: Add to default apps to dock
+  set_fact:
+    dockitems_persist: >-
+      {{ 
+        (dockitems_persist | default([])) 
+        + [ 
+          { 'name': 'Finder', 'path': '/Applications/Finder.app', 'pos': '1' },
+          { 'name': 'Messages', 'path': '/Applications/Messages.app', 'pos': '2' },
+          { 'name': 'Music', 'path': '/Applications/Music.app', 'pos': '11' }
+        ] 
+      }}
   tags:
     - system

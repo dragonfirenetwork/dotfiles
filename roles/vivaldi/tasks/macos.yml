@@ -1,15 +1,24 @@
 ---
 # roles/vivaldi/tasks/macos.yml
 
-- name: Install vivaldi
-  homebrew_cask:
-    name: vivaldi
-    state: present
+- name: Vivaldi | Check if Vivaldi is already installed
+  stat:
+    path: '/Applications/Vivaldi.app'
+  register: vivaldi_installed
   tags:
     - vivaldi
 
-- name: Add to dock
-  set_fact:
-    dockitems_persist: "{{ dockitems_persist + [ { 'name': '/Applications/Vivaldi.app', 'pos': 7 } ] }}"
+- name: Vivaldi | Setup and Configuration
+  block:
+    - name: Install vivaldi
+      homebrew_cask:
+        name: vivaldi
+        state: present
+
+    - name: Add to dock
+      set_fact:
+        dockitems_persist: "{{ dockitems_persist + [ { 'name': '/Applications/Vivaldi.app', 'pos': '7' } ] }}"
+  
+  when: not vivaldi_installed.stat.exists
   tags:
     - vivaldi

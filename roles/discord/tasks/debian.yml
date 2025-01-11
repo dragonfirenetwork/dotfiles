@@ -12,6 +12,7 @@
     - name: Discord | Install discord
       apt:
         deb: "/tmp/discord.deb"
+        state: present
         update_cache: yes
 
     - name: Discord | Remove .deb package
