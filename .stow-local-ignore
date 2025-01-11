@@ -12,3 +12,4 @@ vault.secret
 requirements.yml
 setup.sh
 ansible.log
+.config
