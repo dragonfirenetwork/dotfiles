@@ -1,10 +1,18 @@
 ---
 # roles/steam/tasks/macos.yml
 
+- name: Steam | Check if already installed
+  stat:
+    path: "/Applications/Steam.app"
+  register: steam_installed
+  tags:
+    - steam
+
 - name: Steam | Install via Homebrew
   homebrew_cask:
     name: steam
     state: present
+  when: not steam_installed
   tags:
     - steam
 
