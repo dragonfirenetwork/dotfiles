@@ -1,11 +1,18 @@
 ---
 # roles/alacritty/tasks/macos.yml
 
+- name: Alacritty | Check if already installed
+  stat:
+    path: "/Applications/Alacritty.app"
+  register: alacritty_installed
+  tags:
+    - alacritty
 
 - name: Alacritty | Install via Homebrew
   homebrew:
     name: alacritty
     state: present
+  when: not alacritty_installed.stat.exists
   tags:
     - alacritty
 
