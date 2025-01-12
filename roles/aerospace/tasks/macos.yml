@@ -1,14 +1,14 @@
 ---
 # roles/aerospace/tasks/macos.yml
 
-- name: Add Homebrew tap for Aerospace
+- name: Aerospace | Add Homebrew tap
   homebrew_tap:
     name: nikitabobko/tap
     state: present
   tags:
     - aerospace
 
-- name: Install Aerospace
+- name: Aerospace | Install
   homebrew_cask:
     name: aerospace
     state: present

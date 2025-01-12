@@ -1,14 +1,14 @@
 ---
 # roles/bat/tasks/macos.yml
 
-- name: MacOSX | Install via Homebrew
+- name: Bat | Install via Homebrew
   homebrew:
     name: bat
     state: present
   tags:
     - bat
 
-- name: Add aliases
+- name: Bat | Add aliases
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |

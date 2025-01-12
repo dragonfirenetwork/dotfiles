@@ -5,7 +5,6 @@
   homebrew:
     name: asciiquarium
     state: present
-  when: ansible_os_family == "Darwin"
   tags:
     - asciiquarium
 

@@ -1,7 +1,7 @@
 ---
 # roles/ssh/tasks/ssh.yml
 
-- name: Ensure .ssh directory exists
+- name: SSH | Ensure .ssh directory exists
   file:
     path: "{{ ansible_env.HOME }}/.ssh"
     state: directory
@@ -9,7 +9,7 @@
   tags:
     - ssh
 
-- name: Copy SSH keys
+- name: SSH | Copy SSH keys
   copy:
     dest: "{{ ansible_env.HOME }}/.ssh/{{ ssh_key_item.key }}"
     content: "{{ ssh_key_item.value }}"
@@ -22,7 +22,7 @@
   tags:
     - ssh
 
-- name: Copy SSH config
+- name: SSH | Copy SSH config
   copy:
     dest: "{{ ansible_env.HOME }}/.ssh/config"
     content: "{{ ssh_configs }}"
@@ -30,7 +30,7 @@
   tags:
     - ssh
 
-- name: Copy SSH known_host
+- name: SSH | Copy SSH known_host
   copy:
     dest: "{{ ansible_env.HOME }}/.ssh/known_hosts"
     content: "{{ ssh_known_hosts }}"
@@ -38,7 +38,7 @@
   tags:
     - ssh
 
-- name: Add aliases
+- name: SSH | Add aliases
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: |

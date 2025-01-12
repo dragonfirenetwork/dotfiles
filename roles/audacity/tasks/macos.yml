@@ -5,6 +5,5 @@
   homebrew_cask:
     name: audacity
     state: present
-  when: ansible_os_family == "Darwin"
   tags:
     - audacity

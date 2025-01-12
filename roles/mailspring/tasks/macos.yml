@@ -8,7 +8,7 @@
   tags:
     - mailspring
 
-- name: Install Mailspring
+- name: Mailspring | Setup and Configuration
   block:
     - name: Install mailspring
       homebrew_cask:

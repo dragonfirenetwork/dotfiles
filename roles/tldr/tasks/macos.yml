@@ -1,7 +1,7 @@
 ---
 # roles/tldr/tasks/tldr/macos.yml
 
-- name: Install tldr
+- name: TLDR | Install via Homebrew
   homebrew:
     name: tldr
     state: present
