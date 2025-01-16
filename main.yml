@@ -102,8 +102,8 @@
     - role: raycast
       tags: raycast
 
-  #  - role: rectangle
-  #    tags: rectangle
+    - role: rectangle
+      tags: rectangle
 
   #  - role: revolt
   #    tags: revolt

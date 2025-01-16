@@ -1,0 +1,9 @@
+---
+# roles/rectangle/macos.yml
+
+- name: Rectangle | Install via Homebrew
+  homebrew:
+    name: rectangle
+    state: present
+  tags:
+    - rectangle
