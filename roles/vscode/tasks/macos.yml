@@ -21,6 +21,7 @@
         dest: "/usr/local/bin/code"
         state: link
         force: yes
+      become: true
 
     - name: Install VS Code Extensions (Initial Installation)
       command: code --install-extension {{ item }}
@@ -31,14 +32,12 @@
         PATH: "{{ ansible_env.PATH }}"
       args:
         creates: "{{ lookup('env','HOME') }}/.vscode/extensions/{{ item }}"
-      notify:
-        - Reload VS Code
 
     - name: Set dock position
       set_fact:
         dockitems_persist: "{{ dockitems_persist + [ { 'name': 'VSCode', 'path': '/Applications/Visual Studio Code.app', 'pos': '6' } ] }}"
-
   when: not vscode_installed.stat.exists
+  become: true
   tags:
     - vscode
 
@@ -50,6 +49,7 @@
         dest: "/usr/local/bin/code"
         state: link
         force: yes
+      become: true
 
     - name: Install VS Code Extensions (Configuration)
       command: code --install-extension {{ item }}
@@ -60,8 +60,6 @@
         PATH: "{{ ansible_env.PATH }}"
       args:
         creates: "{{ lookup('env','HOME') }}/.vscode/extensions/{{ item }}"
-      notify:
-        - Reload VS Code
 
     - name: Configure settings.json
       copy:
@@ -80,9 +78,7 @@
               ]
           }
         owner: "{{ lookup('env','USER') }}"
-        group: "{{ lookup('env','USER') }}"
         mode: '0644'
-      notify:
-        - Reload VS Code
+  become: true
   tags:
     - vscode

@@ -9,15 +9,14 @@
   tags:
     - wallpaper
 
-- name: Copy wallpapers to the local directory
+- name: Copy all wallpaper files to local directory
   copy:
-    src: "{{ item.image }}"
-    dest: "{{ wallpaper_directory_path }}/{{ item.image }}"
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/Pictures/Wallpapers/"
     owner: "{{ ansible_env.USER }}"
     mode: '0644'
-  loop: "{{ wallpaper.virtual_desktop_wallpaper.values() | list | unique }}"
-  loop_control:
-    label: "{{ item.image }}"
+  with_fileglob:
+    - "*"
   tags:
     - wallpaper
 

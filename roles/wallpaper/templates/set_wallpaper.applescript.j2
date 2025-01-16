@@ -1,7 +1,10 @@
 tell application "System Events"
 {% for desktop_number in range(1, virtual_desktops + 1) %}
   tell desktop {{ desktop_number }}
-    set picture to POSIX file "{{ wallpaper_directory_path }}/{{ wallpaper.virtual_desktop_wallpaper['desktop' ~ desktop_number|string].image }}"
+    set properties to {
+      picture: POSIX file "{{ wallpaper_directory_path }}/{{ wallpaper.main_wallpaper['desktop' ~ desktop_number|string].image }}",
+      picture scaling: 2
+    }
   end tell
 {% endfor %}
 end tell
