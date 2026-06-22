@@ -1,9 +1,17 @@
 ---
 # roles/vlc/tasks/macos.yml
 
+- name: VLC | Check if VLC is already installed
+  stat:
+    path: "/Applications/VLC.app"
+  register: vlc_installed
+  tags:
+    - vlc
+
 - name: Install vlc
   homebrew_cask:
     name: vlc
     state: present
+  when: not vlc_installed.stat.exists
   tags:
     - vlc
