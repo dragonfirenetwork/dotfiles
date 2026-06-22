@@ -1,0 +1,22 @@
+---
+# roles/aliases/tasks/macos.yml
+
+- name: Aliases | Copy .aliases file
+  copy:
+    src: aliases
+    dest: "{{ ansible_env.HOME }}/.aliases"
+    owner: "{{ ansible_env.USER }}"
+    group: "staff"
+    mode: 0644
+  tags:
+    - aliases
+
+- name: Aliases | Source .aliases from .zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      # Load aliases
+      source ~/.aliases
+    insertafter: EOF
+  tags:
+    - aliases

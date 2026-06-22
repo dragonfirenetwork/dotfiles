@@ -1,0 +1,51 @@
+# ~/.aliases — managed by the dotfiles 'aliases' role.
+# NOTE: work / corporate-specific aliases (internal hostnames, work scripts,
+# ansible-vault helpers, etc.) are intentionally NOT kept here, since this
+# repo is public. Keep those in a separate, untracked ~/.aliases.local and
+# add `source ~/.aliases.local` to your shell if you want them loaded.
+
+# OS convenience aliases
+alias update='brew update && brew upgrade && brew cleanup'
+alias la='ls -la'
+alias ll='tree -L 3'
+
+# Generate a random string
+alias ct='openssl rand -base64 32 | pbcopy | echo "Token copied to clipboard"'
+
+# Zoxide
+alias cd="z"
+eval "$(zoxide init zsh)"
+
+# Asciiquarium
+alias brb=asciiquarium
+alias aq=asciiquarium
+
+# Bat
+alias cat=bat
+
+# SSH
+sshfix() {
+    ssh-keygen -R "$1"
+}
+alias ssha='eval $(ssh-agent) && ssh-add'
+
+# Tmux dev environment session
+alias td='~/.config/tmux/tmux-dev.sh'
+
+# Quickly open directories
+alias dotfiles='cd ~/.dotfiles'
+alias personal='cd ~/personal'
+alias work='cd ~/work'
+
+# Git aliases
+alias ga='git add .'
+alias gc='git commit -m'
+alias gp='git push'
+alias gs='git status'
+alias gd='git diff'
+alias gu='git pull'
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# Load machine-local / work-specific aliases if present (untracked)
+[ -f "$HOME/.aliases.local" ] && source "$HOME/.aliases.local"

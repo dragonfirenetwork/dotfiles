@@ -24,6 +24,9 @@
     - role: zsh
       tags: zsh
 
+    - role: aliases
+      tags: aliases
+
     - role: aerospace
       tags: aerospace
 
