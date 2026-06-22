@@ -1,0 +1,21 @@
+---
+# roles/btop/tasks/macos.yml
+
+- name: Btop | Install via Homebrew
+  homebrew:
+    name: btop
+    state: present
+  tags:
+    - btop
+
+- name: Btop | Copy configuration file
+  copy:
+    src: btop.conf
+    dest: "{{ ansible_env.HOME }}/.config/btop/btop.conf"
+    owner: "{{ ansible_env.USER }}"
+    group: "staff"
+    mode: 0644
+    directory_mode: 0755
+    force: true
+  tags:
+    - btop

@@ -1,0 +1,21 @@
+---
+# roles/htop/tasks/macos.yml
+
+- name: Htop | Install via Homebrew
+  homebrew:
+    name: htop
+    state: present
+  tags:
+    - htop
+
+- name: Htop | Copy configuration file
+  copy:
+    src: htoprc
+    dest: "{{ ansible_env.HOME }}/.config/htop/htoprc"
+    owner: "{{ ansible_env.USER }}"
+    group: "staff"
+    mode: 0644
+    directory_mode: 0755
+    force: true
+  tags:
+    - htop

@@ -1,0 +1,24 @@
+---
+# roles/btop/tasks/debian.yml
+
+- name: Btop | Setup and configure
+  block:
+
+    - name: Btop | Install via Apt
+      apt:
+        name: btop
+        state: present
+
+    - name: Btop | Copy configuration file
+      copy:
+        src: btop.conf
+        dest: "{{ ansible_env.HOME }}/.config/btop/btop.conf"
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: '0644'
+        directory_mode: '0755'
+        force: true
+
+  become: true
+  tags:
+    - btop

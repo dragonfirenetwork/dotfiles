@@ -54,6 +54,12 @@
     - role: bat
       tags: bat
 
+    - role: btop
+      tags: btop
+
+    - role: htop
+      tags: htop
+
     - role: tldr
       tags: tldr
 
