@@ -33,11 +33,11 @@
     - role: git
       tags: git
 
-    - role: teleport
-      tags: teleport
+#    - role: teleport
+#      tags: teleport
 
-    - role: wireguard
-      tags: wireguard
+#    - role: wireguard
+#      tags: wireguard
 
     - role: alacritty
       tags: alacritty
@@ -69,23 +69,23 @@
     # - role: packer
     #  tags: packer
 
-    - role: audacity
-      tags: audacity
+#    - role: audacity
+#      tags: audacity
 
-    - role: mailspring
-      tags: mailspring
+#    - role: mailspring
+#      tags: mailspring
 
-    - role: brave
-      tags: brave
+#    - role: brave
+#      tags: brave
 
-    - role: chromium
-      tags: chromium
+#    - role: chromium
+#      tags: chromium
 
-    - role: discord
-      tags: discord
+#    - role: discord
+#      tags: discord
 
-    - role: foliate
-      tags: foliate
+#    - role: foliate
+#      tags: foliate
 
   #  - role: fusion360
   #    tags: fusion360
@@ -114,8 +114,8 @@
   #  - role: signal
   #    tags: signal
 
-    - role: steam
-      tags: steam
+#    - role: steam
+#      tags: steam
 
   #  - role: syncthing
   #    tags: syncthing
@@ -129,8 +129,8 @@
   #  - role: vaultwarden
   #    tags: vaultwarden
 
-    - role: vivaldi
-      tags: vivaldi
+#    - role: vivaldi
+#      tags: vivaldi
 
   #  - role: pwsh
   #    tags: pwsh
@@ -141,8 +141,8 @@
     - role: vlc
       tags: vlc
 
-    - role: vscode
-      tags: vscode
+  #  - role: vscode
+  #    tags: vscode
 
     - role: starship
       tags: starship
@@ -153,8 +153,8 @@
     - role: i3wm
       tags: i3wm
 
-    - role: wallpaper
-      tags: wallpaper
+#    - role: wallpaper
+#      tags: wallpaper
 
   post_tasks:
     - name: Set success
@@ -162,4 +162,4 @@
         send_success: false
 
     - include_tasks: roles/finishing_touches/tasks/main.yml
-    - include_tasks: roles/notifications/tasks/main.yml
+#    - include_tasks: roles/notifications/tasks/main.yml
