@@ -1,8 +1,0 @@
----
-# roles/rectangle/tasks/main.yml
-
-- name: MacOSX | Load install playbook
-  include_tasks: macos.yml
-  when: ansible_os_family == "Darwin"
-  tags:
-    - rectangle

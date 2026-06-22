@@ -84,12 +84,6 @@
 #    - role: mailspring
 #      tags: mailspring
 
-#    - role: brave
-#      tags: brave
-
-#    - role: chromium
-#      tags: chromium
-
 #    - role: discord
 #      tags: discord
 
@@ -110,9 +104,6 @@
 
     - role: raycast
       tags: raycast
-
-    - role: rectangle
-      tags: rectangle
 
   #  - role: revolt
   #    tags: revolt
@@ -137,9 +128,6 @@
 
   #  - role: vaultwarden
   #    tags: vaultwarden
-
-#    - role: vivaldi
-#      tags: vivaldi
 
   #  - role: pwsh
   #    tags: pwsh

@@ -1,9 +1,0 @@
----
-# roles/chromium/tasks/macos.yml
-
-- name: Install chromium browser
-  homebrew_cask:
-    name: chromium
-    state: present
-  tags:
-    - chromium
