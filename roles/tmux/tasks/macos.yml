@@ -15,3 +15,19 @@
     mode: 0644
     directory_mode: 0755
     force: true
+
+- name: Copy tmux dev session configuration
+  copy:
+    src: dev.conf
+    dest: "{{ ansible_env.HOME }}/.config/tmux"
+    mode: 0644
+    directory_mode: 0755
+    force: true
+
+- name: Copy tmux dev session launcher script
+  copy:
+    src: tmux-dev.sh
+    dest: "{{ ansible_env.HOME }}/.config/tmux"
+    mode: 0755
+    directory_mode: 0755
+    force: true

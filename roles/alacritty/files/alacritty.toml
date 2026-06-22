@@ -1,7 +1,7 @@
 general.live_config_reload = true
 
 general.import = [
-    "~/.config/alacritty/themes/themes/dracula.toml"
+    "~/.config/alacritty/themes/themes/hardhacker.toml"
 ]
 
 [env]
@@ -10,6 +10,7 @@ TERM = "xterm-256color"
 [window]
 opacity = 1
 dynamic_padding = false
+padding = { x = 10, y = 0 }
 decorations = "buttonless"
 position = { x = 0, y = 0 }
 startup_mode = "SimpleFullscreen"
@@ -56,6 +57,7 @@ bindings = [
 
 [keyboard]
 bindings = [
+  { key = "Enter",    mods = "Shift",         chars = "\u001b\r" },
   { key = "V",        mods = "Control|Shift", action = "Paste" },
   { key = "C",        mods = "Control|Shift", action = "Copy" },
   { key = "Paste",                            action = "Paste" },
@@ -66,14 +68,12 @@ bindings = [
   { key = "Key0",     mods = "Control",       action = "ResetFontSize" },
   { key = "Equals",   mods = "Control",       action = "IncreaseFontSize" },
   { key = "Minus",    mods = "Control",       action = "DecreaseFontSize" },
-  { key = "L",        mods = "Control",       action = "ClearLogNotice" },
-  { key = "L",        mods = "Control",       chars  = "\f" },
   { key = "PageUp",   mods = "Shift",         action = "ScrollPageUp",      mode = "~Alt" },
   { key = "PageDown", mods = "Shift",         action = "ScrollPageDown",    mode = "~Alt" },
   { key = "Up",       mods = "Shift",         action = "ScrollLineUp",      mode = "~Alt" },
   { key = "Down",     mods = "Shift",         action = "ScrollLineDown",    mode = "~Alt" },
   { key = "Home",     mods = "Shift",         action = "ScrollToTop",       mode = "~Alt" },
   { key = "End",      mods = "Shift",         action = "ScrollToBottom",    mode = "~Alt" },
-  { key = "Right", mods = "Alt", chars = "\u001BF" },
-  { key = "Left",  mods = "Alt", chars = "\u001BB" },
+  { key = "Right",    mods = "Alt",           chars  = "\u001BF" },
+  { key = "Left",     mods = "Alt",           chars  = "\u001BB" },
 ]
