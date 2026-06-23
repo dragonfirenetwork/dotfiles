@@ -17,7 +17,7 @@
         mode: '0644'
       tags:
         - teleport
-      when: ansible_architecture == 'arm64'
+      when: ansible_facts.architecture == 'arm64'
 
     - name: Download Teleport for Intel (amd64)
       get_url:
@@ -26,7 +26,7 @@
         mode: '0644'
       tags:
         - teleport
-      when: ansible_architecture == 'x86_64'
+      when: ansible_facts.architecture == 'x86_64'
 
     - name: Install Teleport Apple Silicon (arm64)
       command: sudo installer -pkg /tmp/wifiman-desktop-arm64.pkg -target /
@@ -34,7 +34,7 @@
         creates: "/Applications/Teleport.app"
       tags:
         - teleport
-      when: ansible_architecture == 'arm64'
+      when: ansible_facts.architecture == 'arm64'
 
     - name: Install Teleport Intel (amd64)
       command: sudo installer -pkg /tmp/wifiman-desktop-amd64.pkg -target /
@@ -42,7 +42,7 @@
         creates: "/Applications/Teleport.app"
       tags:
         - teleport
-      when: ansible_architecture == 'x86_64'
+      when: ansible_facts.architecture == 'x86_64'
 
     - name: Verify Teleport installation
       stat:
@@ -57,7 +57,7 @@
         state: absent
       tags:
         - teleport
-      when: ansible_architecture == 'arm64'
+      when: ansible_facts.architecture == 'arm64'
 
     - name: Remove Teleport installer for Intel (amd64)
       file:
@@ -65,7 +65,7 @@
         state: absent
       tags:
         - teleport
-      when: ansible_architecture == 'x86_64'
+      when: ansible_facts.architecture == 'x86_64'
 
   when: not teleport_installed.stat.exists
   tags:

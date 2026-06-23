@@ -12,8 +12,8 @@
       copy:
         src: "{{ item.image }}"
         dest: "{{ wallpaper_directory_path }}/{{ item.image }}"
-        owner: "{{ ansible_env.USER }}"
-        group: "{{ ansible_env.USER }}"
+        owner: "{{ ansible_facts.env.USER }}"
+        group: "{{ ansible_facts.env.USER }}"
       loop: "{{ wallpaper.virtual_desktop_wallpaper.values() | list | unique }}"
       loop_control:
         label: "{{ item.image }}"

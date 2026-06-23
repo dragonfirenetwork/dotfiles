@@ -18,7 +18,7 @@
 
 - name: Alacritty | Check if themes repository exists
   stat:
-    path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
+    path: "{{ ansible_facts.env.HOME }}/.config/alacritty/themes/.git"
   register: alacritty_repo_exists
   tags:
     - alacritty
@@ -26,7 +26,7 @@
 - name: Alacritty | Clone Alacritty themes repository
   git:
     repo: "https://github.com/alacritty/alacritty-theme.git"
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+    dest: "{{ ansible_facts.env.HOME }}/.config/alacritty/themes"
   when: not alacritty_repo_exists.stat.exists
   tags:
     - alacritty
@@ -34,7 +34,7 @@
 - name: Alacritty | Pull latest changes from themes repository
   git:
     repo: "https://github.com/alacritty/alacritty-theme.git"
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+    dest: "{{ ansible_facts.env.HOME }}/.config/alacritty/themes"
     update: yes
   when: alacritty_repo_exists.stat.exists
   tags:
@@ -43,8 +43,8 @@
 - name: Alacritty | Copy configuration file (MacOS)
   copy:
     src: alacritty.toml
-    dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
-    owner: "{{ ansible_env.USER }}"
+    dest: "{{ ansible_facts.env.HOME }}/.config/alacritty/alacritty.toml"
+    owner: "{{ ansible_facts.env.USER }}"
     group: "staff"
     mode: 0644
   tags:

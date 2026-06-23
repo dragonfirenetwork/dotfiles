@@ -11,8 +11,8 @@
 - name: Htop | Copy configuration file
   copy:
     src: htoprc
-    dest: "{{ ansible_env.HOME }}/.config/htop/htoprc"
-    owner: "{{ ansible_env.USER }}"
+    dest: "{{ ansible_facts.env.HOME }}/.config/htop/htoprc"
+    owner: "{{ ansible_facts.env.USER }}"
     group: "staff"
     mode: 0644
     directory_mode: 0755

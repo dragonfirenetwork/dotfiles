@@ -12,7 +12,7 @@
     - name: Tmux | Copy tmux configuration
       copy:
         src: tmux.conf
-        dest: "{{ ansible_env.HOME }}/.config/tmux"
+        dest: "{{ ansible_facts.env.HOME }}/.config/tmux"
         mode: '0644'
         directory_mode: '0755'
         force: true
@@ -20,7 +20,7 @@
     - name: Tmux | Copy tmux dev session configuration
       copy:
         src: dev.conf
-        dest: "{{ ansible_env.HOME }}/.config/tmux"
+        dest: "{{ ansible_facts.env.HOME }}/.config/tmux"
         mode: '0644'
         directory_mode: '0755'
         force: true
@@ -28,7 +28,7 @@
     - name: Tmux | Copy tmux dev session launcher script
       copy:
         src: tmux-dev.sh
-        dest: "{{ ansible_env.HOME }}/.config/tmux"
+        dest: "{{ ansible_facts.env.HOME }}/.config/tmux"
         mode: '0755'
         directory_mode: '0755'
         force: true

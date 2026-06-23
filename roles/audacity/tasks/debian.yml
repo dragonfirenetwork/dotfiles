@@ -7,6 +7,6 @@
     method: user
     state: present
   become_user: glitchbox
-  when: ansible_os_family == "Debian"
+  when: ansible_facts.os_family == "Debian"
   tags:
     - audacity

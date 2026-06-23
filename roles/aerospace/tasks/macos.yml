@@ -8,6 +8,13 @@
   tags:
     - aerospace
 
+- name: Aerospace | Trust the tap
+  command: brew trust --tap nikitabobko/tap
+  register: aerospace_trust
+  changed_when: "'Already trusted' not in aerospace_trust.stdout"
+  tags:
+    - aerospace
+
 - name: Aerospace | Install
   homebrew_cask:
     name: aerospace

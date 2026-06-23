@@ -3,6 +3,6 @@
 
 - name: Debian | Load install playbook
   include_tasks: debian.yml
-  when: ansible_os_family == "Debian"
+  when: ansible_facts.os_family == "Debian"
   tags:
     - i3wm

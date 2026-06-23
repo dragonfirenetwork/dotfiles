@@ -58,8 +58,8 @@
         remote_src: true
         src: /tmp/asciiquarium_1.1/asciiquarium
         dest: /usr/local/bin/
-        owner: "{{ ansible_env.USER }}"
-        group: "{{ ansible_env.USER }}"
+        owner: "{{ ansible_facts.env.USER }}"
+        group: "{{ ansible_facts.env.USER }}"
         force: true
         mode: 0755
       become: true
@@ -68,7 +68,7 @@
 
     - name: Asciiquarium | Add aliases to .zshrc
       lineinfile:
-        path: "{{ ansible_env.HOME }}/.zshrc"
+        path: "{{ ansible_facts.env.HOME }}/.zshrc"
         line: |
           # Asciiquarium
           alias brb=asciiquarium

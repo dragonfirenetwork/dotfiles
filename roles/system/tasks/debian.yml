@@ -19,7 +19,7 @@
 #    id: 91A6E7F0
 #    state: present
 #  become: true
-#  when: ansible_distribution == "Ubuntu"
+#  when: ansible_facts.distribution == "Ubuntu"
 #  tags:
 #    - system
 #
@@ -30,7 +30,7 @@
 #    id: A0B04B9F10496B85
 #    state: present
 #  become: true
-#  when: ansible_distribution == "Ubuntu"
+#  when: ansible_facts.distribution == "Ubuntu"
 #  tags:
 #    - system
 
@@ -86,14 +86,14 @@
 
 - name: System | Create .config directory
   file:
-    path: "{{ ansible_env.HOME }}/.config"
+    path: "{{ ansible_facts.env.HOME }}/.config"
     state: directory
   tags:
     - system
 
 - name: System | Create autostart directory
   file:
-    path: "{{ ansible_env.HOME }}/.config/autostart/"
+    path: "{{ ansible_facts.env.HOME }}/.config/autostart/"
     state: directory
   tags:
     - system

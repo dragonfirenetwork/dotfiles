@@ -10,7 +10,7 @@
 
 - name: Add aliases
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: |
       # Asciiquarium
       alias brb=asciiquarium

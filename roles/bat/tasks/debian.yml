@@ -10,7 +10,7 @@
 
     - name: Bat | Add aliases
       lineinfile:
-        path: "{{ ansible_env.HOME }}/.zshrc"
+        path: "{{ ansible_facts.env.HOME }}/.zshrc"
         line: |
           # Bat
           alias cat=bat

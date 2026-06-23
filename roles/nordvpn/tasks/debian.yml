@@ -36,7 +36,7 @@
 
     - name: NordVPN | Add user to group
       user:
-        name: "{{ ansible_env.USER }}"
+        name: "{{ ansible_facts.env.USER }}"
         groups: "nordvpn"
         append: yes
   

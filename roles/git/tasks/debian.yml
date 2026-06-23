@@ -1,7 +1,7 @@
 ---
 # roles/git/tasks/debian.yml
 
-- name: "Git | {{ ansible_distribution }} | Install git"
+- name: "Git | {{ ansible_facts.distribution }} | Install git"
   ansible.builtin.apt:
     name:
       - git

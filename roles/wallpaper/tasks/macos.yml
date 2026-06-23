@@ -12,8 +12,8 @@
 - name: Copy all wallpaper files to local directory
   copy:
     src: "{{ item }}"
-    dest: "{{ ansible_env.HOME }}/Pictures/Wallpapers/"
-    owner: "{{ ansible_env.USER }}"
+    dest: "{{ ansible_facts.env.HOME }}/Pictures/Wallpapers/"
+    owner: "{{ ansible_facts.env.USER }}"
     mode: '0644'
   with_fileglob:
     - "*"
@@ -23,20 +23,20 @@
 - name: Create AppleScript to set wallpapers
   template:
     src: set_wallpaper.applescript.j2
-    dest: "{{ ansible_env.HOME }}/set_wallpaper.applescript"
+    dest: "{{ ansible_facts.env.HOME }}/set_wallpaper.applescript"
   when: wallpaper.virtual_desktop_wallpaper is defined
   tags:
     - wallpaper
 
 - name: Execute the AppleScript to set wallpapers
-  shell: osascript "{{ ansible_env.HOME }}/set_wallpaper.applescript"
+  shell: osascript "{{ ansible_facts.env.HOME }}/set_wallpaper.applescript"
   when: wallpaper.virtual_desktop_wallpaper is defined
   tags:
     - wallpaper
 
 - name: Remove the AppleScript
   file:
-    path: "{{ ansible_env.HOME }}/set_wallpaper.applescript"
+    path: "{{ ansible_facts.env.HOME }}/set_wallpaper.applescript"
     state: absent
   when: wallpaper.virtual_desktop_wallpaper is defined
   tags:

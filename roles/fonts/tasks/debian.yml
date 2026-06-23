@@ -5,13 +5,13 @@
   block:
     - name: Fonts | Ensure fonts directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.local/share/fonts"
+        path: "{{ ansible_facts.env.HOME }}/.local/share/fonts"
         state: directory
 
     - name: Fonts | Download and install Nerd Fonts
       unarchive:
         src: "{{ item }}"
-        dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+        dest: "{{ ansible_facts.env.HOME }}/.local/share/fonts"
         remote_src: yes
       loop: "{{ fonts }}"
  

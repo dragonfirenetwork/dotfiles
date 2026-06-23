@@ -3,6 +3,6 @@
 
 - name: MacOSX | Load install playbook
   import_tasks: macos.yml
-  when: ansible_os_family == "Darwin"
+  when: ansible_facts.os_family == "Darwin"
   tags:
     - raycast

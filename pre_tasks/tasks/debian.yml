@@ -23,8 +23,8 @@
 # Enable passwordless sudo for user
 - name: Enable passwordless sudo for user
   community.general.sudoers:
-    name: "{{ ansible_env.USER }}"
-    user: "{{ ansible_env.USER }}"
+    name: "{{ ansible_facts.env.USER }}"
+    user: "{{ ansible_facts.env.USER }}"
     commands: "ALL"
     nopassword: true
     sudoers_path: "/etc/sudoers.d"
@@ -37,7 +37,7 @@
 # Check if .config exists, if not create it
 - name: Ensure .config directory exists
   file:
-    path: "{{ ansible_env.HOME }}/.config"
+    path: "{{ ansible_facts.env.HOME }}/.config"
     state: directory
     mode: 0755
   tags:
@@ -47,10 +47,10 @@
 # Hush the terminal login
 - name: Hush the terminal login
   file:
-    path: "{{ ansible_env.HOME }}/.hushlogin"
+    path: "{{ ansible_facts.env.HOME }}/.hushlogin"
     state: touch
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
+    owner: "{{ ansible_facts.env.USER }}"
+    group: "{{ ansible_facts.env.USER }}"
     mode: 0600
   tags:
     - pre_tasks

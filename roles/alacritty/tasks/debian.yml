@@ -10,31 +10,31 @@
 
     - name: Alacritty | Check if themes repository exists
       stat:
-        path: "{{ ansible_env.HOME }}/.config/alacritty/themes/.git"
+        path: "{{ ansible_facts.env.HOME }}/.config/alacritty/themes/.git"
       register: alacritty_repo_exists
 
     - name: Alacritty | Clone Alacritty themes repository
       git:
         repo: "https://github.com/alacritty/alacritty-theme.git"
-        dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+        dest: "{{ ansible_facts.env.HOME }}/.config/alacritty/themes"
       when: not alacritty_repo_exists.stat.exists
 
     - name: Alacritty | Pull latest changes from themes repository
       git:
         repo: "https://github.com/alacritty/alacritty-theme.git"
-        dest: "{{ ansible_env.HOME }}/.config/alacritty/themes"
+        dest: "{{ ansible_facts.env.HOME }}/.config/alacritty/themes"
         update: yes
       when: alacritty_repo_exists.stat.exists
 
     - name: Alacritty | Copy configuration file
       copy:
         src: alacritty.toml
-        dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.toml"
-        owner: "{{ ansible_env.USER }}"
-        group: "{{ ansible_env.USER }}"
+        dest: "{{ ansible_facts.env.HOME }}/.config/alacritty/alacritty.toml"
+        owner: "{{ ansible_facts.env.USER }}"
+        group: "{{ ansible_facts.env.USER }}"
         mode: '0644'
 
   become: true
-  when: ansible_os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
+  when: ansible_facts.os_family in ["Debian", "Ubuntu", "Pop!_OS", "LinuxMint", "Kali", "Parrot"]
   tags:
     - alacritty

@@ -11,9 +11,9 @@
 - name: Starship | Copy configuration file
   copy:
     src: "starship.toml"
-    dest: "{{ ansible_env.HOME }}/.config"
+    dest: "{{ ansible_facts.env.HOME }}/.config"
     mode: 0644
-    owner: "{{ ansible_env.USER }}"
+    owner: "{{ ansible_facts.env.USER }}"
     group: "staff"
   tags:
     - starship

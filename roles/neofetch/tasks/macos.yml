@@ -10,17 +10,17 @@
 
     - name: Neofetch | Ensure directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.config/neofetch"
+        path: "{{ ansible_facts.env.HOME }}/.config/neofetch"
         state: directory
-        owner: "{{ ansible_env.USER }}"
+        owner: "{{ ansible_facts.env.USER }}"
         group: "staff"
         mode: '0755'
 
     - name: Set configuration file
       copy:
         src: config.conf
-        dest: "{{ ansible_env.HOME }}/.config/neofetch/config.conf"
-        owner: "{{ ansible_env.USER }}"
+        dest: "{{ ansible_facts.env.HOME }}/.config/neofetch/config.conf"
+        owner: "{{ ansible_facts.env.USER }}"
         group: "staff"
         mode: '0644'
   tags:

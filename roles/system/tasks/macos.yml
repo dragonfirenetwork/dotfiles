@@ -31,9 +31,9 @@
 
 - name: Create .config directory
   file:
-    path: "{{ ansible_env.HOME }}/.config"
+    path: "{{ ansible_facts.env.HOME }}/.config"
     state: directory
-    owner: "{{ ansible_env.USER }}"
+    owner: "{{ ansible_facts.env.USER }}"
     group: "staff"
     mode: 0755
   tags:
@@ -43,9 +43,9 @@
   block:
     - name: Create screenshot directory
       file:
-        path: "{{ ansible_env.HOME }}/Pictures/Screenshots"
+        path: "{{ ansible_facts.env.HOME }}/Pictures/Screenshots"
         state: directory
-        owner: "{{ ansible_env.USER }}"
+        owner: "{{ ansible_facts.env.USER }}"
         group: "staff"
         mode: 0755
 
@@ -54,7 +54,7 @@
         domain: com.apple.screencapture
         key: location
         type: string
-        value: "{{ ansible_env.HOME }}/Pictures/Screenshots"
+        value: "{{ ansible_facts.env.HOME }}/Pictures/Screenshots"
         state: present
 
     - name: Set default prefix for screenshots
@@ -151,7 +151,7 @@
 
 - name: Set HostName, ComputerName, and LocalHostName
   ansible.builtin.hostname:
-    name: "{{ ansible_distribution | lower }}"
+    name: "{{ ansible_facts.distribution | lower }}"
   tags:
     - system
 

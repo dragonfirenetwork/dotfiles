@@ -3,7 +3,7 @@
     name: chocolatey
     state: present
     params: allowGlobalConfirmation=true
-  when: ansible_distribution == "Windows"
+  when: ansible_facts.distribution == "Windows"
   tags:
     - pre_tasks
 
@@ -11,6 +11,6 @@
   win_chocolatey:
     name: all
     state: latest
-  when: ansible_distribution == "Windows"
+  when: ansible_facts.distribution == "Windows"
   tags:
     - pre_tasks

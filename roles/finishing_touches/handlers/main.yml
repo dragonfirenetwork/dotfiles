@@ -5,11 +5,11 @@
   homebrew:
     update_homebrew: true
     upgrade_all: true
-  when: ansible_os_family == "Darwin"
+  when: ansible_facts.os_family == "Darwin"
 
 - name: cleanup_homebrew
   shell: brew cleanup
-  when: ansible_os_family == "Darwin"
+  when: ansible_facts.os_family == "Darwin"
 
 - name: Restart AccountsService
   service:

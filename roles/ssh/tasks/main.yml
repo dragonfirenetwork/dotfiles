@@ -3,7 +3,7 @@
 
 - name: SSH | Ensure .ssh directory exists
   file:
-    path: "{{ ansible_env.HOME }}/.ssh"
+    path: "{{ ansible_facts.env.HOME }}/.ssh"
     state: directory
     mode: 0700
   tags:
@@ -11,7 +11,7 @@
 
 - name: SSH | Copy SSH keys
   copy:
-    dest: "{{ ansible_env.HOME }}/.ssh/{{ ssh_key_item.key }}"
+    dest: "{{ ansible_facts.env.HOME }}/.ssh/{{ ssh_key_item.key }}"
     content: "{{ ssh_key_item.value }}"
     mode: "{{ ssh_key_item.key.endswith('.pub') | ternary('0644', '0600') }}"
   no_log: true
@@ -24,7 +24,7 @@
 
 - name: SSH | Copy SSH config
   copy:
-    dest: "{{ ansible_env.HOME }}/.ssh/config"
+    dest: "{{ ansible_facts.env.HOME }}/.ssh/config"
     content: "{{ ssh_configs }}"
     mode: 0644
   tags:
@@ -32,7 +32,7 @@
 
 - name: SSH | Copy SSH known_host
   copy:
-    dest: "{{ ansible_env.HOME }}/.ssh/known_hosts"
+    dest: "{{ ansible_facts.env.HOME }}/.ssh/known_hosts"
     content: "{{ ssh_known_hosts }}"
     mode: 0644
   tags:
@@ -40,7 +40,7 @@
 
 - name: SSH | Add aliases
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: |
       # SSH aliases
       alias ssha='eval $(ssh-agent) && ssh-add'

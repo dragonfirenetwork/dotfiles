@@ -17,15 +17,15 @@
 
 - name: Check if .zshrc exists already
   stat:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
   register: zshrc_file
   tags:
     - zsh
 
 - name: Backup existing .zshrc if it exists
-  command: mv "{{ ansible_env.HOME }}/.zshrc" "{{ ansible_env.HOME }}/.zshrc.bak"
+  command: mv "{{ ansible_facts.env.HOME }}/.zshrc" "{{ ansible_facts.env.HOME }}/.zshrc.bak"
   args:
-    removes: "{{ ansible_env.HOME }}/.zshrc"
+    removes: "{{ ansible_facts.env.HOME }}/.zshrc"
   ignore_errors: true
   when: zshrc_file.stat.exists
   tags:
@@ -33,14 +33,14 @@
 
 - name: Create new .zshrc
   file:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     state: touch
   tags:
     - zsh
 
 - name: Set Path in .zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: |
       {{ ansible_managed | comment }}
 
@@ -51,7 +51,7 @@
 
 - name: Configure Homebrew and utilities in .zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: |
       # Homebrew
       eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -64,7 +64,7 @@
 
 - name: Set History settings in .zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: |
       # History setup
       HISTFILE=$HOME/.zhistory
@@ -81,7 +81,7 @@
 
 - name: Set OS convenience aliases in .zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: |
       # OS convenience aliases
       alias update='brew update && brew upgrade && brew cleanup'

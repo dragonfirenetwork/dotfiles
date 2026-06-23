@@ -3,11 +3,11 @@
 
 - name: Set Starship prompt in shell
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_facts.env.HOME }}/.zshrc"
     line: |
       # Starship
       eval "$(starship init zsh)"
     insertafter: EOF
-  become_user: "{{ ansible_env.USER }}"
+  become_user: "{{ ansible_facts.env.USER }}"
   tags:
     - always

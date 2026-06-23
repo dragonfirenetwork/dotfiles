@@ -9,7 +9,7 @@
         state: latest
 
     - name: ZSH | Set default shell to Zsh
-      command: chsh -s "$(which zsh)" "{{ ansible_env.USER }}"
+      command: chsh -s "$(which zsh)" "{{ ansible_facts.env.USER }}"
 
     - name: ZSH | Install syntax highlighting
       apt:
@@ -23,13 +23,13 @@
 
     - name: ZSH | Check if .zshrc exists already
       stat:
-        path: "{{ ansible_env.HOME }}/.zshrc"
+        path: "{{ ansible_facts.env.HOME }}/.zshrc"
       register: zshrc_file
 
     - name: ZSH | Backup existing .zshrc if it exists
       copy:
-        src: "{{ ansible_env.HOME }}/.zshrc"
-        dest: "{{ ansible_env.HOME }}/.zshrc.bak"
+        src: "{{ ansible_facts.env.HOME }}/.zshrc"
+        dest: "{{ ansible_facts.env.HOME }}/.zshrc.bak"
         remote_src: yes
         backup: yes
       when: zshrc_file.stat.exists
@@ -37,7 +37,7 @@
     - name: ZSH | Create .zshrc from template
       template:
         src: zshrc.j2
-        dest: "{{ ansible_env.HOME }}/.zshrc"
+        dest: "{{ ansible_facts.env.HOME }}/.zshrc"
   
   become: true
   tags:
