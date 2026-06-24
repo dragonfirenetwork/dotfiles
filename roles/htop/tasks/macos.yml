@@ -8,6 +8,16 @@
   tags:
     - htop
 
+- name: Htop | Ensure config directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.config/htop"
+    state: directory
+    owner: "{{ ansible_facts.env.USER }}"
+    group: "staff"
+    mode: 0755
+  tags:
+    - htop
+
 - name: Htop | Copy configuration file
   copy:
     src: htoprc

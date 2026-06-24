@@ -9,6 +9,14 @@
         name: tmux
         state: present
 
+    - name: Tmux | Ensure config directory exists
+      file:
+        path: "{{ ansible_facts.env.HOME }}/.config/tmux"
+        state: directory
+        owner: "{{ ansible_facts.env.USER }}"
+        group: "{{ ansible_facts.env.USER }}"
+        mode: 0755
+
     - name: Tmux | Copy tmux configuration
       copy:
         src: tmux.conf

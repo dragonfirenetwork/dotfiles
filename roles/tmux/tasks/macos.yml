@@ -8,6 +8,16 @@
   tags:
     - tmux
 
+- name: Tmux | Ensure config directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.config/tmux"
+    state: directory
+    owner: "{{ ansible_facts.env.USER }}"
+    group: "staff"
+    mode: 0755
+  tags:
+    - tmux
+
 - name: Copy tmux configuration
   copy:
     src: tmux.conf

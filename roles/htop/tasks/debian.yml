@@ -9,6 +9,14 @@
         name: htop
         state: present
 
+    - name: Htop | Ensure config directory exists
+      file:
+        path: "{{ ansible_facts.env.HOME }}/.config/htop"
+        state: directory
+        owner: "{{ ansible_facts.env.USER }}"
+        group: "{{ ansible_facts.env.USER }}"
+        mode: 0755
+
     - name: Htop | Copy configuration file
       copy:
         src: htoprc

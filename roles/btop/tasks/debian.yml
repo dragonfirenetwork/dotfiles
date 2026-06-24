@@ -9,6 +9,14 @@
         name: btop
         state: present
 
+    - name: Btop | Ensure config directory exists
+      file:
+        path: "{{ ansible_facts.env.HOME }}/.config/btop"
+        state: directory
+        owner: "{{ ansible_facts.env.USER }}"
+        group: "{{ ansible_facts.env.USER }}"
+        mode: 0755
+
     - name: Btop | Copy configuration file
       copy:
         src: btop.conf

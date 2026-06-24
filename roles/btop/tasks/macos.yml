@@ -8,6 +8,16 @@
   tags:
     - btop
 
+- name: Btop | Ensure config directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.config/btop"
+    state: directory
+    owner: "{{ ansible_facts.env.USER }}"
+    group: "staff"
+    mode: 0755
+  tags:
+    - btop
+
 - name: Btop | Copy configuration file
   copy:
     src: btop.conf
