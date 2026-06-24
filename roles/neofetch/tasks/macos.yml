@@ -1,27 +1,16 @@
 ---
 # roles/neofetch/tasks/macos.yml
+# neofetch is discontinued and was removed from Homebrew core; fastfetch is
+# its actively-maintained successor. The old neofetch config.conf is not
+# compatible with fastfetch (which uses ~/.config/fastfetch/config.jsonc),
+# so we install fastfetch with its sensible defaults and skip the old config.
 
-- name: Neofetch | Setup and configuration
+- name: Fastfetch | Setup and configuration
   block:
-    - name: Install neofetch
+    - name: Install fastfetch
       homebrew:
-        name: neofetch
+        name: fastfetch
         state: present
-
-    - name: Neofetch | Ensure directory exists
-      file:
-        path: "{{ ansible_facts.env.HOME }}/.config/neofetch"
-        state: directory
-        owner: "{{ ansible_facts.env.USER }}"
-        group: "staff"
-        mode: '0755'
-
-    - name: Set configuration file
-      copy:
-        src: config.conf
-        dest: "{{ ansible_facts.env.HOME }}/.config/neofetch/config.conf"
-        owner: "{{ ansible_facts.env.USER }}"
-        group: "staff"
-        mode: '0644'
   tags:
     - neofetch
+    - fastfetch

@@ -23,6 +23,10 @@ alias aq=asciiquarium
 # Bat
 alias cat=bat
 
+# Fastfetch (neofetch is discontinued; alias the old muscle-memory name)
+alias neofetch=fastfetch
+alias ff=fastfetch
+
 # SSH
 sshfix() {
     ssh-keygen -R "$1"

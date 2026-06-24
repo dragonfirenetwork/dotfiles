@@ -1,31 +1,21 @@
 ---
 # roles/neofetch/tasks/debian.yml
+# neofetch is discontinued; fastfetch is its actively-maintained successor.
+# fastfetch is available in apt on Ubuntu 24.04+ / Debian 13+. The old
+# neofetch config.conf is not compatible with fastfetch, so we rely on
+# fastfetch's defaults rather than copying the dead config.
 
-- name: Neofetch | Install via Apt
+- name: Fastfetch | Install via Apt
   block:
-    - name: Neofetch | Install
+    - name: Fastfetch | Install
       apt:
-        name: neofetch
+        name: fastfetch
         state: present
       tags:
         - neofetch
-
-    - name: Neofetch | Ensure configuration directory exists
-      file:
-        path: "{{ ansible_facts.env.HOME }}/.config/neofetch"
-        state: directory
-        owner: "{{ ansible_facts.env.USER }}"
-        group: "{{ ansible_facts.env.USER }}"
-        mode: 0755
-
-    - name: Neofetch | Set configuration file
-      copy:
-        src: config.conf
-        dest: "{{ ansible_facts.env.HOME }}/.config/neofetch/config.conf"
-        owner: "{{ ansible_facts.env.USER }}"
-        group: "{{ ansible_facts.env.USER }}"
-        mode: 0644
+        - fastfetch
 
   become: true
   tags:
     - neofetch
+    - fastfetch

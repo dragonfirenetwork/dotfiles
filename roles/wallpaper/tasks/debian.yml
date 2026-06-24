@@ -1,14 +1,14 @@
 ---
 # roles/wallpaper/tasks/debian.yml
 
-- name: Wallpaper | {{ ansible_distrobution }} | Setup and configuration
+- name: Wallpaper | {{ ansible_facts.distribution }} | Setup and configuration
   block:
-    - name: Wallpaper | {{ ansible_distrobution }} | Ensure the Wallpaper directory exists
+    - name: Wallpaper | {{ ansible_facts.distribution }} | Ensure the Wallpaper directory exists
       file:
         path: "{{ wallpaper_directory_path }}"
         state: directory
 
-    - name: Wallpaper | {{ ansible_distrobution }} | Copy wallpapers to the local directory
+    - name: Wallpaper | {{ ansible_facts.distribution }} | Copy wallpapers to the local directory
       copy:
         src: "{{ item.image }}"
         dest: "{{ wallpaper_directory_path }}/{{ item.image }}"
