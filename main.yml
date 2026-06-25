@@ -10,6 +10,12 @@
     - group_vars/all.yml
     - group_vars/macos.yml
 
+  # finishing_touches is included via include_tasks (not as a role), so its
+  # handlers/main.yml is not auto-loaded. Import them at the play level so
+  # tasks that notify update_homebrew/cleanup_homebrew can resolve them.
+  handlers:
+    - import_tasks: roles/finishing_touches/handlers/main.yml
+
   pre_tasks:
     - name: Pre-tasks
       include_tasks: pre_tasks/tasks/main.yml
