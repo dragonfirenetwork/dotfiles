@@ -56,3 +56,13 @@
         extended_allitems: false
   tags:
     - always
+
+# Absolute dock slots are unreliable when unmanaged items are present, so pin
+# VSCode relative to Alacritty explicitly as the final dock step.
+- name: Dock | Pin Visual Studio Code directly after Alacritty
+  ansible.builtin.command: dockutil --move 'Visual Studio Code' --after 'Alacritty'
+  changed_when: false
+  failed_when: false
+  when: ansible_facts.os_family == "Darwin"
+  tags:
+    - always

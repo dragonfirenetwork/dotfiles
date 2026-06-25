@@ -18,7 +18,7 @@
 
     - name: Set dock position
       set_fact:
-        dockitems_persist: "{{ dockitems_persist + [ { 'name': 'VSCode', 'path': '/Applications/Visual Studio Code.app', 'pos': '6' } ] }}"
+        dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Visual Studio Code', 'path': '/Applications/Visual Studio Code.app', 'pos': '6' } ] }}"
   when: not vscode_installed.stat.exists
   tags:
     - vscode
