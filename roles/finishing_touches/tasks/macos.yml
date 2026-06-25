@@ -33,6 +33,7 @@
       - Photos
       - Contacts
       - Calendar
+      - Terminal
   include_tasks: macos_dock_remove.yml
   loop: "{{ dockitems_remove }}"
   loop_control:
