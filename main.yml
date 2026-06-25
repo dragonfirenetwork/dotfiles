@@ -147,6 +147,9 @@
     - role: vscode
       tags: vscode
 
+    - role: parsec
+      tags: parsec
+
     - role: starship
       tags: starship
 

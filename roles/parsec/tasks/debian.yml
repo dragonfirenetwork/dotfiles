@@ -1,0 +1,24 @@
+---
+# roles/parsec/tasks/debian.yml
+
+- name: Parsec | Setup and configuration
+  block:
+    - name: Parsec | Download .deb package
+      get_url:
+        url: "https://builds.parsec.app/package/parsec-linux.deb"
+        dest: "/tmp/parsec-linux.deb"
+        mode: '0644'
+
+    - name: Parsec | Install parsec
+      apt:
+        deb: "/tmp/parsec-linux.deb"
+        state: present
+        update_cache: yes
+
+    - name: Parsec | Remove .deb package
+      file:
+        path: "/tmp/parsec-linux.deb"
+        state: absent
+  become: true
+  tags:
+    - parsec
