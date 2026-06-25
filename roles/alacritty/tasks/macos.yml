@@ -16,6 +16,13 @@
   tags:
     - alacritty
 
+- name: Alacritty | Remove Gatekeeper quarantine attribute
+  command: xattr -dr com.apple.quarantine /Applications/Alacritty.app
+  changed_when: false
+  failed_when: false
+  tags:
+    - alacritty
+
 - name: Alacritty | Check if themes repository exists
   stat:
     path: "{{ ansible_facts.env.HOME }}/.config/alacritty/themes/.git"

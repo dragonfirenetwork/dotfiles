@@ -156,8 +156,8 @@
     - role: i3wm
       tags: i3wm
 
-#    - role: wallpaper
-#      tags: wallpaper
+    - role: wallpaper
+      tags: wallpaper
 
   post_tasks:
     - name: Set success
