@@ -339,12 +339,11 @@
   set_fact:
     dockitems_persist: >-
       {{ 
-        (dockitems_persist | default([])) 
-        + [ 
-          { 'name': 'Finder', 'path': '/Applications/Finder.app', 'pos': '1' },
-          { 'name': 'Messages', 'path': '/Applications/Messages.app', 'pos': '2' },
-          { 'name': 'Music', 'path': '/Applications/Music.app', 'pos': '11' }
-        ] 
+        (dockitems_persist | default([]))
+        + [
+          { 'name': 'Messages', 'path': '/System/Applications/Messages.app', 'pos': '2' },
+          { 'name': 'Music', 'path': '/System/Applications/Music.app', 'pos': '11' }
+        ]
       }}
   tags:
     - system
