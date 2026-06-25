@@ -1,6 +1,12 @@
 ---
 # roles/fonts/tasks/main.yml
 
+- name: MacOSX | Load install playbook
+  include_tasks: macos.yml
+  when: ansible_facts.os_family == "Darwin"
+  tags:
+    - fonts
+
 - name: Debian | Load install playbook
   include_tasks: debian.yml
   when: ansible_facts.os_family == "Debian"
