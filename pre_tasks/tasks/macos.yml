@@ -103,3 +103,12 @@
   tags:
     - pre_tasks
     - mac_setup
+
+# Homebrew 6+ refuses to load formulae/casks from non-official taps until trusted
+- name: Trust the Hashicorp tap
+  command: brew trust --tap hashicorp/tap
+  register: hashicorp_trust
+  changed_when: "'Already trusted' not in hashicorp_trust.stdout"
+  tags:
+    - pre_tasks
+    - mac_setup
