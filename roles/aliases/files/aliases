@@ -13,6 +13,7 @@ alias ll='tree -L 3'
 alias ct='openssl rand -base64 32 | pbcopy | echo "Token copied to clipboard"'
 
 # Zoxide
+export _ZO_DOCTOR=0
 alias cd="z"
 eval "$(zoxide init zsh)"
 
