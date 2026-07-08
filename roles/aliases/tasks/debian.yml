@@ -1,9 +1,9 @@
 ---
 # roles/aliases/tasks/debian.yml
 
-- name: Aliases | Copy .aliases file
-  copy:
-    src: aliases
+- name: Aliases | Render .aliases file
+  template:
+    src: aliases.j2
     dest: "{{ ansible_facts.env.HOME }}/.aliases"
     owner: "{{ ansible_facts.env.USER }}"
     group: "{{ ansible_facts.env.USER }}"

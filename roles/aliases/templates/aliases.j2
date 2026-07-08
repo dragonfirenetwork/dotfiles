@@ -43,8 +43,9 @@ alias personal='cd ~/personal'
 alias work='cd ~/work'
 
 # YUMI second brain (cognitive-repo) — runs bin/brain from anywhere (it self-locates its repo)
-alias brain='~/Developer/homelab/cognitive-repo/bin/brain'          # brain serve | find | index | lint
-alias yumi='~/Developer/homelab/cognitive-repo/bin/brain serve'     # launch the web UI at http://localhost:7777/webui/
+# Path is a vaulted var (cognitive_repo_path) so it isn't exposed in this public repo.
+alias brain='{{ cognitive_repo_path }}/bin/brain'          # brain serve | find | index | lint
+alias yumi='{{ cognitive_repo_path }}/bin/brain serve'     # launch the web UI at http://localhost:7777/webui/
 
 # Git aliases
 alias ga='git add .'
