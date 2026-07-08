@@ -45,7 +45,17 @@ alias work='cd ~/work'
 # YUMI second brain (cognitive-repo) — runs bin/brain from anywhere (it self-locates its repo)
 # Path is a vaulted var (cognitive_repo_path) so it isn't exposed in this public repo.
 alias brain='{{ cognitive_repo_path }}/bin/brain'          # brain serve | find | index | lint
-alias yumi='{{ cognitive_repo_path }}/bin/brain serve'     # launch the web UI at http://localhost:7777/webui/
+# yumi: no arg opens the web UI; -start/-stop/-restart control the launchd service
+yumi() {
+  local plist="$HOME/Library/LaunchAgents/com.dragonfire.yumi.plist"
+  case "$1" in
+    -start)   launchctl load -w "$plist" 2>/dev/null && echo "yumi: service started" ;;
+    -stop)    launchctl unload "$plist" 2>/dev/null && echo "yumi: service stopped" ;;
+    -restart) launchctl kickstart -k "gui/$(id -u)/com.dragonfire.yumi" 2>/dev/null \
+                || launchctl load -w "$plist"; echo "yumi: service restarted" ;;
+    *)        open "http://localhost:7777/webui/" ;;
+  esac
+}
 
 # Git aliases
 alias ga='git add .'
