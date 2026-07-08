@@ -42,6 +42,10 @@ alias dotfiles='cd ~/.dotfiles'
 alias personal='cd ~/personal'
 alias work='cd ~/work'
 
+# YUMI second brain (cognitive-repo) — runs bin/brain from anywhere (it self-locates its repo)
+alias brain='~/Developer/homelab/cognitive-repo/bin/brain'          # brain serve | find | index | lint
+alias yumi='~/Developer/homelab/cognitive-repo/bin/brain serve'     # launch the web UI at http://localhost:7777/webui/
+
 # Git aliases
 alias ga='git add .'
 alias gc='git commit -m'
