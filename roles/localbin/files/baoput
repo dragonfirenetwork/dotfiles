@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# baoput — write a secret to OpenBao (KV v2) in the k8s cluster. Companion to baoget.
+# Usage: baoput <path-under-secret/> key=value [key=value ...]
+#   e.g. baoput work/hilton-pep-leg password=hunter2 note='what this is'
+# WARNING: `bao kv put` REPLACES all keys at the path. Check the path first
+# (baoget <path>) and re-supply existing keys, or use `baopatch` semantics by hand.
+set -euo pipefail
+path="${1:?usage: baoput <path> key=value [key=value ...]}"; shift
+[ "$#" -ge 1 ] || { echo "baoput: at least one key=value required" >&2; exit 1; }
+vp="$(kubectl -n semaphore get secret ansible-vault-secret -o jsonpath='{.data.vault-password}' | base64 -d)"
+tok="$(cd "$HOME/Developer/homelab/ansible" && ansible localhost -c local -m debug \
+  -a var=openbao_root_token -e @group_vars/openbao.yml \
+  --vault-password-file <(printf '%s' "$vp") -o 2>/dev/null \
+  | sed -E 's/.*"openbao_root_token": "([^"]*)".*/\1/')"
+[ -n "$tok" ] || { echo "baoput: failed to obtain OpenBao token" >&2; exit 1; }
+kubectl -n openbao exec -i openbao-0 -- env BAO_TOKEN="$tok" bao kv put "secret/$path" "$@"

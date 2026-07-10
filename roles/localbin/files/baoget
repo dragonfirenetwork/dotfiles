@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# baoget — read a secret from OpenBao (KV v2) in the k8s cluster.
+# Usage: baoget <path-under-secret/> [field]
+#   e.g. baoget apps/cloudflare api-token
+set -euo pipefail
+path="${1:?usage: baoget <path> [field]}"; field="${2:-}"
+vp="$(kubectl -n semaphore get secret ansible-vault-secret -o jsonpath='{.data.vault-password}' | base64 -d)"
+tok="$(cd "$HOME/Developer/homelab/ansible" && ansible localhost -c local -m debug \
+  -a var=openbao_root_token -e @group_vars/openbao.yml \
+  --vault-password-file <(printf '%s' "$vp") -o 2>/dev/null \
+  | sed -E 's/.*"openbao_root_token": "([^"]*)".*/\1/')"
+[ -n "$tok" ] || { echo "baoget: failed to obtain OpenBao token" >&2; exit 1; }
+if [ -n "$field" ]; then
+  kubectl -n openbao exec -i openbao-0 -- env BAO_TOKEN="$tok" bao kv get -field="$field" "secret/$path"
+else
+  kubectl -n openbao exec -i openbao-0 -- env BAO_TOKEN="$tok" bao kv get "secret/$path"
+fi

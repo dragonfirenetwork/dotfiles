@@ -1,8 +1,14 @@
 ---
 # roles/localbin/tasks/main.yml
-# Portable personal scripts deployed to ~/.local/bin (already on PATH via zsh role).
-# OS-agnostic. Note: `glm` needs `baoget` (OpenBao helper) + `claude` present and
-# homelab/cluster access to resolve the vaulted GLM key at launch.
+# Portable personal dev tooling so a fresh machine comes up with claude/glm/codex ready.
+#
+# Scripts -> ~/.local/bin (already on PATH via the zsh role). OS-agnostic bash.
+#   glm      : interactive Claude Code driven by GLM-5.2 (Z.ai Coding Plan).
+#   baoget/put/list : OpenBao (cluster KV) helpers. RUNTIME DEPS: kubectl, cluster
+#                     access, and the homelab ansible repo at ~/Developer/homelab/ansible
+#                     (baoget reads the vault password from there). glm needs baoget.
+#   codex is NOT a script — it's OpenAI's own CLI (npm global), installed below. It
+#   still needs a one-time `codex login` per machine (ChatGPT-account OAuth; not synced).
 
 - name: localbin | ensure ~/.local/bin exists
   ansible.builtin.file:
@@ -17,3 +23,18 @@
     mode: "0755"
   loop:
     - glm
+    - baoget
+    - baoput
+    - baolist
+
+- name: localbin | ensure node (npm) for the codex CLI  [macOS]
+  community.general.homebrew:
+    name: node
+    state: present
+  when: ansible_facts.os_family == "Darwin"
+
+- name: localbin | ensure OpenAI Codex CLI (npm global)
+  community.general.npm:
+    name: "@openai/codex"
+    global: true
+    state: present

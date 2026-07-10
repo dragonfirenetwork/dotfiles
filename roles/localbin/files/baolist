@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# baolist — list secret PATHS (names only, no values) in OpenBao (KV v2).
+# Companion to baoget/baoput. Usage: baolist [path-under-secret/]   e.g. baolist apps
+set -euo pipefail
+path="${1:-}"
+vp="$(kubectl -n semaphore get secret ansible-vault-secret -o jsonpath='{.data.vault-password}' | base64 -d)"
+tok="$(cd "$HOME/Developer/homelab/ansible" && ansible localhost -c local -m debug \
+  -a var=openbao_root_token -e @group_vars/openbao.yml \
+  --vault-password-file <(printf '%s' "$vp") -o 2>/dev/null \
+  | sed -E 's/.*"openbao_root_token": "([^"]*)".*/\1/')"
+[ -n "$tok" ] || { echo "baolist: failed to obtain OpenBao token" >&2; exit 1; }
+kubectl -n openbao exec -i openbao-0 -- env BAO_TOKEN="$tok" bao kv list "secret/$path"
