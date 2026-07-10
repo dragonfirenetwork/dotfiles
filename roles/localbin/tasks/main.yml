@@ -16,6 +16,14 @@
     state: directory
     mode: "0755"
 
+- name: localbin | ensure Claude Code (native installer, self-updating; glm execs it)
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -fsSL https://claude.ai/install.sh | bash
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.local/bin/claude"
+
 - name: localbin | install scripts
   ansible.builtin.copy:
     src: "{{ item }}"
