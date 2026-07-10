@@ -33,6 +33,9 @@
     - role: aliases
       tags: aliases
 
+    - role: localbin
+      tags: localbin
+
     - role: aerospace
       tags: aerospace
 

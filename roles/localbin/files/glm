@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# glm — interactive Claude Code, driven by GLM-5.2 (Z.ai Coding Plan). Same TUI as `claude`,
+# just a different brain. Key pulled from OpenBao at launch (never stored on disk).
+# Usage: glm                (start an interactive session in the current dir)
+#        glm "one-shot..."  (pass args/flags straight through to claude)
+export ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic"
+export ANTHROPIC_AUTH_TOKEN="$("$HOME/.local/bin/baoget" apps/glm token </dev/null 2>/dev/null)"
+export ANTHROPIC_MODEL="glm-5.2"
+export ANTHROPIC_SMALL_FAST_MODEL="glm-4.5-air"
+export API_TIMEOUT_MS="3000000"
+unset ANTHROPIC_API_KEY
+[ -n "$ANTHROPIC_AUTH_TOKEN" ] || { echo "glm: no key at OpenBao apps/glm (baoput it first)"; exit 1; }
+exec "$HOME/.local/bin/claude" "$@"
