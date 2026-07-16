@@ -16,6 +16,26 @@
   tags:
     - ghostty
 
+- name: Ghostty | Ensure config directory exists
+  file:
+    path: "{{ ansible_facts.env.HOME }}/.config/ghostty"
+    state: directory
+    owner: "{{ ansible_facts.env.USER }}"
+    group: "staff"
+    mode: 0755
+  tags:
+    - ghostty
+
+- name: Ghostty | Copy configuration file (MacOS)
+  copy:
+    src: config
+    dest: "{{ ansible_facts.env.HOME }}/.config/ghostty/config"
+    owner: "{{ ansible_facts.env.USER }}"
+    group: "staff"
+    mode: 0644
+  tags:
+    - ghostty
+
 - name: Ghostty | Add to dock
   set_fact:
     dockitems_persist: "{{ dockitems_persist + [ { 'name': 'Ghostty', 'path': '/Applications/Ghostty.app', 'pos': '4' } ] }}"

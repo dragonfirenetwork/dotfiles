@@ -1,0 +1,62 @@
+# Ghostty config — mirrors roles/alacritty/files/alacritty.toml
+# (Ghostty sets TERM=xterm-ghostty itself; no TERM override needed.)
+
+# ── Theme: Hardhacker (ported from alacritty-theme hardhacker.toml) ──
+background = #282433
+foreground = #eee9fc
+cursor-color = #eee9fc
+cursor-text = #eee9fc
+palette = 0=#282433
+palette = 1=#e965a5
+palette = 2=#b1f2a7
+palette = 3=#ebde76
+palette = 4=#b1baf4
+palette = 5=#e192ef
+palette = 6=#b3f4f3
+palette = 7=#eee9fc
+palette = 8=#3f3951
+palette = 9=#e965a5
+palette = 10=#b1f2a7
+palette = 11=#ebde76
+palette = 12=#b1baf4
+palette = 13=#e192ef
+palette = 14=#b3f4f3
+palette = 15=#eee9fc
+
+# ── Window: buttonless, fullscreen at startup (SimpleFullscreen equivalent) ──
+window-decoration = none
+fullscreen = true
+macos-non-native-fullscreen = true
+background-opacity = 1
+window-padding-x = 10
+window-padding-y = 0
+
+# ── Font ──
+font-family = JetBrainsMono Nerd Font
+font-family-bold = JetBrainsMono Nerd Font
+font-family-italic = JetBrainsMono Nerd Font
+font-family-bold-italic = JetBrainsMono Nerd Font
+font-size = 16
+
+# ── Cursor ──
+cursor-style = block
+cursor-style-blink = true
+
+# ── Selection / mouse ──
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+
+# ── macOS: Option acts as Alt (alacritty option_as_alt = "Both") ──
+macos-option-as-alt = true
+
+# ── Keybinds ported from Alacritty ──
+keybind = shift+enter=text:\x1b\r
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+keybind = ctrl+0=reset_font_size
+keybind = ctrl+==increase_font_size:1
+keybind = ctrl+-=decrease_font_size:1
+keybind = shift+page_up=scroll_page_up
+keybind = shift+page_down=scroll_page_down
+keybind = shift+home=scroll_to_top
+keybind = shift+end=scroll_to_bottom
