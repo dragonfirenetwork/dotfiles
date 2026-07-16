@@ -1,0 +1,8 @@
+---
+# roles/ghostty/tasks/main.yml
+
+- name: MacOSX | Load install playbook
+  include_tasks: macos.yml
+  when: ansible_facts.os_family == "Darwin"
+  tags:
+    - ghostty

@@ -1,0 +1,17 @@
+---
+# roles/ghostty/tasks/macos.yml
+
+- name: Ghostty | Check if already installed
+  stat:
+    path: "/Applications/Ghostty.app"
+  register: ghostty_installed
+  tags:
+    - ghostty
+
+- name: Ghostty | Install via Homebrew
+  homebrew_cask:
+    name: ghostty
+    state: present
+  when: not ghostty_installed.stat.exists
+  tags:
+    - ghostty

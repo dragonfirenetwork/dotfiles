@@ -54,6 +54,9 @@
     - role: alacritty
       tags: alacritty
 
+    - role: ghostty
+      tags: ghostty
+
     - role: asciiquarium
       tags: asciiquarium
 
@@ -74,6 +77,9 @@
 
     - role: tmux
       tags: tmux
+
+    - role: herdr
+      tags: herdr
 
     - role: python
       tags: python
